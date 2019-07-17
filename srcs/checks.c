@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/16 23:45:51 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/17 23:48:14 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,26 @@ int		is_invalid(char *str)
 	return (0);
 }
 
-void	is_alloc(void *mem)
+void	is_alloc(void *mem, t_fdf fdf, int error)
 {
+	(void)fdf;
 	if (mem == NULL)
 	{
-		ft_putendl("Allocation failed");
-		exit(0);
+		if (error == -2)
+			ft_putstr_fd("Invalid map, not enough y values or invalid file\n", 2);
+		if (error < 0 && error != -2)
+			ft_putstr_fd("Malloc didn't want to give you memory. SAD\n", 2);
+		if (error < 0)
+			error = -1;
+		exit(error);
 	}
 }
 
-void	mem_init(t_fdf *fdf, t_img *img)
+void	mem_init(t_fdf *fdf)
 {
 	ft_bzero(fdf, sizeof(fdf));
-	ft_bzero(img, sizeof(img));
 	fdf->multi = 1;
-	is_alloc(fdf->mem.m = ft_memalloc((1024)));
+	is_alloc(fdf->mem.m = ft_memalloc((1024)), *fdf, -5);
 	fdf->mem.tsize = (1024);
 	fdf->mem.usize = sizeof(int);
 	fdf->cam.zrot = 1;

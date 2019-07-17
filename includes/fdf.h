@@ -6,19 +6,19 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 16:07:39 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/16 23:45:49 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/17 23:47:59 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
+# include "cl_helper.h"
 # include "libft.h"
 # include "camera.h"
 # include "draw.h"
-# include <SDL2/SDL.h>
-# include <SDL2/SDL_image.h> 
-# include <SDL2/SDL_timer.h>
+# include <mlx.h>
 # include <math.h>
+# include <SDL2/SDL.h>
 # define W 1200
 # define H 1200
 # ifndef PI32
@@ -81,12 +81,13 @@ typedef struct	s_obj
 	int		len;
 }				t_obj;
 
-typedef struct	s_mlx
+typedef struct	s_sdl
 {
-	void	*img;
-	void	*mlx;
-	void	*win;
-}				t_mlx;
+	SDL_Window	*win;
+	SDL_Renderer	*renderer;
+	SDL_Event	event;
+	SDL_Texture	*texture;
+}				t_sdl;
 
 # define ORTH_PROJ 0x1
 # define ISO_PROJ 0x2
@@ -99,10 +100,10 @@ typedef struct	s_fdf
 	t_mem		mem;
 	char		flags;
 	t_obj		obj;
-	int			*str;
+	unsigned int	*str;
 	t_cam		cam;
 	t_camloc	loc;
-	t_mlx		mlx;
+	t_sdl		sdl;
 	t_4d		*p;
 	float		scale;
 	float		zscale;
@@ -110,7 +111,6 @@ typedef struct	s_fdf
 	t_m4x4		proj_matrix;
 }				t_fdf;
 
-void			is_alloc(void *mem);
 int				rgb_lerp(int color1, float t, int color2);
 int				lerp(int a, float t, int b);
 int				ft_abs(int x);
@@ -125,8 +125,9 @@ t_m4x4_inv		pers_proj(float woh, float focallength,
 void			initialize_cam(t_fdf *fdf);
 void			rotate(t_fdf *fdf, float angle, t_m4x4 f(float));
 void			ui_instructions(t_fdf fdf);
-void			mem_init(t_fdf *fdf, t_img *img);
+void			mem_init(t_fdf *fdf);
 void			mi(t_fdf fdf, int x, int y, char *str);
+void			is_alloc(void *mem, t_fdf fdf, int error);
 void			draw_to_img(t_fdf fdf);
 void			pers_keys(int keycode, t_fdf *fdf);
 void			key_to_camera(int keycode, t_fdf *fdf);

@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 19:52:36 by viccarau          #+#    #+#             */
-/*   Updated: 2019/06/05 03:13:48 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/17 17:47:01 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void			draw_to_img(t_fdf fdf)
 	int		j;
 
 	i = 0;
-	ft_bzero(fdf.str, W * H * sizeof(int));
+	ft_bzero(fdf.str, W * H * sizeof(unsigned int));
 	fdf.proj_matrix = translate(fdf.proj_matrix, find_center(fdf));
 	while (i < fdf.obj.size)
 	{
@@ -112,4 +112,4 @@ void			draw_to_img(t_fdf fdf)
 							  transform(fdf.proj_matrix, fdf.p[j]).xy.xy), &fdf, i, j);
 		i++;
 	}
-}
+	}
