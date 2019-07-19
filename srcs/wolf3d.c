@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/17 23:51:40 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/18 01:12:41 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,43 @@ int		my_function(int keycode, t_fdf *fdf)
 
 void	ft_mlx_init(t_fdf *fdf)
 {
+	int i;
+
+	i = 0;
 	SDL_Init(SDL_INIT_EVERYTHING);
 	fdf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 									SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_RESIZABLE);
-	fdf->proj_matrix = final_projection(fdf);
+	fdf->str = ft_memalloc(W * H * sizeof(unsigned int));
+	while (i < (W * H) / 2)
+	{
+		fdf->str[i] = 200;
+		i++;
+	}
+	while (i < (W * H))
+	{
+		fdf->str[i] = 10000;
+		i++;
+	}
+
+	//fdf->proj_matrix = final_projection(fdf);
 }
 
 int		main(int ac, char **av)
 {
 	int i;
 	t_fdf	fdf;
-	int		fd;
+	//int		fd;
+
 
 	mem_init(&fdf);
-	fd = open(av[1], O_RDONLY);
-	fdf.str = ft_memalloc(W * H * sizeof(unsigned int));
-	if (ac && fd > 0)
-	{
-		fdf.sdl.renderer = SDL_CreateRenderer(fdf.sdl.win, -1, 0);
-		fdf.sdl.texture = SDL_CreateTexture(fdf.sdl.renderer, SDL_PIXELFORMAT_ARGB8888,
-											SDL_TEXTUREACCESS_STATIC, W, H);
-	}
+	//fd = open(av[1], O_RDONLY);
+	//fdf.str = ft_memalloc(W * H * sizeof(unsigned int));
+	(void)av;
+	(void)ac;
+	ft_mlx_init(&fdf);
+	fdf.sdl.renderer = SDL_CreateRenderer(fdf.sdl.win, -1, 0);
+	fdf.sdl.texture = SDL_CreateTexture(fdf.sdl.renderer, SDL_PIXELFORMAT_ARGB8888,
+										SDL_TEXTUREACCESS_STATIC, W, H);
 	i = 0;
 	while (1)
 	{
@@ -76,8 +92,8 @@ int		main(int ac, char **av)
 		i++;
 		if (i % 6 == 0)
 		{
-			fdf.proj_matrix = final_projection(&fdf);
-			draw_to_img(fdf);
+			//fdf.proj_matrix = final_projection(&fdf);
+			//draw_to_img(fdf);
 			SDL_UpdateTexture(fdf.sdl.texture, NULL, fdf.str, W * sizeof(unsigned int));
 			SDL_RenderCopy(fdf.sdl.renderer, fdf.sdl.texture, NULL, NULL);
 			SDL_RenderPresent(fdf.sdl.renderer);
