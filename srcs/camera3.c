@@ -6,11 +6,11 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 12:59:26 by viccarau          #+#    #+#             */
-/*   Updated: 2019/05/09 12:27:20 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:39:52 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "wolf3d.h"
 
 float	inner(t_2d a, t_2d b)
 {

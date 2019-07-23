@@ -6,33 +6,32 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 12:47:24 by viccarau          #+#    #+#             */
-/*   Updated: 2019/05/15 16:17:58 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:52:49 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "wolf3d.h"
 
-t_m4x4	final_projection(t_fdf *fdf)
+/*t_m4x4	final_projection(t_wolf *wolf)
 {
-	fdf->proj_matrix = mx_mul(mx_mul(ortho_proj(W / H, 1, 1000).forward,
-	cam_obj_matrix(*fdf)),
-						mx_mul(scaling(fdf->scale), z_scaling(fdf->zscale)));
-	fdf->proj_matrix = translate(fdf->proj_matrix, find_center(*fdf));
-	return (fdf->proj_matrix);
+	wolf->proj_matrix = mx_mul(mx_mul(ortho_proj(W / H, 1, 1000).forward,
+	cam_obj_matrix(*wolf)),
+						mx_mul(scaling(wolf->scale), z_scaling(wolf->zscale)));
+	wolf->proj_matrix = translate(wolf->proj_matrix, find_center(*wolf));
+	return (wolf->proj_matrix);
 }
 
-void	initialize_cam(t_fdf *fdf)
+void	initialize_cam(t_wolf *wolf)
 {
-	fdf->flags = 0;
-	fdf->zscale = 0.1f;
-	fdf->loc.camx = point(1, 0, 0, 0).xyz.xyz;
-	fdf->loc.camy = point(0, 1, 0, 0).xyz.xyz;
-	fdf->loc.camz = point(0, 0, 1, 0).xyz.xyz;
-	fdf->loc.camp = point(0, 0, 0, 0).xyz.xyz;
-	fdf->cam = get_standard_camera();
-	fdf->proj_matrix = final_projection(fdf);
-	fdf->offset = point(0, 0, 0, 0).xyz.xyz;
-}
+	wolf->flags = 0;
+	wolf->zscale = 0.1f;
+	wolf->loc.camx = point(1, 0, 0, 0).xyz.xyz;
+	wolf->loc.camy = point(0, 1, 0, 0).xyz.xyz;
+	wolf->loc.camz = point(0, 0, 1, 0).xyz.xyz;
+	wolf->loc.camp = point(0, 0, 0, 0).xyz.xyz;
+	wolf->cam = get_standard_camera();
+	wolf->proj_matrix = final_projection(wolf);
+	}
 
 t_cam	get_standard_camera(void)
 {
@@ -48,3 +47,4 @@ t_cam	get_standard_camera(void)
 	res.shift = point(0, 0, -1.0f, 0).xyz.xyz;
 	return (res);
 }
+*/

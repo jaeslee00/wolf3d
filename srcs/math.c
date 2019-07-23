@@ -6,11 +6,11 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:24:28 by viccarau          #+#    #+#             */
-/*   Updated: 2019/06/16 02:53:18 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:38:53 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "wolf3d.h"
 
 t_4d	point(float x, float y, float z, float w)
 {

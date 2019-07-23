@@ -6,11 +6,11 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:37:57 by viccarau          #+#    #+#             */
-/*   Updated: 2019/06/16 02:53:00 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:50:46 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "wolf3d.h"
 
 t_ln	init_ln(t_pts pts)
 {
@@ -57,23 +57,25 @@ int		rgb_lerp(int color1, float t, int color2)
 	return ((r * 0x10000) + (g * 0x100) + b);
 }
 
-void	range_finder(t_fdf *fdf)
+/*
+void	range_finder(t_wolf *wolf)
 {
 	int	i;
 
 	i = 0;
-	if ((fdf->flags & 0x10) == 0)
+	if ((wolf->flags & 0x10) == 0)
 	{
-		fdf->l.min = fdf->obj.nb[0];
-		fdf->l.max = fdf->obj.nb[0];
-		while (i < fdf->obj.size)
+		wolf->l.min = wolf->obj.nb[0];
+		wolf->l.max = wolf->obj.nb[0];
+		while (i < wolf->obj.size)
 		{
-			if (fdf->obj.nb[i] < fdf->l.min)
-				fdf->l.min = fdf->obj.nb[i];
-			if (fdf->obj.nb[i] > fdf->l.max)
-				fdf->l.max = fdf->obj.nb[i];
+			if (wolf->obj.nb[i] < wolf->l.min)
+				wolf->l.min = wolf->obj.nb[i];
+			if (wolf->obj.nb[i] > wolf->l.max)
+				wolf->l.max = wolf->obj.nb[i];
 			i++;
 		}
-		fdf->flags |= 0x10;
+		wolf->flags |= 0x10;
 	}
 }
+*/

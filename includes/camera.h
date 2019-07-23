@@ -6,13 +6,13 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 13:02:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/05/09 11:58:36 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:39:35 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CAMERA_H
 # define CAMERA_H
-# include "fdf.h"
+# include "wolf3d.h"
 # include "draw.h"
 
 typedef struct	s_cam
