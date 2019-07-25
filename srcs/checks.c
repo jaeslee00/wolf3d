@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/23 18:55:59 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/24 11:33:39 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,8 @@ void	mem_init(t_wolf *wolf)
 {
 	ft_bzero(&wolf[0], sizeof(*wolf));
 	printf("size of wolf = %ld\n", sizeof(*wolf));
-	wolf->multi = 1;
+	printf("size of ind %ld\n", sizeof(t_sdl) + sizeof(t_mem) + sizeof(t_obj) + sizeof(wolf->img) + sizeof(char));
 	is_alloc(wolf->mem.m = ft_memalloc((1024)), *wolf, -5);
 	wolf->mem.tsize = (1024);
 	wolf->mem.usize = sizeof(int);
-	wolf->cam.zrot = 1;
-}
+	}

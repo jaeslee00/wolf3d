@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/23 19:12:47 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/24 13:57:06 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 # include "libft.h"
 # include "camera.h"
 # include "draw.h"
-# include <mlx.h>
 # include <math.h>
-# include <SDL.h>
-# define W 1200
-# define H 1200
+# include <SDL2/SDL.h>
+# define W 1700
+# define H 900
 # ifndef PI32
 #  define PI32 3.14159265359f
 # endif
@@ -66,13 +65,6 @@ typedef struct	s_ln
 	int		p;
 }				t_ln;
 
-typedef struct	s_img
-{
-	int		bpx;
-	int		size_line;
-	int		endian;
-}				t_img;
-
 typedef struct	s_obj
 {
 	int		*nb;
@@ -88,24 +80,22 @@ typedef struct	s_sdl
 	SDL_Texture	*texture;
 }				t_sdl;
 
-# define ORTH_PROJ 0x1
-# define ISO_PROJ 0x2
-
 typedef struct	s_wolf
 {
-	t_mem		mem;
-	char		flags;
+	t_sdl		sdl;
 	t_obj		obj;
 	unsigned int	*img;
-	t_cam		cam;
-	t_camloc	loc;
-	t_sdl		sdl;
-	t_4d		*p;
-	float		scale;
-	float		zscale;
-	float		multi;
-	t_m4x4		proj_matrix;
+	t_mem		mem;
 }				t_wolf;
+
+typedef struct	s_player
+{
+	t_2d position;
+	t_2d direction;
+	t_2d plane;
+
+}				t_player;
+
 
 int				**int_to_tab(t_obj obj);
 int				rgb_lerp(int color1, float t, int color2);
@@ -116,7 +106,6 @@ int				calculate_scale(t_wolf wolf);
 int				is_valid(float x, float y);
 int				is_invalid(char *str);
 t_m4x4_inv		camera_transform(t_3d x, t_3d y, t_3d z, t_3d p);
-//t_m4x4_inv		ortho_proj(float wheight, float near, float far);
 t_m4x4_inv		pers_proj(float woh, float focallength,
 					  float nearcliplane, float farclipplane);
 void			initialize_cam(t_wolf *wolf);
@@ -127,18 +116,15 @@ void			mi(t_wolf wolf, int x, int y, char *str);
 void			is_alloc(void *mem, t_wolf wolf, int error);
 void			draw_to_img(t_wolf wolf);
 void			pers_keys(int keycode, t_wolf *wolf);
-void			key_to_camera(int keycode, t_wolf *wolf);
 void			range_finder(t_wolf *wolf);
 float			range(float min, float max, float value);
 float			my_sin(float angle);
 float			my_cos(float angle);
 t_cam			get_standard_camera(void);
-//t_3d			find_center(t_wolf wolf);
 t_4d			*int_to_points(t_wolf wolf);
 t_4d			point(float x, float y, float z, float w);
 t_4d			transform(t_m4x4 a, t_4d p);
 t_m4x4			translate(t_m4x4 a, t_3d t);
-//t_m4x4			cam_obj_matrix(t_wolf wolf);
 t_m4x4			x_rot(float angle);
 t_m4x4			y_rot(float angle);
 t_m4x4			z_rot(float angle);
