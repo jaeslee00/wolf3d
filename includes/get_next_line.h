@@ -1,14 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   camera.c                                           :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: viccarau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/06 12:51:11 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/23 18:48:18 by viccarau         ###   ########.fr       */
+/*   Created: 2018/11/04 07:14:34 by viccarau          #+#    #+#             */
+/*   Updated: 2019/04/29 14:12:32 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/wolf3d.h"
-#include "camera.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
+# include "libft.h"
+# define BUFF_SIZE (42 * 4096)
+
+typedef struct	s_gnl
+{
+	char	*tmp;
+	char	*buf;
+	ssize_t	size;
+}				t_gnl;
+
+int				get_next_line(int const fd, char **line);
+#endif

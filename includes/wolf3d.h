@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/24 13:57:06 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/27 22:37:19 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-# define W 1700
+# define W 900
 # define H 900
 # ifndef PI32
 #  define PI32 3.14159265359f
 # endif
 
+#include <stdio.h>
 typedef struct	s_ilst
 {
 	int				content;

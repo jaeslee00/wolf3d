@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/24 11:33:39 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/27 23:12:28 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	is_alloc(void *mem, t_wolf wolf, int error)
 void	mem_init(t_wolf *wolf)
 {
 	ft_bzero(&wolf[0], sizeof(*wolf));
-	printf("size of wolf = %ld\n", sizeof(*wolf));
-	printf("size of ind %ld\n", sizeof(t_sdl) + sizeof(t_mem) + sizeof(t_obj) + sizeof(wolf->img) + sizeof(char));
+	//printf("size of wolf = %d\n", sizeof(*wolf));
+	//printf("size of ind %d\n", sizeof(t_sdl) + sizeof(t_mem) + sizeof(t_obj) + sizeof(wolf->img) + sizeof(char));
 	is_alloc(wolf->mem.m = ft_memalloc((1024)), *wolf, -5);
 	wolf->mem.tsize = (1024);
 	wolf->mem.usize = sizeof(int);
