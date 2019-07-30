@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/27 22:37:19 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/29 10:32:09 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-# define W 900
-# define H 900
+# define W 1280
+# define H 720
+# define FOV 80
+# define HEIGHT 32
+# define WALL_SIZE 64
 # ifndef PI32
 #  define PI32 3.14159265359f
 # endif
@@ -91,10 +94,10 @@ typedef struct	s_wolf
 
 typedef struct	s_player
 {
-	t_2d position;
-	t_2d direction;
+	t_2d_p	ray;
+t_2d_p	position;
+t_2d direction;
 	t_2d plane;
-
 }				t_player;
 
 
