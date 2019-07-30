@@ -6,21 +6,19 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:24:28 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/23 18:38:53 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/30 12:43:44 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-t_4d	point(float x, float y, float z, float w)
-{
-	t_4d p;
+/*
+** Calculate from radians to degrees - (angle * 180 / PI32) degrees
+*/
 
-	p.xyzw.x = x;
-	p.xyzw.y = y;
-	p.xyzw.z = z;
-	p.xyzw.w = w;
-	return (p);
+float	degree_radian(int degree)
+{
+	return (degree * PI32 / 180);
 }
 
 float	my_sin(float angle)
@@ -36,6 +34,38 @@ float	my_cos(float angle)
 	float	r;
 
 	r = cosf(angle);
+	return (r);
+}
+
+float	my_tan(float angle)
+{
+	float	r;
+
+	r = tanf(angle);
+	return (r);
+}
+
+float	my_asin(float angle)
+{
+	float	r;
+
+	r = asinf(angle);
+	return (r);
+}
+
+float	my_acos(float angle)
+{
+	float	r;
+
+	r = acosf(angle);
+	return (r);
+}
+
+float	my_atan(float angle)
+{
+	float	r;
+
+	r = atanf(angle);
 	return (r);
 }
 

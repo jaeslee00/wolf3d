@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/29 10:32:09 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/30 12:04:56 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,21 @@ typedef struct	s_player
 t_2d_p	position;
 t_2d direction;
 	t_2d plane;
+	float arc;
+	int distance;
+	int height;
+	int speed;
 }				t_player;
 
+typedef struct	s_precalc
+{
+	float	sins[360];
+	float	asins[360];
+	float	cosins[360];
+	float	acosins[360];
+	float	tan[360];
+	float	atan[360];
+}				t_precalc;
 
 int				**int_to_tab(t_obj obj);
 int				rgb_lerp(int color1, float t, int color2);
@@ -124,6 +137,11 @@ void			range_finder(t_wolf *wolf);
 float			range(float min, float max, float value);
 float			my_sin(float angle);
 float			my_cos(float angle);
+float			my_asin(float angle);
+float			my_acos(float angle);
+float			my_tan(float angle);
+float			my_atan(float angle);
+float			degree_radian(int degree);
 t_cam			get_standard_camera(void);
 t_4d			*int_to_points(t_wolf wolf);
 t_4d			point(float x, float y, float z, float w);

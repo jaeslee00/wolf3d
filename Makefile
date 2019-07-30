@@ -11,31 +11,36 @@
 #******************************************************************************#
 
 NAME = wolf3d
+SDL2 = ~/Library/Frameworks/SDL2.framework
 SRC_DIR = /Users/viccarau/Work/wolf3d/srcs/
 INC = includes/camera.h includes/wolf3d.h includes/draw.h
 SRC = $(SRC_DIR)checks.c $(SRC_DIR)main.c $(SRC_DIR)keycode.c $(SRC_DIR)math.c \
 		$(SRC_DIR)parsing.c
 OBJ = $(SRC:$(SRC_DIR)%.c=%.o)
 
-#linux
-#LIB=minilibx
-LIB_INC=-Iincludes -Ilibft/includes -I ~/Library/Frameworks/SDL2.framework/Headers
+LIB_INC=-Iincludes -Ilibft/includes -I ~/Work/wolf3d/SDL2.framework/Headers
 #-I$(LIB)
-FLAGS += -lm -Llibft -lft -lm -framework SDL2
-# -lmlx -L $(LIB)
+FLAGS += -Llibft -lft -lm -framework SDL2
 
 CFLAGS += -Wall -Wextra -Werror $(LIB_INC) -F.
 
 all: $(NAME)
 
-$(NAME):	$(OBJ)
+$(NAME):	$(OBJ) $(SDL2)
 	make -C libft
 	gcc -o $(NAME) $(OBJ) $(FLAGS) $(CFLAGS)
 
+$(SDL2):
+	@if [ ! -d  ~/Library/Frameworks ];then mkdir ~/Library/Frameworks; \
+	if [ ! -d ~/Library/Frameworks/SDL2.framework ]; \
+	then cp -r SDL2.framework ~/Library/Frameworks/. ; fi; \
+	elif [ ! -d ~/Library/Frameworks/SDL2.framework ] \
+	;then cp -r SDL2.framework ~/Library/Frameworks/. ; fi
+
+	
+
 $(OBJ): $(SRC) $(INC)
 	gcc -c $(SRC) $(CFLAGS)
-
-#	make -C $(LIB)
 
 clean:
 	rm -f $(OBJ)
@@ -44,6 +49,5 @@ clean:
 fclean:	clean
 	rm -f $(NAME)
 	make -C libft fclean
-#	make -C $(LIB) clean
 
 re: fclean all
