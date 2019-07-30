@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/29 10:46:50 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/07/30 09:52:09 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,19 @@ int		my_function(int keycode, t_wolf *wolf)
 	return (1);
 }
 
-void	ft_raycast(t_wolf *wolf, t_player *player)
+/*void	ft_raycast(t_wolf *wolf, t_player *player)
 {
 	if (facing up)
 		player.ray.y = (p.position.y >> 8) * (64) - 1;
 	if (facing down)
 		ray.y = (p.position.y >> 8) * (64) + 64;
-	ray.x = (p.position.x) + (p.position.y - ray.y) / tan(FOV);
+	ray.x = (p.position.x) + (p.position.y - ray.y) / my_tan(FOV);
 	if (facing up)
 		Ya = -64;
 	else
 		Ya = 64;
 
-	Xa = 64 / tan(FOV);
+	Xa = 64 / my_tan(FOV);
 	while (!hit)
 	{
 		C.x = (ray.x + Xa);
@@ -72,6 +72,7 @@ void	ft_raycast(t_wolf *wolf, t_player *player)
 			hit = 1;
 	}
 }
+*/
 
 void	ft_wolf_init(t_wolf *wolf)
 {
@@ -85,10 +86,11 @@ int		main(int ac, char **av)
 {
 	int		i;
 	t_wolf	wolf;
-	int		fd;
-	//float	avg_fps;
 	t_player p;
-
+	int		fd;
+	
+	//float	avg_fps;
+	
 	p.direction.x = 0;
 	p.direction.y = -1.0f;
 	//p.plane.x = 0;
