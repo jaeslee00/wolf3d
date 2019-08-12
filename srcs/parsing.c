@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 16:26:36 by viccarau          #+#    #+#             */
-/*   Updated: 2019/07/30 15:44:06 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/11 18:43:45 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ int		tkneizer(int fd, t_wolf *wolf)
 		free(line);
 	}
 	wolf->obj.size = xy.x;
+	wolf->map = int_to_tab(wolf->obj);
 	return (1);
 	}

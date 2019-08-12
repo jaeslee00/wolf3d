@@ -12,178 +12,113 @@
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-void	fill_rect(int x, int y, int width, int height, unsigned int *img)
+ 
+int	verLine(int x, int y1, int y2, const int color, unsigned int *img)
 {
-	int i;
-	int j;
+	if (y2 < y1) {y1 += y2; y2 = y1 - y2; y1 -= y2;} //swap y1 and y2
+	if (y2 < 0 || y1 >= H  || x < 0 || x >= W) return 0; //no single point of the line is on screen
+	if (y1 < 0) y1 = 0; //clip
+	if (y2 >= W) y2 = H - 1; //clip
 
-	i = x;
-	while (i < height + x)
-	{
-		j = y;
-		while (j < width + y)
+	//printf("%d %d %d\n", x, y1, y2);
+	for(int y = y1; y <= y2; y++)
+		img[x + y * W] = color;
+	return (1);
+}
+
+void	render(t_wolf *wolf, double dirX, double dirY, double planeX, double planeY)
+{
+	double posX = 3, posY = 3;  //x and y start position
+	
+	for (int x = 0; x < W; x++)
 		{
-			if ((j + i * W) < W * H && (j + i * W) > 0)
+			//calculate ray position and direction
+			double cameraX = 2 * x / W - 1; //x-coordinate in camera space
+			double rayDirX = dirX + planeX * cameraX;
+			double rayDirY = dirY + planeY * cameraX;
+			//which box of the map we're in
+			int mapX = (int)posX;
+			int mapY = (int)posY;
+
+			//length of ray from current position to next x or y-side
+			double sideDistX;
+			double sideDistY;
+
+			//length of ray from one x or y-side to next x or y-side
+			double deltaDistX = abs(1 / rayDirX);
+			double deltaDistY = abs(1 / rayDirY);
+			double perpWallDist;
+
+			//what direction to step in x or y-direction (either +1 or -1)
+			int stepX;
+			int stepY;
+
+			int hit = 0; //was there a wall hit?
+			int side; //was a NS or a EW wall hit?
+			//calculate step and initial sideDist
+			if (rayDirX < 0)
 			{
-				img[j + i * W] = 1000;
+				stepX = -1;
+				sideDistX = (posX - mapX) * deltaDistX;
 			}
-			j++;
+			else
+			{
+				stepX = 1;
+				sideDistX = (mapX + 1.0 - posX) * deltaDistX;
+			}
+			if (rayDirY < 0)
+			{
+				stepY = -1;
+				sideDistY = (posY - mapY) * deltaDistY;
+			}
+			else
+			{
+				stepY = 1;
+				sideDistY = (mapY + 1.0 - posY) * deltaDistY;
+			}
+			//perform DDA
+			while (hit == 0)
+			{
+				//jump to next map square, OR in x-direction, OR in y-direction
+				if (sideDistX < sideDistY)
+				{
+					sideDistX += deltaDistX;
+					mapX += stepX;
+					side = 0;
+				}
+				else
+				{
+					sideDistY += deltaDistY;
+					mapY += stepY;
+					side = 1;
+				}
+				//Check if ray has hit a wall
+				if (wolf->map[mapX][mapY] == 1) hit = 1;
+			}
+			//Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
+			if (side == 0) perpWallDist = (mapX - posX + (1 - stepX) / 2) / rayDirX;
+			else           perpWallDist = (mapY - posY + (1 - stepY) / 2) / rayDirY;
+
+			//Calculate height of line to draw on screen
+			int lineHeight = (int)(H / perpWallDist);
+
+			//calculate lowest and highest pixel to fill in current stripe
+			int drawStart = -lineHeight / 2 + H / 2;
+			if(drawStart < 0)drawStart = 0;
+			int drawEnd = lineHeight / 2 + H / 2;
+			if(drawEnd >= H)drawEnd = H - 1;
+
+			//choose wall color
+			 int color;
+
+			if (wolf->map[mapX][mapY] == 1)
+color = 1000;
+else
+color = 0;
+			//give x and y sides different brightness
+			if (side == 1) {color = color / 2;}
+
+			//draw the pixels of the stripe as a vertical line
+			verLine(x, drawStart, drawEnd, color, wolf->img);
 		}
-		i++;
 	}
-}
-
-void	render(t_wolf *wolf, t_steps *s, t_obj *o, int **map)
-{
-	int vertical_grid;
-int horizontal_grid;
-int next_v_grid;
-int dist_h_grid;
-float x_inter;
-	float y_inter;
-float next_x_inter;
-float next_y_inter;
-
-int x_grids_index;
-int y_grids_index;
-
-float distToVerticalGridBeingHit;
-float distToHorizontalGridBeingHit;
-
-int cast_angle, cast_column;
-
-cast_angle = wolf->player.arc;
-cast_angle -= (W / 2);
-
-if (cast_angle < 0)
-cast_angle = ANGLE360 + cast_angle;
-for (cast_column = 0; cast_column < W; cast_column += 5)
-{
-	if (cast_angle > 0 && cast_angle < ANGLE180)
-	{
-			horizontal_grid = (wolf->player.position.x / 64) * 64  + 64;
-dist_h_grid = 64;
-			float xtemp = my_tan(degree_radian(cast_angle) * (horizontal_grid - wolf->player.position.y));
-			x_inter = xtemp + wolf->player.position.x;
-	}
-	else
-	{
-			horizontal_grid = (wolf->player.position.y / 64) * 64;
-        dist_h_grid = -64;
-
-			float xtemp = my_tan(degree_radian(cast_angle)) * (horizontal_grid - wolf->player.position.y);
-			x_inter = xtemp + wolf->player.position.x;
-
-        horizontal_grid--;
-	}
-	// LOOK FOR HORIZONTAL WALL
-		if (cast_angle == 0 || cast_angle == ANGLE180)
-			distToHorizontalGridBeingHit = 9999999.0f;
-	else
-	{
-			next_x_inter = s->x_step[cast_angle];
-        while (1)
-        {
-			x_grids_index = (int)(x_inter / 64);
-			// in the picture, y_grids_index will be 1
-			y_grids_index = (horizontal_grid / 64);
-
-			if ((x_grids_index >= o->len) ||
-					(y_grids_index >= o->size / o->len) ||
-				x_grids_index < 0 || y_grids_index < 0)
-			{
-					distToHorizontalGridBeingHit = 9999999.0f;
-				break;
-			}
-				else if ((map[y_grids_index][x_grids_index]) != 0 )
-			{
-					distToHorizontalGridBeingHit  = (x_inter- wolf->player.position.x)* my_cos(degree_radian(cast_angle));
-				break;
-			}
-			else
-			{
-				x_inter += next_x_inter;
-				horizontal_grid += dist_h_grid;
-			}
-        }
-	}
-
-		if (cast_angle < ANGLE90 || cast_angle > ANGLE270)
-	{
-			vertical_grid = 64 + (wolf->player.position.x / 64) * 64;
-        next_v_grid = 64;
-
-			float ytemp = my_tan(degree_radian(cast_angle)) * (vertical_grid - wolf->player.position.x);
-			y_inter = ytemp + wolf->player.position.y;
-	}
-	else
-	{
-			vertical_grid = (wolf->player.position.x / 64) * 64;
-        next_v_grid = -64;
-
-			float ytemp = my_tan(degree_radian(cast_angle)) * (vertical_grid - wolf->player.position.x);
-			y_inter = ytemp + wolf->player.position.y;
-
-        vertical_grid--;
-	}
-		if (ANGLE90 || ANGLE270)
-		distToVerticalGridBeingHit = 9999999.0f;
-		else
-	{
-        next_y_inter = s->y_step[cast_angle];
-        while (1)
-        {
-			x_grids_index = (vertical_grid / 64);
-			y_grids_index = (int)(y_inter / 64);
-
-				if ((x_grids_index >= o->len) ||
-					(y_grids_index >= o->size / o->len) ||
-				x_grids_index < 0 || y_grids_index < 0)
-			{
-					distToVerticalGridBeingHit = 9999999.0f;
-				break;
-			}
-				else if ((map[y_grids_index][x_grids_index]) != 0)
-			{
-					distToVerticalGridBeingHit = (y_inter - wolf->player.position.y) * my_sin(degree_radian(cast_angle));
-				break;
-			}
-			else
-			{
-				y_inter += next_y_inter;
-				vertical_grid += next_v_grid;
-			}
-        }
-	}
-
-	float dist;
-	int topOfWall;
-	int bottomOfWall;
-		
-		if (distToHorizontalGridBeingHit < distToVerticalGridBeingHit)
-		dist = distToHorizontalGridBeingHit;
-			else
-		dist = distToVerticalGridBeingHit;
-			//dist /= s->correction[cast_column];
-	int projectedWallHeight = (int)(64 * (float)426 / dist);
-	bottomOfWall = 360 + (int)(projectedWallHeight * 0.5f);
-	topOfWall = H - bottomOfWall;
-	if (bottomOfWall >= H)
-		bottomOfWall = H - 1;
-	//fOffscreenGraphics.drawLine(cast_column, topOfWall, cast_column, bottomOfWall);
-		//fOffscreenGraphics.fillRect(castColumn, topOfWall, 5, projectedWallHeight);
-		//if (cast_column > 0 && topOfWall > 0 && bottomOfWall > 0 && cast_column < 720 && topOfWall < 720 && bottomOfWall < 720)
-			fill_rect(cast_column, topOfWall, 5, projectedWallHeight, wolf->img);
-		//(void)topOfWall;
-		//fill_rect(0, 0, 100, 100, wolf->img);
-		//fill_rect(150, 150, 100, 100, wolf->img);
-		//fill_rect(500, 500, 100, 100, wolf->img);
-
-		//fillRect(int x, int y, int width, int height)
-		cast_angle += 5;
-		if (cast_angle >= (W / 4) * 18)
-			cast_angle -= (W / 4) * 18;
-}
-	// blit to screen
-}

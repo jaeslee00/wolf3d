@@ -52,13 +52,8 @@ int		my_function(int keycode, t_wolf *wolf)
 	return (1);
 }
 
-void	ft_wolf_init(t_wolf *wolf, t_steps *steps)
+void	ft_wolf_init(t_wolf *wolf)
 {
-	t_steps s;
-	
-	init_precalc(&s);
-	steps = &s;
-	printf("sin(30) = %f cos(30)%f\n", steps->x_step[30], steps->y_step[30]);
 	SDL_Init(SDL_INIT_EVERYTHING);
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, W, H, 0);
@@ -74,18 +69,14 @@ int		main(int ac, char **av)
 	int		i;
 	t_wolf	wolf;
 	int		fd;
-	t_steps s;
+	double dirX = -1, dirY = 0; //initial direction vector
+	double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 	//float	avg_fps;
 	wolf.player.direction.x = 0;
 	wolf.player.direction.y = -1.0f;
 	//p.plane.x = 0;
 	//p.plane.y = 80;
 
-	/*
- center of projection plane = (640, 360);
- distance to the projection plane = 426 (640 / tan(40));
- angle between rays = FOV / 1280 (1 column);
- */
 	mem_init(&wolf);
 	if (ac == 2)
 		fd = open(av[1], O_RDONLY);
@@ -94,9 +85,9 @@ int		main(int ac, char **av)
 	if (fd > 0)
 	{
 		tkneizer(fd, &wolf);
-		print_map(int_to_tab(wolf.obj), wolf.obj, &wolf.player);
+		print_map(wolf.map, wolf.obj, &wolf.player);
 		printf("\nplayer = %d, %d\n", wolf.player.position.x, wolf.player.position.y);
-		ft_wolf_init(&wolf, &s);
+		ft_wolf_init(&wolf);
 		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
 			SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
@@ -121,23 +112,31 @@ int		main(int ac, char **av)
 				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_S)
 					wolf.player.position.x -= 1;
 				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_A)
-					wolf.player.position.y += 1;
-				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_D)
-					wolf.player.position.y -= 1;
+					{
+					double oldDirX = dirX;
+						dirX = dirX * cos(0.01f) - dirY * sin(0.01f);
+						dirY = oldDirX * sin(0.01f) + dirY * cos(0.01f);
+						double oldPlaneX = planeX;
+						planeX = planeX * cos(0.01f) - planeY * sin(0.01f);
+						planeY = oldPlaneX * sin(0.01f) + planeY * cos(0.01f);
 					}
-			//printf("player pos %d\n", wolf.player.position.x);
-			//if (i % 100 == 0)
-			//printf("fps = %f\n", avg_fps);
+					if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_D)
+				{
+					double oldDirX = dirX;
+					dirX = dirX * cos(-0.01f) - dirY * sin(-0.01f);
+					dirY = oldDirX * sin(-0.01f) + dirY * cos(-0.01f);
+					double oldPlaneX = planeX;
+					planeX = planeX * cos(-0.01f) - planeY * sin(-0.01f);
+					planeY = oldPlaneX * sin(-0.01f) + planeY * cos(-0.01f);
+				}
+					}
+			ft_bzero(wolf.img, sizeof(unsigned int) * W * H);
+			render(&wolf, dirX, dirY, planeX, planeY);
+			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img, W * sizeof(unsigned int));
+			SDL_RenderCopy(wolf.sdl.renderer, wolf.sdl.texture, NULL, NULL);
+			SDL_RenderPresent(wolf.sdl.renderer);
 			i++;
-			if (i % 100 == 0)
-			{
-				ft_bzero(wolf.img, W * H * 4);
-				render(&wolf, &s, &wolf.obj, int_to_tab(wolf.obj));
-				SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img, W * sizeof(unsigned int));
-				SDL_RenderCopy(wolf.sdl.renderer, wolf.sdl.texture, NULL, NULL);
-				SDL_RenderPresent(wolf.sdl.renderer);
 			}
-		}
-	}
 	return (0);
+}
 }
