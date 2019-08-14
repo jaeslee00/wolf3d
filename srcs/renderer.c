@@ -15,66 +15,68 @@
  
 int	verLine(int x, int y1, int y2, const int color, unsigned int *img)
 {
-	if (y2 < y1) {y1 += y2; y2 = y1 - y2; y1 -= y2;} //swap y1 and y2
-	if (y2 < 0 || y1 >= H  || x < 0 || x >= W) return 0; //no single point of the line is on screen
-	if (y1 < 0) y1 = 0; //clip
-	if (y2 >= W) y2 = H - 1; //clip
+	int y;
 
-	//printf("%d %d %d\n", x, y1, y2);
-	for(int y = y1; y <= y2; y++)
+	if (y2 < y1)
+	{
+		y1 += y2;
+		y2 = y1 - y2;
+		y1 -= y2;
+	}
+	if (y2 < 0 || y1 >= H  || x < 0 || x >= W)
+		return (0);
+	if (y1 < 0)
+		y1 = 0;
+	if (y2 >= W)
+		y2 = H - 1;
+	y = y1;
+	while (y <= y2)
+{
 		img[x + y * W] = color;
+		 y++;
+	}
 	return (1);
 }
 
 void	render(t_wolf *wolf, double dirX, double dirY, double planeX, double planeY)
 {
-	double posX = 3, posY = 3;  //x and y start position
-	
-	for (int x = 0; x < W; x++)
+for (int x = 0; x < W; x++)
 		{
-			//calculate ray position and direction
-			double cameraX = 2 * x / W - 1; //x-coordinate in camera space
-			double rayDirX = dirX + planeX * cameraX;
+
+		double cameraX = 2 * x / (double)(W) - 1; //x-coordinate in camera space
+		double rayDirX = dirX + planeX * cameraX;
 			double rayDirY = dirY + planeY * cameraX;
-			//which box of the map we're in
-			int mapX = (int)posX;
-			int mapY = (int)posY;
-
-			//length of ray from current position to next x or y-side
-			double sideDistX;
+			int mapX = (int)wolf->player.position.x;
+			int mapY = (int)wolf->player.position.y;
+double sideDistX;
 			double sideDistY;
-
-			//length of ray from one x or y-side to next x or y-side
-			double deltaDistX = abs(1 / rayDirX);
-			double deltaDistY = abs(1 / rayDirY);
+double deltaDistX = ft_abs(1 / rayDirX);
+			double deltaDistY = ft_abs(1 / rayDirY);
 			double perpWallDist;
-
-			//what direction to step in x or y-direction (either +1 or -1)
-			int stepX;
+int stepX;
 			int stepY;
 
-			int hit = 0; //was there a wall hit?
-			int side; //was a NS or a EW wall hit?
-			//calculate step and initial sideDist
+			int hit = 0;
+			int side; 
 			if (rayDirX < 0)
 			{
 				stepX = -1;
-				sideDistX = (posX - mapX) * deltaDistX;
+				sideDistX = (wolf->player.position.x - mapX) * deltaDistX;
 			}
 			else
 			{
 				stepX = 1;
-				sideDistX = (mapX + 1.0 - posX) * deltaDistX;
+				sideDistX = (mapX + 1.0 - wolf->player.position.x) * deltaDistX;
 			}
 			if (rayDirY < 0)
 			{
 				stepY = -1;
-				sideDistY = (posY - mapY) * deltaDistY;
+				sideDistY = (wolf->player.position.y - mapY) * deltaDistY;
 			}
 			else
 			{
 				stepY = 1;
-				sideDistY = (mapY + 1.0 - posY) * deltaDistY;
+				sideDistY = (mapY + 1.0 - wolf->player.position.y) * deltaDistY;
 			}
 			//perform DDA
 			while (hit == 0)
@@ -92,33 +94,28 @@ void	render(t_wolf *wolf, double dirX, double dirY, double planeX, double planeY
 					mapY += stepY;
 					side = 1;
 				}
-				//Check if ray has hit a wall
-				if (wolf->map[mapX][mapY] == 1) hit = 1;
+				if (wolf->map[mapX][mapY] == 1)
+				hit = 1;
 			}
-			//Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-			if (side == 0) perpWallDist = (mapX - posX + (1 - stepX) / 2) / rayDirX;
-			else           perpWallDist = (mapY - posY + (1 - stepY) / 2) / rayDirY;
-
-			//Calculate height of line to draw on screen
-			int lineHeight = (int)(H / perpWallDist);
-
-			//calculate lowest and highest pixel to fill in current stripe
-			int drawStart = -lineHeight / 2 + H / 2;
-			if(drawStart < 0)drawStart = 0;
+			if (side == 0)
+			perpWallDist = (mapX - wolf->player.position.x + (1 - stepX) / 2) / rayDirX;
+			else
+			perpWallDist = (mapY - wolf->player.position.y + (1 - stepY) / 2) / rayDirY;
+		int lineHeight = (int)(H / perpWallDist);
+int drawStart = -lineHeight / 2 + H / 2;
+			if (drawStart < 0)
+			drawStart = 0;
 			int drawEnd = lineHeight / 2 + H / 2;
-			if(drawEnd >= H)drawEnd = H - 1;
-
-			//choose wall color
-			 int color;
+			if (drawEnd >= H)
+			drawEnd = H - 1;
+int color;
 
 			if (wolf->map[mapX][mapY] == 1)
-color = 1000;
+color = 0x660000;
 else
 color = 0;
-			//give x and y sides different brightness
-			if (side == 1) {color = color / 2;}
-
-			//draw the pixels of the stripe as a vertical line
-			verLine(x, drawStart, drawEnd, color, wolf->img);
+			if (side == 1)
+		color = color >> 1;
+verLine(x, drawStart, drawEnd, color, wolf->img);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:24:28 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/01 12:32:40 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/14 16:34:52 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ float	my_atan(float angle)
 	return (r);
 }
 
-int		ft_abs(int x)
+double	ft_abs(double x)
 {
 	if (x < 0)
 		x = -x;

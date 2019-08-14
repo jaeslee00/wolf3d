@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/11 18:47:42 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/14 16:50:20 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-# define W 1920
-# define H 1080
+# define W 640
+# define H 480
 # define FOV 80
 # define HEIGHT 32
 # define WALL_SIZE 64
@@ -100,13 +100,13 @@ typedef struct	s_sdl
 typedef struct	s_player
 {
 	t_2d_p	ray;
-t_2d_p	position;
-t_2d direction;
-	t_2d plane;
-	float arc;
-	int distance;
-	int height;
-	int speed;
+	t_2d	position;
+	t_2d	direction;
+	t_2d	plane;
+	float	arc;
+	int		distance;
+	int		height;
+	int		speed;
 }				t_player;
 
 typedef struct	s_wolf
@@ -125,7 +125,7 @@ void			ft_raycast(t_wolf *wolf, t_player *player);
 int				**int_to_tab(t_obj obj);
 int				rgb_lerp(int color1, float t, int color2);
 int				lerp(int a, float t, int b);
-int				ft_abs(int x);
+double			ft_abs(double x);
 int				tkneizer(int fd, t_wolf *wolf);
 int				is_valid(float x, float y);
 int				is_invalid(char *str);
