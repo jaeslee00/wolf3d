@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/15 03:53:53 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/15 18:28:11 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-# define W 640
-# define H 480
+# define W 1920
+# define H 1080
 # define FOV 80
 # define HEIGHT 32
 # define WALL_SIZE 64
@@ -85,11 +85,20 @@ typedef struct	s_sdl
 
 typedef struct	s_player
 {
-	t_2d_p	ray;
+	t_2d	ray;
 	t_2d	position;
 	t_2d	direction;
 	t_2d	plane;
-	}				t_player;
+}				t_player;
+
+typedef struct	s_raycaster
+{
+	t_2d_p	step;
+	t_2d_p	map;
+	t_2d	side_dist;
+	t_2d	delta_dist;
+	t_2d		plane;
+}				t_raycaster;
 
 typedef struct	s_wolf
 {
@@ -102,7 +111,9 @@ typedef struct	s_wolf
 }				t_wolf;
 
 int				print_map(int **map, t_obj obj, t_player *player);
-void			render(t_wolf *wolf, double dirX, double dirY, double planeX, double planeY);
+void			render(t_wolf *wolf);
+//render(t_wolf *wolf, double dirX, double dirY, double planeX, double planeY);
+//render(&wolf, wolf.player.direction.x, wolf.player.direction.y, wolf.player.plane.x, wolf.player.plane.y);
 void			calculate_distance(t_player *p, t_2d_p *a);
 void			ft_raycast(t_wolf *wolf, t_player *player);
 int				**int_to_tab(t_obj obj);

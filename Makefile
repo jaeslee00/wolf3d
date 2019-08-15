@@ -6,37 +6,41 @@
 #    By: viccarau <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/09 12:55:04 by viccarau          #+#    #+#              #
-#    Updated: 2019/07/16 23:19:57 by marvin           ###   ########.fr        #
+#    Updated: 2019/07/16 23:19:57 by viccarau         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 NAME = wolf3d
-SRC_DIR = ~/Work/wolf3d/srcs/
+SDL2 = ~/Library/Frameworks/SDL2.framework
+SRC_DIR = /Users/viccarau/Work/wolf3d/srcs/
 INC = includes/camera.h includes/wolf3d.h includes/draw.h
 SRC = $(SRC_DIR)checks.c $(SRC_DIR)main.c $(SRC_DIR)keycode.c $(SRC_DIR)math.c \
-		$(SRC_DIR)parsing.c $(SRC_DIR)renderer.c $(SRC_DIR)raycaster.c $(SRC_DIR)debug.c
-
+		$(SRC_DIR)parsing.c $(SRC_DIR)renderer.c $(SRC_DIR)debug.c
 OBJ = $(SRC:$(SRC_DIR)%.c=%.o)
 
-#linux
-#LIB=minilibx
-LIB_INC=-Iincludes -Ilibft/includes
+LIB_INC=-Iincludes -Ilibft/includes -I ~/Work/wolf3d/SDL2.framework/Headers
 #-I$(LIB)
-#FLAGS+= $(LIB_INC) -lm -lXext -lX11
-# -lmlx -L $(LIB) 
+FLAGS += -Llibft -lft -lm -framework SDL2
 
-CFLAGS += -g -Wall -Wextra -Werror $(LIB_INC) -Llibft -lft -lm -lSDL2_image -lSDL2
+CFLAGS += -Wall -Wextra -Werror $(LIB_INC) -F.
 
 all: $(NAME)
 
-$(NAME):	$(OBJ)
+$(NAME):	$(OBJ) $(SDL2)
 	make -C libft
 	gcc -o $(NAME) $(OBJ) $(FLAGS) $(CFLAGS)
 
+$(SDL2):
+	@if [ ! -d  ~/Library/Frameworks ];then mkdir ~/Library/Frameworks; \
+	if [ ! -d ~/Library/Frameworks/SDL2.framework ]; \
+	then cp -r SDL2.framework ~/Library/Frameworks/. ; fi; \
+	elif [ ! -d ~/Library/Frameworks/SDL2.framework ] \
+	;then cp -r SDL2.framework ~/Library/Frameworks/. ; fi
+
+	
+
 $(OBJ): $(SRC) $(INC)
 	gcc -c $(SRC) $(CFLAGS)
-
-#	make -C $(LIB)
 
 clean:
 	rm -f $(OBJ)
@@ -45,6 +49,5 @@ clean:
 fclean:	clean
 	rm -f $(NAME)
 	make -C libft fclean
-#	make -C $(LIB) clean
 
 re: fclean all

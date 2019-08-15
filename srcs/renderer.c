@@ -15,6 +15,7 @@
  
 int	verLine(int x, int y1, int y2, const int color, unsigned int *img)
 {
+	int i;
 	int y;
 
 	if (y2 < y1)
@@ -30,77 +31,77 @@ int	verLine(int x, int y1, int y2, const int color, unsigned int *img)
 	if (y2 >= W)
 		y2 = H - 1;
 	y = y1;
-	while (y <= y2)
-{
+	i = 0;
+	while (i++ < y)
+		img[x + i * W] = 0x666600;
+	while (++y < y2)
 		img[x + y * W] = color;
-		 y++;
-	}
+	while (++y < H)
+		img[x + y * W] = 0x333300;
 	return (1);
 }
 
-void	render(t_wolf *wolf, double dirX, double dirY, double planeX, double planeY)
+void	render(t_wolf *wolf)
 {
-for (int x = 0; x < W; x++)
+	t_raycaster r;
+	double perpWallDist;
+	int hit;
+	int side;
+int x;
+
+	x = 0;
+ while (x < W)
 		{
-
-		double cameraX = 2 * x / (double)(W) - 1; //x-coordinate in camera space
-		double rayDirX = dirX + planeX * cameraX;
-			double rayDirY = dirY + planeY * cameraX;
-			int mapX = (int)wolf->player.position.x;
-			int mapY = (int)wolf->player.position.y;
-double sideDistX;
-			double sideDistY;
-double deltaDistX = ft_abs(1 / rayDirX);
-			double deltaDistY = ft_abs(1 / rayDirY);
-			double perpWallDist;
-int stepX;
-			int stepY;
-
-			int hit = 0;
-			int side; 
-			if (rayDirX < 0)
+		hit = 0;
+		wolf->player.ray.x = wolf->player.direction.x + wolf->player.plane.x * (2 * x / (double)(W) - 1);
+		wolf->player.ray.y = wolf->player.direction.y + wolf->player.plane.y * (2 * x / (double)(W) - 1);
+		r.delta_dist.x = ft_abs(1 / wolf->player.ray.x);
+		 r.delta_dist.y = ft_abs(1 / wolf->player.ray.y);
+		  r.map.x = (int)wolf->player.position.x;
+		  r.map.y = (int)wolf->player.position.y;
+			if (wolf->player.ray.x < 0)
 			{
-				stepX = -1;
-				sideDistX = (wolf->player.position.x - mapX) * deltaDistX;
+				r.step.x = -1;
+				r.side_dist.x = (wolf->player.position.x - r.map.x) * r.delta_dist.x;
 			}
 			else
 			{
-				stepX = 1;
-				sideDistX = (mapX + 1.0 - wolf->player.position.x) * deltaDistX;
+				r.step.x = 1;
+				r.side_dist.x = (r.map.x + 1.0 - wolf->player.position.x) * r.delta_dist.x;
 			}
-			if (rayDirY < 0)
+			if (wolf->player.ray.y < 0)
 			{
-				stepY = -1;
-				sideDistY = (wolf->player.position.y - mapY) * deltaDistY;
+				r.step.y = -1;
+				r.side_dist.y = (wolf->player.position.y - r.map.y) * r.delta_dist.y;
 			}
 			else
 			{
-				stepY = 1;
-				sideDistY = (mapY + 1.0 - wolf->player.position.y) * deltaDistY;
+				r.step.y = 1;
+				r.side_dist.y = (r.map.y + 1.0 - wolf->player.position.y) * r.delta_dist.y;
 			}
 			//perform DDA
 			while (hit == 0)
 			{
 				//jump to next map square, OR in x-direction, OR in y-direction
-				if (sideDistX < sideDistY)
+				if (r.side_dist.x < r.side_dist.y)
 				{
-					sideDistX += deltaDistX;
-					mapX += stepX;
+					r.side_dist.x += r.delta_dist.x;
+					r.map.x += r.step.x;
 					side = 0;
 				}
 				else
 				{
-					sideDistY += deltaDistY;
-					mapY += stepY;
+					r.side_dist.y += r.delta_dist.y;
+					r.map.y += r.step.y;
 					side = 1;
 				}
-				if (wolf->map[mapX][mapY] == 1)
+			if (wolf->map[r.map.x][r.map.y] == 1 || wolf->map[r.map.x][r.map.y] > 2)
 				hit = 1;
 			}
 			if (side == 0)
-			perpWallDist = (mapX - wolf->player.position.x + (1 - stepX) / 2) / rayDirX;
+			perpWallDist = (r.map.x - wolf->player.position.x + (1 - r.step.x) / 2) / wolf->player.ray.x;
 			else
-			perpWallDist = (mapY - wolf->player.position.y + (1 - stepY) / 2) / rayDirY;
+			perpWallDist = (r.map.y - wolf->player.position.y + (1 - r.step.y) / 2) / wolf->player.ray.y;
 		int lineHeight = (int)(H / perpWallDist);
 int drawStart = -lineHeight / 2 + H / 2;
 			if (drawStart < 0)
@@ -110,12 +111,13 @@ int drawStart = -lineHeight / 2 + H / 2;
 			drawEnd = H - 1;
 int color;
 
-			if (wolf->map[mapX][mapY] == 1)
-color = 0x660000;
+			if (wolf->map[r.map.x][r.map.y])
+			color = 0x440000 * wolf->map[r.map.x][r.map.y];
 else
 color = 0;
 			if (side == 1)
 		color = color >> 1;
 verLine(x, drawStart, drawEnd, color, wolf->img);
+		x++;
 		}
 	}
