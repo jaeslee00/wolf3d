@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:46:12 by viccarau          #+#    #+#             */
-/*   Updated: 2019/06/05 03:13:33 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/15 03:06:31 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ typedef struct	s_m4x4
 
 typedef struct	s_2d
 {
-	float		x;
-	float		y;
+			double	x;
+			double	y;
 }				t_2d;
 
 typedef union	u_3d

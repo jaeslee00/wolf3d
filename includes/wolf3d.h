@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/14 16:50:20 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/15 03:53:53 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,6 @@
 # ifndef PI32
 #  define PI32 3.14159265359f
 # endif
-
-#define ANGLE0 0
-#define ANGLE5 W / 16
-#define ANGLE10 ANGLE5 * 2
-#define ANGLE20 ANGLE10 * 2
-#define ANGLE30 ANGLE10 * 3
-#define ANGLE40 ANGLE20 * 2
-#define ANGLE60 ANGLE20 * 3
-#define ANGLE80 ANGLE40 * 2
-#define ANGLE90 ANGLE30 * 3
-#define ANGLE180 ANGLE90 * 2
-#define ANGLE270 ANGLE180 + ANGLE90
-#define ANGLE360 ANGLE180 * 2
-
 
 #include <stdio.h>
 typedef struct	s_ilst
@@ -103,11 +89,7 @@ typedef struct	s_player
 	t_2d	position;
 	t_2d	direction;
 	t_2d	plane;
-	float	arc;
-	int		distance;
-	int		height;
-	int		speed;
-}				t_player;
+	}				t_player;
 
 typedef struct	s_wolf
 {
@@ -119,6 +101,7 @@ typedef struct	s_wolf
 	int		**map;
 }				t_wolf;
 
+int				print_map(int **map, t_obj obj, t_player *player);
 void			render(t_wolf *wolf, double dirX, double dirY, double planeX, double planeY);
 void			calculate_distance(t_player *p, t_2d_p *a);
 void			ft_raycast(t_wolf *wolf, t_player *player);

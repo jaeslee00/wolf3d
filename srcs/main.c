@@ -13,42 +13,48 @@
 
 #include "wolf3d.h"
 
-int print_map(int **map, t_obj obj, t_player *player)
+int		my_function(int keycode, t_wolf *wolf, int **map)
 {
-	int	lines;
-	int	i;
-	int	j;
+	t_2d		old;
+	t_player	*p;
 
-	lines = (obj.size / obj.len);
-	i = 0;
-	printf("\n \t0  1  2  3  4  5  6  7  8  9  10 11\n\n");
-	while (i < lines)
-	{
-		j = 0;
-		while (j < obj.len)
-		{
-			 if (j == 0)
-				printf("%d\t", i);
-			if (map[i][j] == 2)
-			{
-				player->position.x = i;
-				player->position.y = j;
-			}
-			printf("%d  ", map[i][j]);
-			j++;
-		}
-		i++;
-		printf("\n");
-	}
-	return (0);
-}
-
-int		my_function(int keycode, t_wolf *wolf)
-{
+	p = &wolf->player;
 	if (keycode == SDL_SCANCODE_R)
 		printf("\nYou pressed R\n\n");
 	if (keycode == SDL_SCANCODE_ESCAPE)
 		is_alloc(NULL, *wolf, 0);
+	if (keycode == SDL_SCANCODE_W)
+	{
+		if (wolf->map[(int)(p->position.x + p->direction.x * 0.05f)][(int)(p->position.y)] == 0)
+			p->position.x += p->direction.x * 0.05f;
+		if (wolf->map[(int)(p->position.x)][(int)(p->position.y + p->direction.y * 0.05f)] == 0)
+			p->position.y += p->direction.y * 0.05f;
+	}
+	if (keycode == SDL_SCANCODE_S)
+	{
+		if (wolf->map[(int)(p->position.x - p->direction.x * 0.05f)][(int)(p->position.y)] == 0)
+			p->position.x -= p->direction.x * 0.05f;
+		if (wolf->map[(int)(p->position.x)][(int)(p->position.y - p->direction.y * 0.05f)] == 0)
+			p->position.y -= p->direction.y * 0.05f;
+	}
+	if (keycode == SDL_SCANCODE_A)
+	{
+		old.x = p->direction.x;
+		p->direction.x = p->direction.x * cos(0.05f) - p->direction.y * sin(0.05f);
+		p->direction.y = old.x * sin(0.05f) + p->direction.y * cos(0.05f);
+		old.y = p->plane.x;
+		p->plane.x = p->plane.x * cos(0.05f) - p->plane.y * sin(0.05f);
+		p->plane.y = old.y * sin(0.05f) + p->plane.y * cos(0.05f);
+	}
+	if (keycode == SDL_SCANCODE_D)
+	{
+		old.x = p->direction.x;
+		p->direction.x = p->direction.x * cos(-0.05f) - p->direction.y * sin(-0.05f);
+		p->direction.y = old.x * sin(-0.05f) + p->direction.y * cos(-0.05f);
+		old.y = p->plane.x;
+		p->plane.x = p->plane.x * cos(-0.05f) - p->plane.y * sin(-0.05f);
+		p->plane.y = old.y * sin(-0.05f) + p->plane.y * cos(-0.05f);
+	}
 	return (1);
 }
 
@@ -58,10 +64,10 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, W, H, 0);
 	wolf->img = ft_memalloc(W * H * sizeof(unsigned int));
-	wolf->player.arc = W / 12;
-	wolf->player.distance = 426;
-	wolf->player.height = 32;
-	wolf->player.speed = 16;
+	wolf->player.direction.x = -1;
+	wolf->player.direction.y = 0;
+	wolf->player.plane.x = 0;
+	wolf->player.plane.y = 0.66;
 }
 
 int		main(int ac, char **av)
@@ -69,11 +75,7 @@ int		main(int ac, char **av)
 	int		i;
 	t_wolf	wolf;
 	int		fd;
-	double dirX = -1, dirY = 0; //initial direction vector
-	double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 	//float	avg_fps;
-	wolf.player.direction.x = 0;
-	wolf.player.direction.y = -1.0f;
 	//p.plane.x = 0;
 	//p.plane.y = 80;
 
@@ -107,45 +109,9 @@ int		main(int ac, char **av)
 					//wolf.player.arc -= 5;
 				//if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_D)
 					//wolf.player.arc += 5;
-				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_W)
-					wolf.player.position.x += 1;
-				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_S)
-					wolf.player.position.x -= 1;
-				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_W)
-				{
-					if (wolf.map[(int)(wolf.player.position.x + dirX * 0.05f)][(int)(wolf.player.position.y)] == 0)
-						wolf.player.position.x += dirX * 0.05f;
-					if (wolf.map[(int)(wolf.player.position.x)][(int)(wolf.player.position.y + dirY * 0.05f)] == 0)
-						wolf.player.position.y += dirY * 0.05f;
-				}
-				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_S)
-				{
-					if (wolf.map[(int)(wolf.player.position.x - dirX * 0.05f)][(int)(wolf.player.position.y)] == 0)
-						wolf.player.position.x -= dirX * 0.05f;
-					if (wolf.map[(int)(wolf.player.position.x)][(int)(wolf.player.position.y - dirY * 0.05f)] == 0)
-						wolf.player.position.y -= dirY * 0.05f;
-				}
-				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_A)
-					{
-					double oldDirX = dirX;
-						dirX = dirX * cos(0.05f) - dirY * sin(0.05f);
-						dirY = oldDirX * sin(0.05f) + dirY * cos(0.05f);
-						double oldPlaneX = planeX;
-						planeX = planeX * cos(0.05f) - planeY * sin(0.05f);
-						planeY = oldPlaneX * sin(0.05f) + planeY * cos(0.05f);
-					}
-				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_D)
-				{
-					double oldDirX = dirX;
-					dirX = dirX * cos(-0.05f) - dirY * sin(-0.05f);
-					dirY = oldDirX * sin(-0.05f) + dirY * cos(-0.05f);
-					double oldPlaneX = planeX;
-					planeX = planeX * cos(-0.05f) - planeY * sin(-0.05f);
-					planeY = oldPlaneX * sin(-0.05f) + planeY * cos(-0.05f);
-				}
 				}
 			ft_bzero(wolf.img, sizeof(unsigned int) * W * H);
-			render(&wolf, dirX, dirY, planeX, planeY);
+			render(&wolf, wolf.player.direction.x, wolf.player.direction.y, wolf.player.plane.x, wolf.player.plane.y);
 			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img, W * sizeof(unsigned int));
 			SDL_RenderCopy(wolf.sdl.renderer, wolf.sdl.texture, NULL, NULL);
 			SDL_RenderPresent(wolf.sdl.renderer);
