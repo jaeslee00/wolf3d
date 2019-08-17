@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/15 18:28:11 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/17 04:05:25 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ typedef struct	s_player
 	t_2d	position;
 	t_2d	direction;
 	t_2d	plane;
+	float	speed;
 }				t_player;
 
 typedef struct	s_raycaster

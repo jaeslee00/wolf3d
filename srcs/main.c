@@ -26,16 +26,16 @@ int		my_function(int keycode, t_wolf *wolf, int **map)
 	if (keycode == SDL_SCANCODE_W)
 	{
 if (map[(int)(p->position.x + p->direction.x * 0.05f)][(int)(p->position.y)] == 0)
-			p->position.x += p->direction.x * 0.05f;
+			p->position.x += p->direction.x * p->speed;
 		if (map[(int)(p->position.x)][(int)(p->position.y + p->direction.y * 0.05f)] == 0)
-			p->position.y += p->direction.y * 0.05f;
+			p->position.y += p->direction.y * p->speed;
 	}
 	if (keycode == SDL_SCANCODE_S)
 	{
 		if (map[(int)(p->position.x - p->direction.x * 0.05f)][(int)(p->position.y)] == 0)
-			p->position.x -= p->direction.x * 0.05f;
+			p->position.x -= p->direction.x * p->speed;
 		if (map[(int)(p->position.x)][(int)(p->position.y - p->direction.y * 0.05f)] == 0)
-			p->position.y -= p->direction.y * 0.05f;
+			p->position.y -= p->direction.y * p->speed;
 	}
 	if (keycode == SDL_SCANCODE_E)
 	{
@@ -69,6 +69,22 @@ if (map[(int)(p->position.x + p->direction.x * 0.05f)][(int)(p->position.y)] == 
 		p->plane.x = p->plane.x * cos(-0.05f) - p->plane.y * sin(-0.05f);
 		p->plane.y = old.y * sin(-0.05f) + p->plane.y * cos(-0.05f);
 	}
+// TODO(viccarau): Implement a FOV calculator by doing the dot product between direction and plane
+// vectors, then the cos of the dot product is the angle of the FOV
+// TODO(viccarau): Limit the FOV slider
+if (keycode == SDL_SCANCODE_EQUALS)
+	{
+		p->direction.x *= 0.9f;
+		p->direction.y *= 0.9f;
+		p->speed *= 1.1f;
+		}
+	if (keycode == SDL_SCANCODE_MINUS)
+	{
+		p->direction.x *= 1.1f;
+		p->direction.y *= 1.1f;
+		p->speed *= 0.9f;
+		}
+printf("plane x\t%f , plane y\t%f\n", p->plane.x, p->plane.y);
 	return (1);
 }
 
@@ -76,12 +92,14 @@ void	ft_wolf_init(t_wolf *wolf)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED, W, H, 0);
+									 SDL_WINDOWPOS_CENTERED, W, H, 0);
+	//SDL_WINDOW_FULLSCREEN
 	wolf->img = ft_memalloc(W * H * sizeof(unsigned int));
 	wolf->player.direction.x = -1;
 	wolf->player.direction.y = 0;
 	wolf->player.plane.x = 0;
-	wolf->player.plane.y = 0.66;
+	wolf->player.plane.y = 1;
+	wolf->player.speed = 0.05f;
 }
 
 int		main(int ac, char **av)
