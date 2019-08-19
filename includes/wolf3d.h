@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/17 04:05:25 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/19 19:57:51 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-# define W 1920
-# define H 1080
+# define W 1280
+# define H 720
 # define FOV 80
 # define HEIGHT 32
 # define WALL_SIZE 64
@@ -99,6 +99,9 @@ typedef struct	s_raycaster
 	t_2d	side_dist;
 	t_2d	delta_dist;
 	t_2d		plane;
+	double	perp_distance;
+	int		hit;
+	int		side;
 }				t_raycaster;
 
 typedef struct	s_wolf
@@ -109,7 +112,7 @@ typedef struct	s_wolf
 	unsigned int	*img;
 	t_mem		mem;
 	int		**map;
-}				t_wolf;
+	}				t_wolf;
 
 int				print_map(int **map, t_obj obj, t_player *player);
 void			render(t_wolf *wolf);

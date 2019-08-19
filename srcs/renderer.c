@@ -32,27 +32,27 @@ int	verLine(int x, int y1, int y2, const int color, unsigned int *img)
 		y2 = H - 1;
 	y = y1;
 	i = 0;
-	while (i++ < y)
-		img[x + i * W] = 0x666600;
 	while (++y < y2)
 		img[x + y * W] = color;
-	while (++y < H)
-		img[x + y * W] = 0x333300;
 	return (1);
 }
 
+/*
+t_raycaster r;
+double perpWallDist;
+int hit;
+int side;
+int x;
+*/
+
 void	render(t_wolf *wolf)
 {
+	int x;
 	t_raycaster r;
-	double perpWallDist;
-	int hit;
-	int side;
-int x;
-
 	x = 0;
  while (x < W)
 		{
-		hit = 0;
+		r.hit = 0;
 		wolf->player.ray.x = wolf->player.direction.x + wolf->player.plane.x * (2 * x / (double)(W) - 1);
 		wolf->player.ray.y = wolf->player.direction.y + wolf->player.plane.y * (2 * x / (double)(W) - 1);
 		r.delta_dist.x = ft_abs(1 / wolf->player.ray.x);
@@ -80,29 +80,29 @@ int x;
 				r.side_dist.y = (r.map.y + 1.0 - wolf->player.position.y) * r.delta_dist.y;
 			}
 			//perform DDA
-			while (hit == 0)
+			while (r.hit == 0)
 			{
 				//jump to next map square, OR in x-direction, OR in y-direction
 				if (r.side_dist.x < r.side_dist.y)
 				{
 					r.side_dist.x += r.delta_dist.x;
 					r.map.x += r.step.x;
-					side = 0;
+					r.side = 0;
 				}
 				else
 				{
 					r.side_dist.y += r.delta_dist.y;
 					r.map.y += r.step.y;
-					side = 1;
+					r.side = 1;
 				}
 			if (wolf->map[r.map.x][r.map.y] == 1 || wolf->map[r.map.x][r.map.y] > 2)
-				hit = 1;
+				r.hit = 1;
 			}
-			if (side == 0)
-			perpWallDist = (r.map.x - wolf->player.position.x + (1 - r.step.x) / 2) / wolf->player.ray.x;
+			if (r.side == 0)
+			r.perp_distance = (r.map.x - wolf->player.position.x + (1 - r.step.x) / 2) / wolf->player.ray.x;
 			else
-			perpWallDist = (r.map.y - wolf->player.position.y + (1 - r.step.y) / 2) / wolf->player.ray.y;
-		int lineHeight = (int)(H / perpWallDist);
+			 r.perp_distance = (r.map.y - wolf->player.position.y + (1 - r.step.y) / 2) / wolf->player.ray.y;
+		int lineHeight = (int)(H / r.perp_distance);
 int drawStart = -lineHeight / 2 + H / 2;
 			if (drawStart < 0)
 			drawStart = 0;
@@ -115,7 +115,7 @@ int color;
 			color = 0x440000 * wolf->map[r.map.x][r.map.y];
 else
 color = 0;
-			if (side == 1)
+			if (r.side == 1)
 		color = color >> 1;
 verLine(x, drawStart, drawEnd, color, wolf->img);
 		x++;
