@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/07 19:19:34 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/20 04:24:29 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,17 @@ void	is_alloc(void *mem, t_wolf wolf, int error)
 			error = -1;
 		exit(error);
 	}
-}
+	}
 
 void	mem_init(t_wolf *wolf)
 {
 	ft_bzero(&wolf[0], sizeof(*wolf));
+	// NOTE(viccarau): This comments will help me see the size of my structures
+	//				I'll optimize them by the way I need them
+	
 	//printf("size of wolf = %d\n", sizeof(*wolf));
 	//printf("size of ind %d\n", sizeof(t_sdl) + sizeof(t_mem) + sizeof(t_obj) + sizeof(wolf->img) + sizeof(char));
-	is_alloc(wolf->mem.m = ft_memalloc((1024)), *wolf, -5);
-	wolf->mem.tsize = (1024);
+	is_alloc(wolf->mem.m = ft_memalloc((3702644)), *wolf, -5);
+	wolf->mem.tsize = 3702644;
 	wolf->mem.usize = sizeof(int);
 	}

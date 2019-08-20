@@ -22,7 +22,7 @@ int		my_function(SDL_Event event, t_wolf *wolf, int **map)
 	p = &wolf->player;
 	if (event.type == SDL_MOUSEMOTION)
 	{
-		motion = -(double)(event.motion.xrel * 0.01f);
+		motion = -(double)(event.motion.xrel * 0.001f);
 		old.x = p->direction.x;
 		p->direction.x = p->direction.x * cos(motion) - p->direction.y * sin(motion);
 		p->direction.y = old.x * sin(motion) + p->direction.y * cos(motion);
@@ -34,51 +34,52 @@ else
 {
 	if (event.key.keysym.scancode == SDL_SCANCODE_R)
 		printf("\nYou pressed R\n\n");
-	if (event.key.keysym.scancode == SDL_SCANCODE_W)
+	// TODO(viccarau): I want a circle colision from the player to the walls
+		if (event.key.keysym.scancode == SDL_SCANCODE_W)
 	{
-if (map[(int)(p->position.x + p->direction.x * 0.05f)][(int)(p->position.y)] == 0)
+if (map[(int)(p->position.x + p->direction.x * p->speed)][(int)(p->position.y)] == 0)
 			p->position.x += p->direction.x * p->speed;
-		if (map[(int)(p->position.x)][(int)(p->position.y + p->direction.y * 0.05f)] == 0)
+		if (map[(int)(p->position.x)][(int)(p->position.y + p->direction.y * p->speed)] == 0)
 			p->position.y += p->direction.y * p->speed;
 	}
 	if (event.key.keysym.scancode == SDL_SCANCODE_S)
 	{
-		if (map[(int)(p->position.x - p->direction.x * 0.05f)][(int)(p->position.y)] == 0)
+		if (map[(int)(p->position.x - p->direction.x * p->speed)][(int)(p->position.y)] == 0)
 			p->position.x -= p->direction.x * p->speed;
-		if (map[(int)(p->position.x)][(int)(p->position.y - p->direction.y * 0.05f)] == 0)
+		if (map[(int)(p->position.x)][(int)(p->position.y - p->direction.y * p->speed)] == 0)
 			p->position.y -= p->direction.y * p->speed;
-	}
-	if (event.key.keysym.scancode == SDL_SCANCODE_E)
-	{
-		if (map[(int)(p->position.x + p->plane.x * 0.05f)][(int)(p->position.y)] == 0)
-			p->position.x += p->plane.x * 0.09f;
-		if (map[(int)(p->position.x)][(int)(p->position.y + p->plane.y * 0.05f)] == 0)
-			p->position.y += p->plane.y * 0.09f;
-	}
-	if (event.key.keysym.scancode == SDL_SCANCODE_Q)
-	{
-		if (map[(int)(p->position.x - p->plane.x * 0.05f)][(int)(p->position.y)] == 0)
-			p->position.x -= p->plane.x * 0.09f;
-		if (map[(int)(p->position.x)][(int)(p->position.y - p->plane.y * 0.05f)] == 0)
-			p->position.y -= p->plane.y * 0.09f;
-	}
-	if (event.key.keysym.scancode == SDL_SCANCODE_A)
-	{
-		old.x = p->direction.x;
-		p->direction.x = p->direction.x * cos(0.05f) - p->direction.y * sin(0.05f);
-		p->direction.y = old.x * sin(0.05f) + p->direction.y * cos(0.05f);
-		old.y = p->plane.x;
-		p->plane.x = p->plane.x * cos(0.05f) - p->plane.y * sin(0.05f);
-		p->plane.y = old.y * sin(0.05f) + p->plane.y * cos(0.05f);
 	}
 	if (event.key.keysym.scancode == SDL_SCANCODE_D)
 	{
+		if (map[(int)(p->position.x + p->plane.x * 0.2f)][(int)(p->position.y)] == 0)
+			p->position.x += p->plane.x * 0.2f;
+		if (map[(int)(p->position.x)][(int)(p->position.y + p->plane.y * 0.2f)] == 0)
+			p->position.y += p->plane.y * 0.2f;
+	}
+	if (event.key.keysym.scancode == SDL_SCANCODE_A)
+	{
+		if (map[(int)(p->position.x - p->plane.x * 0.2f)][(int)(p->position.y)] == 0)
+			p->position.x -= p->plane.x * 0.2f;
+		if (map[(int)(p->position.x)][(int)(p->position.y - p->plane.y * 0.2f)] == 0)
+			p->position.y -= p->plane.y * 0.2f;
+	}
+	if (event.key.keysym.scancode == SDL_SCANCODE_Q)
+	{
 		old.x = p->direction.x;
-		p->direction.x = p->direction.x * cos(-0.05f) - p->direction.y * sin(-0.05f);
-		p->direction.y = old.x * sin(-0.05f) + p->direction.y * cos(-0.05f);
+		p->direction.x = p->direction.x * cos(0.2f) - p->direction.y * sin(0.2f);
+		p->direction.y = old.x * sin(0.2f) + p->direction.y * cos(0.2f);
 		old.y = p->plane.x;
-		p->plane.x = p->plane.x * cos(-0.05f) - p->plane.y * sin(-0.05f);
-		p->plane.y = old.y * sin(-0.05f) + p->plane.y * cos(-0.05f);
+		p->plane.x = p->plane.x * cos(0.2f) - p->plane.y * sin(0.2f);
+		p->plane.y = old.y * sin(0.2f) + p->plane.y * cos(0.2f);
+	}
+	if (event.key.keysym.scancode == SDL_SCANCODE_E)
+	{
+		old.x = p->direction.x;
+		p->direction.x = p->direction.x * cos(-0.2f) - p->direction.y * sin(-0.2f);
+		p->direction.y = old.x * sin(-0.2f) + p->direction.y * cos(-0.2f);
+		old.y = p->plane.x;
+		p->plane.x = p->plane.x * cos(-0.2f) - p->plane.y * sin(-0.2f);
+		p->plane.y = old.y * sin(-0.2f) + p->plane.y * cos(-0.2f);
 	}
 // TODO(viccarau): Implement a FOV calculator by doing the dot product between direction and plane
 // vectors, then the cos of the dot product is the angle of the FOV
@@ -106,41 +107,50 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 									 SDL_WINDOWPOS_CENTERED, 1920, 1080, 0);
 	//SDL_WINDOW_FULLSCREEN
-	wolf->img = ft_memalloc(W * H * sizeof(unsigned int));
+	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(unsigned int));
 	wolf->player.direction.x = -1;
 	wolf->player.direction.y = 0;
 	wolf->player.plane.x = 0;
 	wolf->player.plane.y = 1;
-	wolf->player.speed = 0.05f;
+	wolf->player.speed = 0.2f;
 }
 
 void	ceiling(unsigned int *img)
 {
 	int x;
 	int y;
-	
-	 x = 0;
+	int y1;
+	 float color;
+	 
+	color = 0x333300;
+	x = 0;
 	y = 0;
+	y1 = (H / 2) << 6;
 	while (y < H / 2)
 	{
 		x = 0;
 		while (x < W)
 		{
-			img[x + y * W] = 0x003333;
+			img[x + y * W] = color;
+			color = y1 / 4;
 			x++;
 		}
 		y++;
+		y1--;
 	}
+	y1 = (H / 8);
 	while (y < H)
 	{
 		x = 0;
 		while (x < W)
 		{
-			img[x + y * W] = 0x333300;
+			img[x + y * W] = color;
+			color = y1 / 4;
 			x++;
 		}
 		y++;
-	}
+		y1++;
+		}
 		}
 
 int		main(int ac, char **av)
@@ -150,7 +160,6 @@ int		main(int ac, char **av)
 	t_wolf	wolf;
 	int		fd;
 	int frames[120];
-	//float	avg_fps;
 	
 	mem_init(&wolf);
 		if (ac == 2)
@@ -179,7 +188,7 @@ int		main(int ac, char **av)
 is_alloc(NULL, wolf, 0);
 					my_function(wolf.sdl.event, &wolf, wolf.map);
 				}
-			ft_bzero(wolf.img, sizeof(unsigned int) * W * H);
+			//ft_bzero(wolf.img, sizeof(unsigned int) * W * H);
 			ceiling(wolf.img);
 			render(&wolf);
 			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img, W * sizeof(unsigned int));
@@ -187,19 +196,20 @@ is_alloc(NULL, wolf, 0);
 			SDL_RenderPresent(wolf.sdl.renderer);
 			if (i == 100)
 			{
-				j = 99;
-				while (j >= 0)
+				i = 1;
+				j = 0;
+				while (i <= 100)
 				{
 					printf("%d ms\t", frames[i] - frames[j]);
-					i--;
-					j--;
+					i++;
+					j++;
 				}
 				ft_bzero(frames, sizeof(int) * 120);
 				printf("\n");
-				i = 0;
+				i = -1;
 			}
 			i++;
 			}
+	}
 	return (0);
-}
 }

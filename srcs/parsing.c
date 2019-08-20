@@ -6,13 +6,15 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 16:26:36 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/11 18:43:45 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/20 04:23:57 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-int **int_to_tab(t_obj obj)
+// TODO(viccarau): I want to make a function that removes blocks of memory dependant
+// on data structures that declare the beginning and the end of that block of memory;
+int **int_to_tab(t_wolf *wolf)
 {
 	int i;
 	int j;
@@ -22,15 +24,16 @@ int **int_to_tab(t_obj obj)
 
 	i = 0;
 	k = 0;
-	lines = (obj.size / obj.len);
-	tab = ft_memalloc(sizeof(*tab) * lines);
+	lines = (wolf->obj.size / wolf->obj.len);
+	is_alloc(tab = ft_mem(&wolf->mem, sizeof(*tab) * lines), *wolf, -1);
+	
 	while (i < lines)
 	{
 		j = 0;
-		tab[i] = ft_memalloc(sizeof(**tab) * (obj.len));
-		while (j < obj.len)
+		is_alloc(tab[i] = ft_mem(&wolf->mem, sizeof(**tab) * (wolf->obj.len)), *wolf, -1);
+		while (j < wolf->obj.len)
 		{
-			tab[i][j] = obj.nb[k];
+			tab[i][j] = wolf->obj.nb[k];
 				j++;
 			k++;
 		}
@@ -73,6 +76,6 @@ int		tkneizer(int fd, t_wolf *wolf)
 		free(line);
 	}
 	wolf->obj.size = xy.x;
-	wolf->map = int_to_tab(wolf->obj);
+	wolf->map = int_to_tab(wolf);
 	return (1);
 	}

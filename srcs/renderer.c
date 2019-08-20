@@ -15,7 +15,6 @@
  
 int	verLine(int x, int y1, int y2, const int color, unsigned int *img)
 {
-	int i;
 	int y;
 
 	if (y2 < y1)
@@ -31,26 +30,21 @@ int	verLine(int x, int y1, int y2, const int color, unsigned int *img)
 	if (y2 >= W)
 		y2 = H - 1;
 	y = y1;
-	i = 0;
 	while (++y < y2)
 		img[x + y * W] = color;
 	return (1);
 }
 
-/*
-t_raycaster r;
-double perpWallDist;
-int hit;
-int side;
-int x;
-*/
-
 void	render(t_wolf *wolf)
 {
 	int x;
+	int line_height;
+	int draw_start;
+
 	t_raycaster r;
 	x = 0;
- while (x < W)
+ 
+	while (x < W)
 		{
 		r.hit = 0;
 		wolf->player.ray.x = wolf->player.direction.x + wolf->player.plane.x * (2 * x / (double)(W) - 1);
@@ -79,8 +73,10 @@ void	render(t_wolf *wolf)
 				r.step.y = 1;
 				r.side_dist.y = (r.map.y + 1.0 - wolf->player.position.y) * r.delta_dist.y;
 			}
-			//perform DDA
-			while (r.hit == 0)
+			
+		//perform DDA
+			
+		while (r.hit == 0)
 			{
 				//jump to next map square, OR in x-direction, OR in y-direction
 				if (r.side_dist.x < r.side_dist.y)
@@ -98,17 +94,19 @@ void	render(t_wolf *wolf)
 			if (wolf->map[r.map.x][r.map.y] == 1 || wolf->map[r.map.x][r.map.y] > 2)
 				r.hit = 1;
 			}
-			if (r.side == 0)
+			
+		if (r.side == 0)
 			r.perp_distance = (r.map.x - wolf->player.position.x + (1 - r.step.x) / 2) / wolf->player.ray.x;
 			else
 			 r.perp_distance = (r.map.y - wolf->player.position.y + (1 - r.step.y) / 2) / wolf->player.ray.y;
-		int lineHeight = (int)(H / r.perp_distance);
-int drawStart = -lineHeight / 2 + H / 2;
-			if (drawStart < 0)
-			drawStart = 0;
-			int drawEnd = lineHeight / 2 + H / 2;
-			if (drawEnd >= H)
-			drawEnd = H - 1;
+		
+		 line_height = (int)(H / r.perp_distance);
+		draw_start = -line_height / 2 + H / 2;
+			if (draw_start < 0)
+			draw_start = 0;
+			int draw_end = line_height / 2 + H / 2;
+			if (draw_end >= H)
+			draw_end = H - 1;
 int color;
 
 			if (wolf->map[r.map.x][r.map.y])
@@ -117,7 +115,7 @@ else
 color = 0;
 			if (r.side == 1)
 		color = color >> 1;
-verLine(x, drawStart, drawEnd, color, wolf->img);
+verLine(x, draw_start, draw_end, color, wolf->img);
 		x++;
 		}
 	}

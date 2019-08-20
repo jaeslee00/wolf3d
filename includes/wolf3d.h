@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/19 19:57:51 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/20 03:26:27 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void			render(t_wolf *wolf);
 //render(&wolf, wolf.player.direction.x, wolf.player.direction.y, wolf.player.plane.x, wolf.player.plane.y);
 void			calculate_distance(t_player *p, t_2d_p *a);
 void			ft_raycast(t_wolf *wolf, t_player *player);
-int				**int_to_tab(t_obj obj);
+int			**int_to_tab(t_wolf *wolf);
 int				rgb_lerp(int color1, float t, int color2);
 int				lerp(int a, float t, int b);
 double			ft_abs(double x);
