@@ -6,13 +6,13 @@
 #    By: viccarau <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/09 12:55:04 by viccarau          #+#    #+#              #
-#    Updated: 2019/07/16 23:19:57 by viccarau         ###   ########.fr        #
+#    Updated: 2019/08/20 22:44:32 by jaelee           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 NAME = wolf3d
 SDL2 = ~/Library/Frameworks/SDL2.framework
-SRC_DIR = /Users/viccarau/Work/wolf3d/srcs/
+SRC_DIR = ./srcs/
 INC = includes/camera.h includes/wolf3d.h includes/draw.h
 SRC = $(SRC_DIR)checks.c $(SRC_DIR)main.c $(SRC_DIR)keycode.c $(SRC_DIR)math.c \
 		$(SRC_DIR)parsing.c $(SRC_DIR)renderer.c $(SRC_DIR)debug.c
