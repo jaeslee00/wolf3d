@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/22 23:04:37 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/23 00:24:02 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,9 +129,6 @@ typedef struct	s_wolf
 	unsigned int	*img;
 	t_mem		mem;
 	int		**map;
-	int		move_ws;
-	int		move_as;
-	char	key_press[255];
 	t_texture	tex[4];
 }				t_wolf;
 
