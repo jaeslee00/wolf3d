@@ -46,7 +46,7 @@ int		set_color(int side, int x_side, int y_side, t_wolf *wf, int start, int end,
 		int d = y * 256 - H * 128 + line_height * 128;  //256 and 128 factors to avoid floats
 		// TODO: avoid the division to speed this up
 		int texY = ((d * TEX_WIDTH) / line_height) >> 8;
-		int color = wf->tex[0].data2[TEX_HEIGHT * texY + texX];
+		int color = wf->tex[0].data[TEX_HEIGHT * texY + texX];
 		wf->img[x + y * W] = color;
 	}
 

@@ -107,8 +107,8 @@ int		read_all(int fd, unsigned char *data, int size)
 	int	ret;
 
 	read_bytes = 0;
-	while (((ret = read(fd, data + read_bytes, size - read_bytes)) > 0)
-		&& (read_bytes + ret) < size)
+	//read(fd, data, 90 + 64);
+	while (((ret = read(fd, data + read_bytes, size - read_bytes)) > 0))
 		read_bytes = read_bytes + ret;
 	if (ret <= 0)
 		return (ret);
@@ -117,46 +117,30 @@ int		read_all(int fd, unsigned char *data, int size)
 
 t_texture	read_bmp(const char *filename)
 {
+	unsigned char data[64 * 64 * 3];
 	int fd;
 	unsigned char header[54];
 	t_texture		tex;
 
 	fd = open(filename, O_RDONLY);
-	read(fd, header, BMP_HEADER_SIZE);
+	read(fd, header, 54);
 
-	tex.width = *(int*)&header[18];
-	tex.height = *(int*)&header[22];
-	tex.size = 3 * tex.width * tex.height;
+	tex.width = 64;
+	tex.height = 64;
+	printf("ADASD, %d, %d\n", tex.width, tex.height);
+	tex.size = 4 * tex.width * tex.height;
 
-	unsigned char *data = (unsigned char*)malloc(tex.size);
 	int i = 0;
 	int j = 0;
-	tex.data = (unsigned char*)malloc(tex.width * tex.height * 4);
-	tex.data2 = (int*)malloc(tex.width * tex.height * sizeof(int));
+	tex.data = (unsigned int*)malloc(tex.width * tex.height * sizeof(int));
 	read_all(fd, data, tex.size);
-	while (i < 64 * 64)
+
+	i = (64 * 64) - 1;
+	while (i >= 0)
 	{
-		printf("R : %hhu G : %hhu B : %hhu\n", data[i], data[i+1], data[i + 2]);
-		i += 3;
-	}
-	i = 0;
-	j = 0;
-	while (i < TEX_WIDTH * TEX_HEIGHT)
-	{
-		tex.data[i] = data[j];
-		tex.data[i + 1] = data[j + 1];
-		tex.data[i + 2] = data[j + 2];
-		tex.data[i + 3] = 0;
-		i += 4;
+		tex.data[i] = data[j] | data[j + 1] << 8 | data[j + 2] << 16;
+		i--;
 		j += 3;
-	}
-	i = 0;
-	j = 0;
-	while (i < TEX_WIDTH * TEX_HEIGHT)
-	{
-		tex.data2[i] = (int)tex.data[j];
-		j += 4;
-		i++;
 	}
 	return (tex);
 }
@@ -174,9 +158,9 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.plane.y = 1;
 	wolf->player.speed = 0.2f;
 	wolf->tex[0] = read_bmp("./texture/eagle.bmp");
-//	wolf->tex[1] = read_bmp("./texture/colorstone.bmp");
-//	wolf->tex[2] = read_bmp("./texture/greystone.bmp");
-//	wolf->tex[3] = read_bmp("./texture/redbrick.bmp");
+	wolf->tex[1] = read_bmp("./texture/colorstone.bmp");
+	wolf->tex[2] = read_bmp("./texture/greystone.bmp");
+	wolf->tex[3] = read_bmp("./texture/redbrick.bmp");
 	// int i = 0;
 	// while (i < 64 * 64)
 	// {
@@ -195,8 +179,7 @@ void	ceiling(unsigned int *img)
 	int y;
 	int y1;
 	 float color;
-
-	color = 0x333300;
+color = 0x333300;
 	x = 0;
 	y = 0;
 	y1 = (H / 2) << 6;
@@ -227,6 +210,24 @@ void	ceiling(unsigned int *img)
 		}
 		}
 
+void img_to_screen(unsigned int *img, t_texture t)
+{
+	int x;
+	int y;
+
+	x = 0;
+	while (x < t.width)
+	{
+		y = 0;
+		while (y < t.height)
+		{
+			img[x + y * W] = t.data[x + y * W];
+			y++;
+		}
+		x++;
+	}
+}
+
 int		main(int ac, char **av)
 {
 	int		i;
@@ -247,7 +248,7 @@ int		main(int ac, char **av)
 		ft_wolf_init(&wolf);
 		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
-			SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
+											 SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, wolf.tex[0].width, wolf.tex[0].height);
 		i = 0;
 		ft_bzero(frames, sizeof(int) * 120);
 		SDL_SetRelativeMouseMode(SDL_TRUE);

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/22 06:06:19 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/22 23:04:37 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include <math.h>
 # include <stdint.h>
 # include <SDL2/SDL.h>
-# define W 1280
-# define H 720
+# define W 64
+# define H 64
 # define FOV 80
 # define HEIGHT 32
 # define TEX_WIDTH 64
@@ -50,9 +50,8 @@ typedef struct	s_texture
 	int				width;
 	int				height;
 	int				size;
-	unsigned char	*data;
-	int				*data2;
-}				t_texture;
+	unsigned int		*data;
+	}				t_texture;
 
 typedef struct	s_2d_p
 {
