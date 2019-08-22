@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/20 03:26:27 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/22 23:38:38 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ typedef struct	s_wolf
 	unsigned int	*img;
 	t_mem		mem;
 	int		**map;
+	unsigned int flag;
 	}				t_wolf;
 
 int				print_map(int **map, t_obj obj, t_player *player);

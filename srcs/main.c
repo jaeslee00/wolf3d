@@ -13,56 +13,16 @@
 
 #include "wolf3d.h"
 
-int		my_function(SDL_Event event, t_wolf *wolf, int **map)
+// TODO(viccarau): Limit the FOV slider
+
+void	set_flag(t_wolf *wolf, SDL_Event event)
 {
+	//state = SDL_GetKeyboardState(NULL);
 	t_2d		old;
 	t_player	*p;
 	double motion;
 
 	p = &wolf->player;
-	if (event.type == SDL_MOUSEMOTION)
-	{
-		motion = -(double)(event.motion.xrel * 0.001f);
-		old.x = p->direction.x;
-		p->direction.x = p->direction.x * cos(motion) - p->direction.y * sin(motion);
-		p->direction.y = old.x * sin(motion) + p->direction.y * cos(motion);
-		old.y = p->plane.x;
-		p->plane.x = p->plane.x * cos(motion) - p->plane.y * sin(motion);
-		p->plane.y = old.y * sin(motion) + p->plane.y * cos(motion);
-		}
-else 
-{
-	if (event.key.keysym.scancode == SDL_SCANCODE_R)
-		printf("\nYou pressed R\n\n");
-	// TODO(viccarau): I want a circle colision from the player to the walls
-		if (event.key.keysym.scancode == SDL_SCANCODE_W)
-	{
-if (map[(int)(p->position.x + p->direction.x * p->speed)][(int)(p->position.y)] == 0)
-			p->position.x += p->direction.x * p->speed;
-		if (map[(int)(p->position.x)][(int)(p->position.y + p->direction.y * p->speed)] == 0)
-			p->position.y += p->direction.y * p->speed;
-	}
-	if (event.key.keysym.scancode == SDL_SCANCODE_S)
-	{
-		if (map[(int)(p->position.x - p->direction.x * p->speed)][(int)(p->position.y)] == 0)
-			p->position.x -= p->direction.x * p->speed;
-		if (map[(int)(p->position.x)][(int)(p->position.y - p->direction.y * p->speed)] == 0)
-			p->position.y -= p->direction.y * p->speed;
-	}
-	if (event.key.keysym.scancode == SDL_SCANCODE_D)
-	{
-		if (map[(int)(p->position.x + p->plane.x * 0.2f)][(int)(p->position.y)] == 0)
-			p->position.x += p->plane.x * 0.2f;
-		if (map[(int)(p->position.x)][(int)(p->position.y + p->plane.y * 0.2f)] == 0)
-			p->position.y += p->plane.y * 0.2f;
-	}
-	if (event.key.keysym.scancode == SDL_SCANCODE_A)
-	{
-		if (map[(int)(p->position.x - p->plane.x * 0.2f)][(int)(p->position.y)] == 0)
-			p->position.x -= p->plane.x * 0.2f;
-		if (map[(int)(p->position.x)][(int)(p->position.y - p->plane.y * 0.2f)] == 0)
-			p->position.y -= p->plane.y * 0.2f;
-	}
 	if (event.key.keysym.scancode == SDL_SCANCODE_Q)
 	{
 		old.x = p->direction.x;
@@ -81,10 +41,97 @@ if (map[(int)(p->position.x + p->direction.x * p->speed)][(int)(p->position.y)] 
 		p->plane.x = p->plane.x * cos(-0.2f) - p->plane.y * sin(-0.2f);
 		p->plane.y = old.y * sin(-0.2f) + p->plane.y * cos(-0.2f);
 	}
+	if (event.type == SDL_MOUSEMOTION)
+	{
+		motion = -(double)(event.motion.xrel * 0.001f);
+		old.x = p->direction.x;
+		p->direction.x = p->direction.x * cos(motion) - p->direction.y * sin(motion);
+		p->direction.y = old.x * sin(motion) + p->direction.y * cos(motion);
+		old.y = p->plane.x;
+		p->plane.x = p->plane.x * cos(motion) - p->plane.y * sin(motion);
+		p->plane.y = old.y * sin(motion) + p->plane.y * cos(motion);
+	}
+	if (event.key.keysym.scancode == SDL_SCANCODE_W)
+		{
+		if (event.type == SDL_KEYDOWN)
+		{
+			wolf->flag &= ~(1UL << 1);
+			wolf->flag |= 1UL;
+		}
+else
+			wolf->flag &= ~(1UL);
+			}
+	if (event.key.keysym.scancode == SDL_SCANCODE_S)
+	{
+		if (event.type == SDL_KEYDOWN)
+		{
+		wolf->flag &= ~(1UL);
+				  wolf->flag |= 1UL << 1;
+	}
+else
+			wolf->flag &= ~(1UL << 1);
+	}
+	if (event.key.keysym.scancode == SDL_SCANCODE_D)
+	{
+		if (event.type == SDL_KEYDOWN)
+		{
+		wolf->flag &= ~(1UL << 3);
+				  wolf->flag |= 1UL << 2;
+		}
+			else
+				wolf->flag &= ~(1UL << 2);
+	}
+	if (event.key.keysym.scancode == SDL_SCANCODE_A)
+	{
+		if (event.type == SDL_KEYDOWN)
+		{
+		wolf->flag &= ~(1UL << 2);
+		wolf->flag |= 1UL << 3;
+		}
+else
+		wolf->flag &= ~(1UL << 3);
+	}
+	}
+
+// TODO(viccarau): I want a circle colision from the player to the walls
+
 // TODO(viccarau): Implement a FOV calculator by doing the dot product between direction and plane
 // vectors, then the cos of the dot product is the angle of the FOV
-// TODO(viccarau): Limit the FOV slider
-if (event.key.keysym.scancode == SDL_SCANCODE_EQUALS)
+
+int		my_function(SDL_Event event, t_wolf *wolf, int **map)
+{
+	t_player	*p;
+	
+	p = &wolf->player;
+	if (wolf->flag & 1UL)
+		{
+			if (map[(int)(p->position.x + p->direction.x * p->speed)][(int)(p->position.y)] == 0)
+				p->position.x += p->direction.x * p->speed;
+			if (map[(int)(p->position.x)][(int)(p->position.y + p->direction.y * p->speed)] == 0)
+				p->position.y += p->direction.y * p->speed;
+		}
+	if (wolf->flag & 1UL << 1)
+		{
+			if (map[(int)(p->position.x - p->direction.x * p->speed)][(int)(p->position.y)] == 0)
+				p->position.x -= p->direction.x * p->speed;
+			if (map[(int)(p->position.x)][(int)(p->position.y - p->direction.y * p->speed)] == 0)
+				p->position.y -= p->direction.y * p->speed;
+		}
+	if (wolf->flag & 1UL << 2)
+		{
+			if (map[(int)(p->position.x + p->plane.x * p->speed)][(int)(p->position.y)] == 0)
+				p->position.x += p->plane.x * p->speed;
+			if (map[(int)(p->position.x)][(int)(p->position.y + p->plane.y * p->speed)] == 0)
+				p->position.y += p->plane.y * p->speed;
+		}
+	if (wolf->flag & 1UL << 3)
+		{
+			if (map[(int)(p->position.x - p->plane.x * p->speed)][(int)(p->position.y)] == 0)
+				p->position.x -= p->plane.x * p->speed;
+			if (map[(int)(p->position.x)][(int)(p->position.y - p->plane.y * p->speed)] == 0)
+				p->position.y -= p->plane.y * p->speed;
+		}
+		if (event.key.keysym.scancode == SDL_SCANCODE_EQUALS)
 	{
 		p->direction.x *= 0.9f;
 		p->direction.y *= 0.9f;
@@ -96,8 +143,7 @@ if (event.key.keysym.scancode == SDL_SCANCODE_EQUALS)
 		p->direction.y *= 1.1f;
 		p->speed *= 0.9f;
 		}
-	}
-//printf("plane x\t%f , plane y\t%f\n", p->plane.x, p->plane.y);
+	//printf("plane x\t%f , plane y\t%f\n", p->plane.x, p->plane.y);
 	return (1);
 }
 
@@ -112,7 +158,8 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.direction.y = 0;
 	wolf->player.plane.x = 0;
 	wolf->player.plane.y = 1;
-	wolf->player.speed = 0.2f;
+	wolf->player.speed = 0.02f;
+	wolf->flag = 0;
 }
 
 void	ceiling(unsigned int *img)
@@ -186,8 +233,9 @@ int		main(int ac, char **av)
 					exit(0);
 				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 is_alloc(NULL, wolf, 0);
-					my_function(wolf.sdl.event, &wolf, wolf.map);
-				}
+				set_flag(&wolf, wolf.sdl.event);
+					}
+			my_function(wolf.sdl.event, &wolf, wolf.map);
 			//ft_bzero(wolf.img, sizeof(unsigned int) * W * H);
 			ceiling(wolf.img);
 			render(&wolf);
