@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/20 03:26:27 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/22 06:06:19 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,20 @@
 # include "libft.h"
 # include "draw.h"
 # include <math.h>
+# include <stdint.h>
 # include <SDL2/SDL.h>
 # define W 1280
 # define H 720
 # define FOV 80
 # define HEIGHT 32
+# define TEX_WIDTH 64
+# define TEX_HEIGHT 64
+# define EW_WALL 0
+# define SN_WALL 1
 # define WALL_SIZE 64
+# define PRESSED 1
+# define RELEASED 0
+# define BMP_HEADER_SIZE 54
 # ifndef PI32
 #  define PI32 3.14159265359f
 # endif
@@ -36,6 +44,15 @@ typedef struct	s_ilst
 ** E[ROW][COLUMN]
 ** ROW Major
 */
+
+typedef struct	s_texture
+{
+	int				width;
+	int				height;
+	int				size;
+	unsigned char	*data;
+	int				*data2;
+}				t_texture;
 
 typedef struct	s_2d_p
 {
@@ -87,6 +104,7 @@ typedef struct	s_player
 {
 	t_2d	ray;
 	t_2d	position;
+	t_2d	offset;
 	t_2d	direction;
 	t_2d	plane;
 	float	speed;
@@ -112,10 +130,15 @@ typedef struct	s_wolf
 	unsigned int	*img;
 	t_mem		mem;
 	int		**map;
-	}				t_wolf;
+	int		move_ws;
+	int		move_as;
+	char	key_press[255];
+	t_texture	tex[4];
+}				t_wolf;
 
 int				print_map(int **map, t_obj obj, t_player *player);
 void			render(t_wolf *wolf);
+void			raycast(t_wolf *wf);
 //render(t_wolf *wolf, double dirX, double dirY, double planeX, double planeY);
 //render(&wolf, wolf.player.direction.x, wolf.player.direction.y, wolf.player.plane.x, wolf.player.plane.y);
 void			calculate_distance(t_player *p, t_2d_p *a);
@@ -140,4 +163,3 @@ float			my_atan(float angle);
 float			degree_radian(int degree);
 
 #endif
- 

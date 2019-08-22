@@ -30,7 +30,7 @@ int		my_function(SDL_Event event, t_wolf *wolf, int **map)
 		p->plane.x = p->plane.x * cos(motion) - p->plane.y * sin(motion);
 		p->plane.y = old.y * sin(motion) + p->plane.y * cos(motion);
 		}
-else 
+else
 {
 	if (event.key.keysym.scancode == SDL_SCANCODE_R)
 		printf("\nYou pressed R\n\n");
@@ -101,6 +101,66 @@ if (event.key.keysym.scancode == SDL_SCANCODE_EQUALS)
 	return (1);
 }
 
+int		read_all(int fd, unsigned char *data, int size)
+{
+	int	read_bytes;
+	int	ret;
+
+	read_bytes = 0;
+	while (((ret = read(fd, data + read_bytes, size - read_bytes)) > 0)
+		&& (read_bytes + ret) < size)
+		read_bytes = read_bytes + ret;
+	if (ret <= 0)
+		return (ret);
+	return (read_bytes + ret);
+}
+
+t_texture	read_bmp(const char *filename)
+{
+	int fd;
+	unsigned char header[54];
+	t_texture		tex;
+
+	fd = open(filename, O_RDONLY);
+	read(fd, header, BMP_HEADER_SIZE);
+
+	tex.width = *(int*)&header[18];
+	tex.height = *(int*)&header[22];
+	tex.size = 3 * tex.width * tex.height;
+
+	unsigned char *data = (unsigned char*)malloc(tex.size);
+	int i = 0;
+	int j = 0;
+	tex.data = (unsigned char*)malloc(tex.width * tex.height * 4);
+	tex.data2 = (int*)malloc(tex.width * tex.height * sizeof(int));
+	read_all(fd, data, tex.size);
+	while (i < 64 * 64)
+	{
+		printf("R : %hhu G : %hhu B : %hhu\n", data[i], data[i+1], data[i + 2]);
+		i += 3;
+	}
+	i = 0;
+	j = 0;
+	while (i < TEX_WIDTH * TEX_HEIGHT)
+	{
+		tex.data[i] = data[j];
+		tex.data[i + 1] = data[j + 1];
+		tex.data[i + 2] = data[j + 2];
+		tex.data[i + 3] = 0;
+		i += 4;
+		j += 3;
+	}
+	i = 0;
+	j = 0;
+	while (i < TEX_WIDTH * TEX_HEIGHT)
+	{
+		tex.data2[i] = (int)tex.data[j];
+		j += 4;
+		i++;
+	}
+	return (tex);
+}
+
 void	ft_wolf_init(t_wolf *wolf)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -113,6 +173,20 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.plane.x = 0;
 	wolf->player.plane.y = 1;
 	wolf->player.speed = 0.2f;
+	wolf->tex[0] = read_bmp("./texture/eagle.bmp");
+//	wolf->tex[1] = read_bmp("./texture/colorstone.bmp");
+//	wolf->tex[2] = read_bmp("./texture/greystone.bmp");
+//	wolf->tex[3] = read_bmp("./texture/redbrick.bmp");
+	// int i = 0;
+	// while (i < 64 * 64)
+	// {
+	// 	printf("%hhu %hhu %hhu %hhu\n",
+	// 	wolf->tex[0].data[i],
+	// 	wolf->tex[0].data[i+1],
+	// 	wolf->tex[0].data[i+2],
+	// 	wolf->tex[0].data[i+3]);
+	// 	i += 4;
+	// }
 }
 
 void	ceiling(unsigned int *img)
@@ -121,7 +195,7 @@ void	ceiling(unsigned int *img)
 	int y;
 	int y1;
 	 float color;
-	 
+
 	color = 0x333300;
 	x = 0;
 	y = 0;
@@ -160,12 +234,12 @@ int		main(int ac, char **av)
 	t_wolf	wolf;
 	int		fd;
 	int frames[120];
-	
+
 	mem_init(&wolf);
 		if (ac == 2)
 		fd = open(av[1], O_RDONLY);
 	else
-		fd = open("test.map", O_RDONLY);
+		fd = open("wolf3d.map", O_RDONLY);
 	if (fd > 0)
 	{
 		tkneizer(fd, &wolf);
@@ -185,12 +259,13 @@ int		main(int ac, char **av)
 				if (wolf.sdl.event.type == SDL_QUIT)
 					exit(0);
 				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
-is_alloc(NULL, wolf, 0);
-					my_function(wolf.sdl.event, &wolf, wolf.map);
-				}
+					is_alloc(NULL, wolf, 0);
+				my_function(wolf.sdl.event, &wolf, wolf.map);
+			}
 			//ft_bzero(wolf.img, sizeof(unsigned int) * W * H);
 			ceiling(wolf.img);
-			render(&wolf);
+			//render(&wolf);
+			raycast(&wolf);
 			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img, W * sizeof(unsigned int));
 			SDL_RenderCopy(wolf.sdl.renderer, wolf.sdl.texture, NULL, NULL);
 			SDL_RenderPresent(wolf.sdl.renderer);
@@ -200,12 +275,12 @@ is_alloc(NULL, wolf, 0);
 				j = 0;
 				while (i <= 100)
 				{
-					printf("%d ms\t", frames[i] - frames[j]);
+				//	printf("%d ms\t", frames[i] - frames[j]);
 					i++;
 					j++;
 				}
 				ft_bzero(frames, sizeof(int) * 120);
-				printf("\n");
+			//	printf("\n");
 				i = -1;
 			}
 			i++;
