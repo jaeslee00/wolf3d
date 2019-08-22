@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/23 00:24:02 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/23 01:06:14 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,9 @@ typedef struct	s_wolf
 	unsigned int	*img;
 	t_mem		mem;
 	int		**map;
-	t_texture	tex[4];
-}				t_wolf;
+t_texture	tex[4];
+				unsigned int flag;
+	}				t_wolf;
 
 int				print_map(int **map, t_obj obj, t_player *player);
 void			render(t_wolf *wolf);
