@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/23 02:30:49 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/23 04:51:47 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,9 @@ typedef struct	s_wolf
 	unsigned int flag;
 	}				t_wolf;
 
+void ft_frametimes(int *frames, int *count);
+int		direction_movement(t_wolf *wolf, int **map);
+void	set_flag(t_wolf *wolf, SDL_Event event);
 double fov_calculator(t_wolf *wolf);
 int				print_map(int **map, t_obj obj, t_player *player);
 void			render(t_wolf *wolf);
