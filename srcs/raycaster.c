@@ -57,8 +57,9 @@ int		set_color(int side, int x_side, int y_side, t_wolf *wf, int start, int end,
 		if (line_height > 0)
 		{
 			tex_height_scale = y - H / 2 + line_height;
-			tex_coord.y = ((tex_height_scale * TEX_WIDTH) / line_height) - 32; 
-			//TODO:(jaelee) glitch on bottom-top texture of wall
+			tex_coord.y = ((tex_height_scale * TEX_WIDTH) / line_height) - 32;
+			if (tex_coord.y < 0)
+				tex_coord.y = 0; //TODO (jae) : fix this shit
 			color = wf->tex[tex_id].data[TEX_WIDTH * tex_coord.y + tex_coord.x];
 		}
 		else color = 0;

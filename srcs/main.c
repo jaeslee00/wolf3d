@@ -98,7 +98,7 @@ int		read_all(int fd, unsigned char *data, int size)
 
 t_texture	read_bmp(const char *filename)
 {
-	unsigned char *data;
+	unsigned char *data; //[3 * 64 * 64];
 	int fd;
 	unsigned char header[54];
 	t_texture		tex;
@@ -122,7 +122,7 @@ t_texture	read_bmp(const char *filename)
 		i--;
 		j += 3;
 	}
-	free(data);
+	//free(data);
 	return (tex);
 }
 
@@ -205,7 +205,7 @@ int		main(int ac, char **av)
 	t_wolf	wolf;
 	int		fd;
 int frames[61];
-	
+
 mem_init(&wolf);
 		if (ac == 2)
 		fd = open(av[1], O_RDONLY);
