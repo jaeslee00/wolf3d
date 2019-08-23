@@ -13,16 +13,28 @@
 
 #include "wolf3d.h"
 
-// TODO(viccarau): Limit the FOV slider
-
 void	set_flag(t_wolf *wolf, SDL_Event event)
 {
-	//state = SDL_GetKeyboardState(NULL);
 	t_2d		old;
 	t_player	*p;
 	double motion;
+	double fov;
 
 	p = &wolf->player;
+	fov = fov_calculator(wolf);
+	 if (event.key.keysym.scancode == SDL_SCANCODE_EQUALS && fov < 120.0f)
+	{
+		 p->direction.x *= 0.99f;
+		p->direction.y *= 0.99f;
+		printf("fov = %f\n", fov);
+	}
+	if (event.key.keysym.scancode == SDL_SCANCODE_MINUS && fov > 60)
+	{
+		 p->direction.x *= 1.05f;
+		p->direction.y *= 1.05f;
+		printf("fov = %f\n", fov);
+	}
+/*
 	if (event.key.keysym.scancode == SDL_SCANCODE_Q)
 	{
 		old.x = p->direction.x;
@@ -41,6 +53,7 @@ void	set_flag(t_wolf *wolf, SDL_Event event)
 		p->plane.x = p->plane.x * cos(-0.2f) - p->plane.y * sin(-0.2f);
 		p->plane.y = old.y * sin(-0.2f) + p->plane.y * cos(-0.2f);
 	}
+*/
 	if (event.type == SDL_MOUSEMOTION)
 	{
 		motion = -(double)(event.motion.xrel * 0.001f);
@@ -93,58 +106,40 @@ else
 	}
 	}
 
-// TODO(viccarau): I want a circle colision from the player to the walls
-
-// TODO(viccarau): Implement a FOV calculator by doing the dot product between direction and plane
-// vectors, then the cos of the dot product is the angle of the FOV
-
-int		my_function(SDL_Event event, t_wolf *wolf, int **map)
+int		my_function(t_wolf *wolf, int **map)
 {
 	t_player	*p;
 	
 	p = &wolf->player;
 	if (wolf->flag & 1UL)
 		{
-			if (map[(int)(p->position.x + p->direction.x * p->speed)][(int)(p->position.y)] == 0)
+		if (map[(int)(p->position.x + p->direction.x * (p->speed + 0.2f))][(int)(p->position.y)] == 0)
 				p->position.x += p->direction.x * p->speed;
-			if (map[(int)(p->position.x)][(int)(p->position.y + p->direction.y * p->speed)] == 0)
+		if (map[(int)(p->position.x)][(int)(p->position.y + p->direction.y * (p->speed + 0.2f))] == 0)
 				p->position.y += p->direction.y * p->speed;
 		}
 	if (wolf->flag & 1UL << 1)
 		{
-			if (map[(int)(p->position.x - p->direction.x * p->speed)][(int)(p->position.y)] == 0)
+		if (map[(int)(p->position.x - p->direction.x * (p->speed + 0.2f))][(int)(p->position.y)] == 0)
 				p->position.x -= p->direction.x * p->speed;
-			if (map[(int)(p->position.x)][(int)(p->position.y - p->direction.y * p->speed)] == 0)
+		if (map[(int)(p->position.x)][(int)(p->position.y - p->direction.y * (p->speed + 0.2f))] == 0)
 				p->position.y -= p->direction.y * p->speed;
 		}
 	if (wolf->flag & 1UL << 2)
 		{
-			if (map[(int)(p->position.x + p->plane.x * p->speed)][(int)(p->position.y)] == 0)
+		if (map[(int)(p->position.x + p->plane.x * (p->speed + 0.2f))][(int)(p->position.y)] == 0)
 				p->position.x += p->plane.x * p->speed;
-			if (map[(int)(p->position.x)][(int)(p->position.y + p->plane.y * p->speed)] == 0)
+		if (map[(int)(p->position.x)][(int)(p->position.y + p->plane.y * (p->speed + 0.2f))] == 0)
 				p->position.y += p->plane.y * p->speed;
 		}
 	if (wolf->flag & 1UL << 3)
 		{
-			if (map[(int)(p->position.x - p->plane.x * p->speed)][(int)(p->position.y)] == 0)
+		if (map[(int)(p->position.x - p->plane.x * (p->speed + 0.2f))][(int)(p->position.y)] == 0)
 				p->position.x -= p->plane.x * p->speed;
-			if (map[(int)(p->position.x)][(int)(p->position.y - p->plane.y * p->speed)] == 0)
+		if (map[(int)(p->position.x)][(int)(p->position.y - p->plane.y * (p->speed + 0.2f))] == 0)
 				p->position.y -= p->plane.y * p->speed;
 		}
-		if (event.key.keysym.scancode == SDL_SCANCODE_EQUALS)
-	{
-		p->direction.x *= 0.9f;
-		p->direction.y *= 0.9f;
-		p->speed *= 1.1f;
-		}
-	if (event.key.keysym.scancode == SDL_SCANCODE_MINUS)
-	{
-		p->direction.x *= 1.1f;
-		p->direction.y *= 1.1f;
-		p->speed *= 0.9f;
-		}
-	//printf("plane x\t%f , plane y\t%f\n", p->plane.x, p->plane.y);
-	return (1);
+		return (1);
 }
 
 void	ft_wolf_init(t_wolf *wolf)
@@ -152,7 +147,6 @@ void	ft_wolf_init(t_wolf *wolf)
 	SDL_Init(SDL_INIT_EVERYTHING);
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 									 SDL_WINDOWPOS_CENTERED, 1920, 1080, 0);
-	//SDL_WINDOW_FULLSCREEN
 	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(unsigned int));
 	wolf->player.direction.x = -1;
 	wolf->player.direction.y = 0;
@@ -160,7 +154,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.plane.y = 1;
 	wolf->player.speed = 0.02f;
 	wolf->flag = 0;
-}
+	}
 
 void	ceiling(unsigned int *img)
 {
@@ -216,7 +210,7 @@ int		main(int ac, char **av)
 	if (fd > 0)
 	{
 		tkneizer(fd, &wolf);
-		print_map(wolf.map, wolf.obj, &wolf.player);
+print_map(wolf.map, wolf.obj, &wolf.player);
 		ft_wolf_init(&wolf);
 		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
@@ -235,7 +229,7 @@ int		main(int ac, char **av)
 is_alloc(NULL, wolf, 0);
 				set_flag(&wolf, wolf.sdl.event);
 					}
-			my_function(wolf.sdl.event, &wolf, wolf.map);
+			my_function(&wolf, wolf.map);
 			//ft_bzero(wolf.img, sizeof(unsigned int) * W * H);
 			ceiling(wolf.img);
 			render(&wolf);

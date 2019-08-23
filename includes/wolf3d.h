@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/22 23:38:38 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/23 02:30:49 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ typedef struct	s_player
 	t_2d	direction;
 	t_2d	plane;
 	float	speed;
-}				t_player;
+	}				t_player;
 
 typedef struct	s_raycaster
 {
@@ -115,6 +115,7 @@ typedef struct	s_wolf
 	unsigned int flag;
 	}				t_wolf;
 
+double fov_calculator(t_wolf *wolf);
 int				print_map(int **map, t_obj obj, t_player *player);
 void			render(t_wolf *wolf);
 //render(t_wolf *wolf, double dirX, double dirY, double planeX, double planeY);

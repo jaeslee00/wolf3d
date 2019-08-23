@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:24:28 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/14 16:34:52 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/23 02:33:52 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,19 @@
 /*
 ** Calculate from radians to degrees - (angle * 180 / PI32) degrees
 */
+
+double fov_calculator(t_wolf *wolf)
+{
+	double fov;
+	t_2d *pn;
+	t_2d *d;
+
+	d = &wolf->player.direction;
+	pn = &wolf->player.plane;
+	fov = (sqrt(pn->x * pn->x) + (pn->y * pn->y)) / (sqrt(d->x * d->x) + (d->y * d->y));
+	fov = round(atan(fov) * 180 / PI32) * 2;
+	return (fov);
+}
 
 float	degree_radian(int degree)
 {

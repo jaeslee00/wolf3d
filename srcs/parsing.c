@@ -6,14 +6,12 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 16:26:36 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/20 04:23:57 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/23 02:42:28 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-// TODO(viccarau): I want to make a function that removes blocks of memory dependant
-// on data structures that declare the beginning and the end of that block of memory;
 int **int_to_tab(t_wolf *wolf)
 {
 	int i;
