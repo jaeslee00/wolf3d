@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/23 01:06:14 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/23 02:22:49 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include <math.h>
 # include <stdint.h>
 # include <SDL2/SDL.h>
-# define W 64
-# define H 64
+# define W 1280
+# define H 720
 # define FOV 80
 # define HEIGHT 32
 # define TEX_WIDTH 64

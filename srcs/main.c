@@ -101,7 +101,7 @@ else
 int		my_function(SDL_Event event, t_wolf *wolf, int **map)
 {
 	t_player	*p;
-	
+
 	p = &wolf->player;
 	if (wolf->flag & 1UL)
 		{
@@ -153,7 +153,6 @@ int		read_all(int fd, unsigned char *data, int size)
 	int	ret;
 
 	read_bytes = 0;
-	//read(fd, data, 90 + 64);
 	while (((ret = read(fd, data + read_bytes, size - read_bytes)) > 0))
 		read_bytes = read_bytes + ret;
 	if (ret <= 0)
@@ -163,7 +162,7 @@ int		read_all(int fd, unsigned char *data, int size)
 
 t_texture	read_bmp(const char *filename)
 {
-	unsigned char data[64 * 64 * 3];
+	unsigned char *data;
 	int fd;
 	unsigned char header[54];
 	t_texture		tex;
@@ -171,16 +170,15 @@ t_texture	read_bmp(const char *filename)
 	fd = open(filename, O_RDONLY);
 	read(fd, header, 54);
 
-	tex.width = 64;
-	tex.height = 64;
-	printf("ADASD, %d, %d\n", tex.width, tex.height);
-	tex.size = 4 * tex.width * tex.height;
+	tex.width = TEX_WIDTH;
+	tex.height = TEX_HEIGHT;
+	tex.size = 3 * tex.width * tex.height;
 
 	int i = 0;
 	int j = 0;
+	data = (unsigned char*)malloc(tex.size);
 	tex.data = (unsigned int*)malloc(tex.width * tex.height * sizeof(int));
 	read_all(fd, data, tex.size);
-
 	i = (64 * 64) - 1;
 	while (i >= 0)
 	{
@@ -188,6 +186,7 @@ t_texture	read_bmp(const char *filename)
 		i--;
 		j += 3;
 	}
+	free(data);
 	return (tex);
 }
 
@@ -202,22 +201,11 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.direction.y = 0;
 	wolf->player.plane.x = 0;
 	wolf->player.plane.y = 1;
-wolf->player.speed = 0.2f;
 	wolf->tex[0] = read_bmp("./texture/eagle.bmp");
 	wolf->tex[1] = read_bmp("./texture/colorstone.bmp");
 	wolf->tex[2] = read_bmp("./texture/greystone.bmp");
 	wolf->tex[3] = read_bmp("./texture/redbrick.bmp");
-	// int i = 0;
-	// while (i < 64 * 64)
-	// {
-	// 	printf("%hhu %hhu %hhu %hhu\n",
-	// 	wolf->tex[0].data[i],
-	// 	wolf->tex[0].data[i+1],
-	// 	wolf->tex[0].data[i+2],
-	// 	wolf->tex[0].data[i+3]);
-	// 	i += 4;
-	// }
-wolf->player.speed = 0.02f;
+	wolf->player.speed = 0.01f;
 	wolf->flag = 0;
 }
 
@@ -296,7 +284,7 @@ int		main(int ac, char **av)
 		ft_wolf_init(&wolf);
 		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
-											 SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, wolf.tex[0].width, wolf.tex[0].height);
+											 SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
 		i = 0;
 		ft_bzero(frames, sizeof(int) * 120);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -325,12 +313,12 @@ is_alloc(NULL, wolf, 0);
 				j = 0;
 				while (i <= 100)
 				{
-				//	printf("%d ms\t", frames[i] - frames[j]);
+					printf("%d ms\t", frames[i] - frames[j]);
 					i++;
 					j++;
 				}
 				ft_bzero(frames, sizeof(int) * 120);
-			//	printf("\n");
+				printf("\n");
 				i = -1;
 			}
 			i++;

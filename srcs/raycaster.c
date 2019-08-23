@@ -23,46 +23,48 @@ int	verLine(int x, int y1, int y2, const int color, unsigned int *img)
 	return (1);
 }
 
+
 int		set_color(int side, int x_side, int y_side, t_wolf *wf, int start, int end, int line_height, int x, t_raycaster ray)
 {
-	double	x_wall;
-	if (side == EW_WALL)
-	{
-		x_wall = wf->player.position.y + ray.perp_distance * wf->player.ray.y;
-	}
-	else
-	{
-		x_wall = wf->player.position.x + ray.perp_distance * wf->player.ray.x;
-	}
-	int texX = (int)(x_wall * (double)TEX_WIDTH);
-	if(side == EW_WALL && wf->player.ray.x > 0)
-		texX = TEX_WIDTH - texX - 1;
-	if(side == SN_WALL && wf->player.ray.y < 0)
-		texX = TEX_WIDTH - texX - 1;
-	x_wall = x_wall - floor(x_wall);
-
-	for(int y = start; y <= end; y++)
-	{
-		int d = y * 256 - H * 128 + line_height * 128;  //256 and 128 factors to avoid floats
-		// TODO: avoid the division to speed this up
-		int texY = ((d * TEX_WIDTH) / line_height) >> 8;
-		int color = wf->tex[0].data[TEX_HEIGHT * texY + texX];
-		wf->img[x + y * W] = color;
-	}
-
+	double	tex_width_scale;
+	t_2d_p	tex_coord;
+	int		tex_height_scale;
+	int		tex_id;
+	int		y;
+	int	color;
 	if (side == EW_WALL)
 	{
 		if (x_side < 0)
-			return (0xFF >> 1);
-		else return (0xFFFF >> 1);
+			tex_id = 0;
+		else tex_id = 1;
 	}
 	else
 	{
 		if (y_side < 0)
-			return (0xFF00 >> 1);
+			tex_id = 2;
 		else
-			return (0xFF0000 >> 1);
+			tex_id = 3;
 	}
+	if (side == EW_WALL)
+		tex_width_scale = wf->player.position.y + ray.perp_distance * wf->player.ray.y;
+	else
+		tex_width_scale = wf->player.position.x + ray.perp_distance * wf->player.ray.x;
+	tex_width_scale = tex_width_scale - floor(tex_width_scale);
+	tex_coord.x = (int)(tex_width_scale * (double)TEX_WIDTH);
+	y = start;
+	while (y < end)
+	{
+		if (line_height > 0)
+		{
+			tex_height_scale = y - H / 2 + line_height;
+			tex_coord.y = ((tex_height_scale * TEX_WIDTH) / line_height) - 32; //TODO glitch on bottom-top texture of wall
+			color = wf->tex[tex_id].data[TEX_WIDTH * tex_coord.y + tex_coord.x];
+		}
+		else color = 0;
+		wf->img[x + y * W] = color;
+		y++;
+	}
+	return (1);
 }
 
 void	raycast(t_wolf *wf)
@@ -134,7 +136,8 @@ void	raycast(t_wolf *wf)
 		if (end >= H)
 			end = H - 1;
 		color = set_color(ray.side, ray.step.x, ray.step.y, wf, start, end, line_height, x, ray);
-		// verLine(x, start, end, color, wf->img);
+		//color = 0xFFFF;
+		//verLine(x, start, end, color, wf->img);
 		x++;
 	}
 
