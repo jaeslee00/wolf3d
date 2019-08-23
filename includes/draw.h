@@ -6,13 +6,12 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:46:12 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/15 03:06:31 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/23 02:51:09 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DRAW_H
 # define DRAW_H
-# define RGB_W 0xFFFFFFFF
 
 typedef struct	s_m4x4
 {
