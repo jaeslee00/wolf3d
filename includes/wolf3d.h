@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/23 04:55:59 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/24 07:03:38 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct	s_texture
 	int				width;
 	int				height;
 	int				size;
-	unsigned int		*data;
+	uint32_t		*data;
 	}				t_texture;
 
 typedef struct	s_2d_p
@@ -119,6 +119,7 @@ typedef struct	s_raycaster
 	double	perp_distance;
 	int		hit;
 	int		side;
+	double	light;
 }				t_raycaster;
 
 typedef struct	s_wolf

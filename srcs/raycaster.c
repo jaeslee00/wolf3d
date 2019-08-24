@@ -23,15 +23,46 @@ int	verLine(int x, int y1, int y2, const int color, unsigned int *img)
 	return (1);
 }
 
-
-int		set_color(int side, int x_side, int y_side, t_wolf *wf, int start, int end, int line_height, int x, t_raycaster ray)
+double linear_interpolation (double a, double b, double percentage)
 {
-	double	tex_width_scale;
+	return ((a * (1.0 - percentage)) + (b * percentage));
+}
+
+int		lighting(int color, t_raycaster *ray)
+{
+	uint8_t	red;
+	uint8_t	blue;
+	uint8_t	green;
+	double	new_red;
+	double	new_blue;
+	double	new_green;
+	double	percentage;
+	int		lighted_color;
+
+	percentage = ray->light;
+	if (percentage < 0.0)
+		percentage = 0.0;
+	if (percentage > 1.0)
+		percentage = 1.0;
+	red = (color >> 16) & 0xFF;
+	green = (color >> 8) & 0xFF;
+	blue = color & 0xFF;
+	new_red = linear_interpolation(0.0, (double)red, percentage);
+	new_green = linear_interpolation(0.0, (double)green, percentage);
+	new_blue = linear_interpolation(0.0, (double)blue, percentage);
+	lighted_color = (uint8_t)new_blue | ((uint8_t)new_green) << 8 | ((uint8_t)new_red) << 16;
+	return (lighted_color);
+}
+
+int		set_color(int side, int x_side, int y_side, t_wolf *wf, int start, int end, int line_height, int x, t_raycaster *ray)
+{
 	t_2d_p	tex_coord;
+	double	tex_width_scale;
 	int		tex_height_scale;
 	int		tex_id;
 	int		y;
 	int	color;
+
 	if (side == EW_WALL)
 	{
 		if (x_side < 0)
@@ -46,24 +77,21 @@ int		set_color(int side, int x_side, int y_side, t_wolf *wf, int start, int end,
 			tex_id = 3;
 	}
 	if (side == EW_WALL)
-		tex_width_scale = wf->player.position.y + ray.perp_distance * wf->player.ray.y;
+		tex_width_scale = wf->player.position.y + ray->perp_distance * wf->player.ray.y;
 	else
-		tex_width_scale = wf->player.position.x + ray.perp_distance * wf->player.ray.x;
+		tex_width_scale = wf->player.position.x + ray->perp_distance * wf->player.ray.x;
 	tex_width_scale = tex_width_scale - floor(tex_width_scale);
 	tex_coord.x = (int)(tex_width_scale * (double)TEX_WIDTH);
 	y = start;
 	while (y < end)
 	{
-		if (line_height > 0)
-		{
-			tex_height_scale = y - H / 2 + line_height;
-			tex_coord.y = ((tex_height_scale * TEX_WIDTH) / line_height) - 32;
-			if (tex_coord.y < 0)
-				tex_coord.y = 0; //TODO (jae) : fix this shit
-			color = wf->tex[tex_id].data[TEX_WIDTH * tex_coord.y + tex_coord.x];
-		}
-		else color = 0;
-		wf->img[x + y * W] = color;
+		tex_height_scale = y * 2 - H + line_height;
+		tex_coord.y = ((tex_height_scale * TEX_WIDTH) / line_height) / 2;
+		//TODO (jae) : this 'if' statement brings down FPS sooooo much.. T-T
+		// if (tex_coord.y < 0)
+		// 	tex_coord.y = 0;
+		color = wf->tex[tex_id].data[TEX_WIDTH * tex_coord.y + tex_coord.x];
+		wf->img[x + y * W] = lighting(color, ray);
 		y++;
 	}
 	return (1);
@@ -77,14 +105,16 @@ void	raycast(t_wolf *wf)
 	int		start;
 	int		end;
 	int		color;
-	int		x = 0;
+	int		x;
+	double	scale;
 
+	scale = 2.0 / (double)W;
 	x = 0;
 	while (x < W)
 	{
 		hit = 0;
-		wf->player.ray.x = wf->player.direction.x +  wf->player.plane.x * (2.0 * x / (double)W - 1.0);
-		wf->player.ray.y = wf->player.direction.y + wf->player.plane.y * (2.0 * x / (double)W - 1.0);
+		wf->player.ray.x = wf->player.direction.x +  wf->player.plane.x * (x * scale - 1.0);
+		wf->player.ray.y = wf->player.direction.y + wf->player.plane.y * (x * scale - 1.0);
 		ray.delta_dist.x = fabs(1.0 / wf->player.ray.x);
 		ray.delta_dist.y = fabs(1.0 / wf->player.ray.y);
 		ray.map.x = (int)wf->player.position.x;
@@ -130,16 +160,16 @@ void	raycast(t_wolf *wf)
 			ray.perp_distance = (ray.map.x - wf->player.position.x + (1 - ray.step.x) / 2) / wf->player.ray.x;
 		else
 			ray.perp_distance = (ray.map.y - wf->player.position.y + (1 - ray.step.y) / 2) / wf->player.ray.y;
-		line_height = (int)(H / ray.perp_distance);
+		ray.light = 1.0 * (1.0 - ray.perp_distance / 12.0);
+		line_height = H / ray.perp_distance;
 		start = -line_height / 2 + H / 2;
 		end = line_height / 2 + H / 2;
 		if (start < 0)
 			start = 0;
 		if (end >= H)
-			end = H - 1;
-		color = set_color(ray.side, ray.step.x, ray.step.y, wf, start, end, line_height, x, ray);
-		//color = 0xFFFF;
-		//verLine(x, start, end, color, wf->img);
+			end = H;
+		if (line_height > 1)
+			color = set_color(ray.side, ray.step.x, ray.step.y, wf, start, end, line_height, x, &ray);
 		x++;
 	}
 

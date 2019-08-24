@@ -83,7 +83,7 @@ int		my_function(SDL_Event event, t_wolf *wolf, int **map)
 	return (1);
 }
 
-int		read_all(int fd, unsigned char *data, int size)
+int		read_all(int fd, uint8_t *data, int size)
 {
 	int	read_bytes;
 	int	ret;
@@ -98,9 +98,9 @@ int		read_all(int fd, unsigned char *data, int size)
 
 t_texture	read_bmp(const char *filename)
 {
-	unsigned char *data; //[3 * 64 * 64];
-	int fd;
-	unsigned char header[54];
+	uint8_t	data[3 * 64 * 64];
+	int		fd;
+	uint8_t	header[54];
 	t_texture		tex;
 
 	fd = open(filename, O_RDONLY);
@@ -112,8 +112,7 @@ t_texture	read_bmp(const char *filename)
 
 	int i = 0;
 	int j = 0;
-	data = (unsigned char*)malloc(tex.size);
-	tex.data = (unsigned int*)malloc(tex.width * tex.height * sizeof(int));
+	tex.data = (uint32_t*)malloc(tex.width * tex.height * sizeof(uint32_t));
 	read_all(fd, data, tex.size);
 	i = (64 * 64) - 1;
 	while (i >= 0)
@@ -122,7 +121,6 @@ t_texture	read_bmp(const char *filename)
 		i--;
 		j += 3;
 	}
-	//free(data);
 	return (tex);
 }
 
