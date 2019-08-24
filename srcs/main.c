@@ -114,7 +114,7 @@ t_texture	read_bmp(const char *filename)
 	int j = 0;
 	tex.data = (uint32_t*)malloc(tex.width * tex.height * sizeof(uint32_t));
 	read_all(fd, data, tex.size);
-	i = (64 * 64) - 1;
+	i = (TEX_WIDTH * TEX_HEIGHT) - 1;
 	while (i >= 0)
 	{
 		tex.data[i] = data[j] | data[j + 1] << 8 | data[j + 2] << 16;
@@ -134,11 +134,13 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.direction.y = 0;
 	wolf->player.plane.x = 0;
 	wolf->player.plane.y = 1;
-	wolf->tex[0] = read_bmp("./texture/eagle.bmp");
-	wolf->tex[1] = read_bmp("./texture/colorstone.bmp");
-	wolf->tex[2] = read_bmp("./texture/greystone.bmp");
+// TODO(viccarau): We will have to make the textures load depending on the type
+	// of wall it is. Some textures have to be on the same type of wall.
+	wolf->tex[0] = read_bmp("./texture/redbrick.bmp");
+	wolf->tex[1] = read_bmp("./texture/redbrick.bmp");
+	wolf->tex[2] = read_bmp("./texture/redbrick.bmp");
 	wolf->tex[3] = read_bmp("./texture/redbrick.bmp");
-	wolf->player.speed = 0.05f;
+	wolf->player.speed = 0.03f;
 	wolf->flag = 0;
 	}
 

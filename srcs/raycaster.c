@@ -13,48 +13,42 @@
 
 #include "wolf3d.h"
 
-int	verLine(int x, int y1, int y2, const int color, unsigned int *img)
+/*double lerp (double a, double b, double percentage)
 {
-	while (y1 < y2)
-	{
-		img[x + y1 * W] = color;
-		y1++;
-	}
-	return (1);
+ return ((a * (1.0 - percentage)) + (b * percentage));
 }
+*/
 
-double linear_interpolation (double a, double b, double percentage)
-{
-	return ((a * (1.0 - percentage)) + (b * percentage));
-}
+/*NOTE(viccarau): I re-added my RGB LERP (Linear interpolation for
+				 colors that get interpolated seperately, then put into an int)
+				The function is in the math.c file
+
+	-I thought if I give max light and min light precalculated then
+	the performance is going to improve. I was wrong, there is something that makes
+	everything slow when you look at the walls, and I don't think it's the light calculation
+
+	-I added the ray light calculation in the light function
+
+	-Made some functions use the data structures that we already have
+
+*/
 
 int		lighting(int color, t_raycaster *ray)
 {
-	uint8_t	red;
-	uint8_t	blue;
-	uint8_t	green;
-	double	new_red;
-	double	new_blue;
-	double	new_green;
-	double	percentage;
-	int		lighted_color;
-
-	percentage = ray->light;
-	if (percentage < 0.0)
-		percentage = 0.0;
-	if (percentage > 1.0)
-		percentage = 1.0;
-	red = (color >> 16) & 0xFF;
-	green = (color >> 8) & 0xFF;
-	blue = color & 0xFF;
-	new_red = linear_interpolation(0.0, (double)red, percentage);
-	new_green = linear_interpolation(0.0, (double)green, percentage);
-	new_blue = linear_interpolation(0.0, (double)blue, percentage);
-	lighted_color = (uint8_t)new_blue | ((uint8_t)new_green) << 8 | ((uint8_t)new_red) << 16;
-	return (lighted_color);
+	if (ray->perp_distance > 10)
+		ray->light = 0.1;
+	//else if (ray.perp_distance <= 6)
+	//ray.light = 0.7;
+	else
+		ray->light = (1.0 - ray->perp_distance / 12.0);
+	if (ray->light < 0.0)
+		ray->light = 0.0;
+	if (ray->light > 1.0)
+		ray->light = 1.0;
+	return (rgb_lerp(0.0, ray->light, color));
 }
 
-int		set_color(int side, int x_side, int y_side, t_wolf *wf, int start, int end, int line_height, int x, t_raycaster *ray)
+int		set_color(t_wolf *wf, int start, int end, int line_height, int x, t_raycaster ray)
 {
 	t_2d_p	tex_coord;
 	double	tex_width_scale;
@@ -63,23 +57,23 @@ int		set_color(int side, int x_side, int y_side, t_wolf *wf, int start, int end,
 	int		y;
 	int	color;
 
-	if (side == EW_WALL)
+	if (ray.side == EW_WALL)
 	{
-		if (x_side < 0)
+		if (ray.step.x < 0)
 			tex_id = 0;
 		else tex_id = 1;
 	}
 	else
 	{
-		if (y_side < 0)
+		if (ray.step.y < 0)
 			tex_id = 2;
 		else
 			tex_id = 3;
 	}
-	if (side == EW_WALL)
-		tex_width_scale = wf->player.position.y + ray->perp_distance * wf->player.ray.y;
+	if (ray.side == EW_WALL)
+		tex_width_scale = wf->player.position.y + ray.perp_distance * wf->player.ray.y;
 	else
-		tex_width_scale = wf->player.position.x + ray->perp_distance * wf->player.ray.x;
+		tex_width_scale = wf->player.position.x + ray.perp_distance * wf->player.ray.x;
 	tex_width_scale = tex_width_scale - floor(tex_width_scale);
 	tex_coord.x = (int)(tex_width_scale * (double)TEX_WIDTH);
 	y = start;
@@ -91,7 +85,7 @@ int		set_color(int side, int x_side, int y_side, t_wolf *wf, int start, int end,
 		// if (tex_coord.y < 0)
 		// 	tex_coord.y = 0;
 		color = wf->tex[tex_id].data[TEX_WIDTH * tex_coord.y + tex_coord.x];
-		wf->img[x + y * W] = lighting(color, ray);
+		wf->img[x + y * W] = lighting(color, &ray);
 		y++;
 	}
 	return (1);
@@ -99,12 +93,12 @@ int		set_color(int side, int x_side, int y_side, t_wolf *wf, int start, int end,
 
 void	raycast(t_wolf *wf)
 {
+	//int color;
 	t_raycaster ray;
 	int		hit;
 	double	line_height;
 	int		start;
 	int		end;
-	int		color;
 	int		x;
 	double	scale;
 
@@ -160,7 +154,6 @@ void	raycast(t_wolf *wf)
 			ray.perp_distance = (ray.map.x - wf->player.position.x + (1 - ray.step.x) / 2) / wf->player.ray.x;
 		else
 			ray.perp_distance = (ray.map.y - wf->player.position.y + (1 - ray.step.y) / 2) / wf->player.ray.y;
-		ray.light = 1.0 * (1.0 - ray.perp_distance / 12.0);
 		line_height = H / ray.perp_distance;
 		start = -line_height / 2 + H / 2;
 		end = line_height / 2 + H / 2;
@@ -169,8 +162,7 @@ void	raycast(t_wolf *wf)
 		if (end >= H)
 			end = H;
 		if (line_height > 1)
-			color = set_color(ray.side, ray.step.x, ray.step.y, wf, start, end, line_height, x, &ray);
+			set_color(wf, start, end, line_height, x, ray);
 		x++;
 	}
-
 }
