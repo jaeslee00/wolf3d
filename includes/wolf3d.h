@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/24 08:12:09 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/25 05:03:22 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,21 @@
 # include <math.h>
 # include <stdint.h>
 # include <SDL2/SDL.h>
-# define W 1280
-# define H 720
-# define FOV 80
+# define W (1920 / 2)
+# define H (1080 / 2)
 # define HEIGHT 32
 # define TEX_WIDTH 64
 # define TEX_HEIGHT 64
 # define EW_WALL 0
 # define SN_WALL 1
-# define WALL_SIZE 64
 # define PRESSED 1
 # define RELEASED 0
+# define WALL 1
+# define DOOR 3
+# define UP	1UL
+# define DOWN	1UL << 1
+# define RIGHT	1UL << 2
+# define LEFT	1UL << 3
 # define BMP_HEADER_SIZE 54
 # ifndef PI32
 #  define PI32 3.14159265359f
