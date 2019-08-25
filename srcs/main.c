@@ -138,6 +138,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->tex[1] = read_bmp("./texture/colorstone.bmp");
 	wolf->tex[2] = read_bmp("./texture/greystone.bmp");
 	wolf->tex[3] = read_bmp("./texture/redbrick.bmp");
+	wolf->tex[4] = read_bmp("./texture/wood.bmp");
 	wolf->player.speed = 0.05f;
 	wolf->flag = 0;
 	}

@@ -48,7 +48,7 @@ int		lighting(int color, t_raycaster *ray)
 	return (rgb_lerp(0.0, ray->light, color));
 }
 
-int		set_color(t_wolf *wf, int start, int end, int line_height, int x, t_raycaster ray)
+int		draw_wall(t_wolf *wf, int start, int end, int line_height, int x, t_raycaster *ray)
 {
 	t_2d_p	tex_coord;
 	double	tex_width_scale;
@@ -57,39 +57,32 @@ int		set_color(t_wolf *wf, int start, int end, int line_height, int x, t_raycast
 	int		y;
 	int	color;
 
-	if (ray.side == EW_WALL)
+	if (ray->side == EW_WALL)
 	{
-		if (ray.step.x < 0)
-			tex_id = 0;
-		else tex_id = 1;
+		tex_id = ray->step.x < 0 ? 0 : 1;
+		tex_width_scale = wf->player.position.y + ray->perp_distance * wf->player.ray.y;
 	}
 	else
 	{
-		if (ray.step.y < 0)
-			tex_id = 2;
-		else
-			tex_id = 3;
+		tex_id = ray->step.y < 0 ? 2 : 3;
+		tex_width_scale = wf->player.position.x + ray->perp_distance * wf->player.ray.x;
 	}
-	if (ray.side == 2)
-		tex_id = 3;
-	if (ray.side == EW_WALL)
-		tex_width_scale = wf->player.position.y + ray.perp_distance * wf->player.ray.y;
-	else
-		tex_width_scale = wf->player.position.x + ray.perp_distance * wf->player.ray.x;
+	// if (ray->side == EW_WALL)
+	// 	tex_width_scale = wf->player.position.y + ray->perp_distance * wf->player.ray.y;
+	// else
+	// 	tex_width_scale = wf->player.position.x + ray->perp_distance * wf->player.ray.x;
 	tex_width_scale = tex_width_scale - floor(tex_width_scale);
 	tex_coord.x = (int)(tex_width_scale * (double)TEX_WIDTH);
 	y = start;
 	while (y < end)
 	{
-		//TODO (jae) : abs() fucking slow...
-		//tex_height_scale = abs(y * 2 - H + line_height);
-		tex_height_scale = y * 2 - H + line_height;
+		tex_height_scale = y * 2 - H + line_height + 1;
 		tex_coord.y = ((tex_height_scale * TEX_WIDTH) / line_height) / 2;
-		if (tex_coord.y < 0)
-			tex_coord.y = 0;
-		//TODO (jae) : this 'if' statement brings down FPS sooooo much.. T-T
 		color = wf->tex[tex_id].data[TEX_WIDTH * tex_coord.y + tex_coord.x];
-		wf->img[x + y * W] = lighting(color, &ray);
+		//NOTE (jae) : we can do distance_table as well
+		if (start != 0 && end != H - 1)
+			color = lighting(color, ray);
+		wf->img[x + y * W] = color;
 		y++;
 	}
 	return (1);
@@ -97,7 +90,6 @@ int		set_color(t_wolf *wf, int start, int end, int line_height, int x, t_raycast
 
 void	raycast(t_wolf *wf)
 {
-	//int color;
 	t_raycaster ray;
 	int		hit;
 	double	line_height;
@@ -159,9 +151,6 @@ void	raycast(t_wolf *wf)
 			{
 				if (ray.delta_dist.x < ray.side_dist.y)
 				{
-					// ray.side_dist.x += ray.delta_dist.x;
-					// ray.map.x += ray.step.x;
-					// ray.side = 1;
 					continue ;
 				}
 				else
@@ -177,15 +166,15 @@ void	raycast(t_wolf *wf)
 			ray.perp_distance = (ray.map.y - wf->player.position.y + (1 - ray.step.y) / 2) / wf->player.ray.y;
 		else if (ray.side == 2)
 			ray.perp_distance = (ray.map.y + 0.5 - wf->player.position.y) / wf->player.ray.y;
-		line_height = H / ray.perp_distance;
+		line_height = (int)(H / ray.perp_distance);
 		start = -line_height / 2 + H / 2;
 		end = line_height / 2 + H / 2;
 		if (start < 0)
 			start = 0;
 		if (end >= H)
-			end = H;
+			end = H - 1;
 		if (line_height > 1)
-			set_color(wf, start, end, line_height, x, ray);
+			draw_wall(wf, start, end, line_height, x, &ray);
 		x++;
 	}
 }

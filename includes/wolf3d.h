@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/25 05:03:22 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/25 10:35:05 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ typedef struct	s_raycaster
 	t_2d	delta_dist;
 	t_2d		plane;
 	double	perp_distance;
+	id_t	tex_flag;
 	int		hit;
 	int		side;
 	double	light;
@@ -134,9 +135,9 @@ typedef struct	s_wolf
 	unsigned int	*img;
 	t_mem		mem;
 	int		**map;
-t_texture	tex[4];
-				unsigned int flag;
-	}				t_wolf;
+	t_texture	tex[5];
+	unsigned int flag;
+}				t_wolf;
 
 void ft_frametimes(int *frames, int *count);
 int		direction_movement(t_wolf *wolf, int **map);

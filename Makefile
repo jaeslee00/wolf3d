@@ -6,7 +6,7 @@
 #    By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/09 12:55:04 by viccarau          #+#    #+#              #
-#    Updated: 2019/08/24 12:21:56 by jaelee           ###   ########.fr        #
+#    Updated: 2019/08/25 10:31:08 by jaelee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ LIB_INC=-Iincludes -Ilibft/includes -I ~/Work/wolf3d/SDL2.framework/Headers
 #-I$(LIB)
 FLAGS += -Llibft -lft -lm -framework SDL2
 
-CFLAGS += -Wall -Wextra -Werror $(LIB_INC) -F.
+CFLAGS += -Wall -Wextra -Werror $(LIB_INC) -F. #-fsanitize=address -g
 
 all: $(NAME)
 
