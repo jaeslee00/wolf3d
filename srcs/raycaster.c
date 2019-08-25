@@ -86,8 +86,11 @@ int		set_color(int side, int x_side, int y_side, t_wolf *wf, int start, int end,
 	while (y < end)
 	{
 		//TODO (jae) : abs() fucking slow...
-		tex_height_scale = abs(y * 2 - H + line_height);
+		//tex_height_scale = abs(y * 2 - H + line_height);
+		tex_height_scale = y * 2 - H + line_height;
 		tex_coord.y = ((tex_height_scale * TEX_WIDTH) / line_height) / 2;
+		if (tex_coord.y < 0)
+			tex_coord.y = 0;
 		//TODO (jae) : this 'if' statement brings down FPS sooooo much.. T-T
 		color = wf->tex[tex_id].data[tex_coord.x + tex_coord.y * TEX_WIDTH];
 		wf->img[x + y * W] = lighting(color, ray);
