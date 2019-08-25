@@ -13,32 +13,14 @@
 
 #include "wolf3d.h"
 
-/*double lerp (double a, double b, double percentage)
-{
- return ((a * (1.0 - percentage)) + (b * percentage));
-}
-*/
-
-/*NOTE(viccarau): I re-added my RGB LERP (Linear interpolation for
-				 colors that get interpolated seperately, then put into an int)
-				The function is in the math.c file
-
-	-I thought if I give max light and min light precalculated then
-	the performance is going to improve. I was wrong, there is something that makes
-	everything slow when you look at the walls, and I don't think it's the light calculation
-
-	-I added the ray light calculation in the light function
-
-	-Made some functions use the data structures that we already have
-
-*/
-
 int		lighting(int color, t_raycaster *ray)
 {
-	if (ray->perp_distance > 10)
-		ray->light = 0.1;
-	//else if (ray.perp_distance <= 6)
-	//ray.light = 0.7;
+	if(ray->perp_distance > 20)
+		return (0);
+	else if (ray->perp_distance > 10)
+		ray->light = 0.2;
+	else if (ray->perp_distance < 3)
+		return (color);
 	else
 		ray->light = (1.0 - ray->perp_distance / 12.0);
 	if (ray->light < 0.0)
@@ -77,15 +59,18 @@ int		set_color(t_wolf *wf, int start, int end, int line_height, int x, t_raycast
 	tex_width_scale = tex_width_scale - floor(tex_width_scale);
 	tex_coord.x = (int)(tex_width_scale * (double)TEX_WIDTH);
 	y = start;
+	
 	while (y < end)
 	{
 		tex_height_scale = y * 2 - H + line_height;
 		tex_coord.y = ((tex_height_scale * TEX_WIDTH) / line_height) / 2;
-		//TODO (jae) : this 'if' statement brings down FPS sooooo much.. T-T
-		// if (tex_coord.y < 0)
-		// 	tex_coord.y = 0;
-		color = wf->tex[tex_id].data[TEX_WIDTH * tex_coord.y + tex_coord.x];
-		wf->img[x + y * W] = lighting(color, &ray);
+		// TODO (jae) : this 'if' statement brings down FPS sooooo much.. T-T
+  // TODO(viccarau): I think we can padd every texture at the beginning so
+		//	when it's -2 there's actually a texture there;
+		if (tex_coord.y < 0)
+			 tex_coord.y = 0;
+		 color = wf->tex[tex_id].data[TEX_WIDTH * tex_coord.y + tex_coord.x];
+		wf->img[x + y * W] = lighting(color, &ray); 
 		y++;
 	}
 	return (1);

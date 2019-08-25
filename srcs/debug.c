@@ -57,6 +57,8 @@ void ft_frametimes(int *frames, int *count)
 			ft_putnbr(frames[*count] - frames[j]);
 			ft_putstr(" ms ");
 			*count += 1;
+			if (*count % 12 == 0)
+				ft_putchar('\n');
 			j++;
 		}
 		ft_bzero(frames, sizeof(int) * 61);

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/25 00:32:08 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/25 17:18:43 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <math.h>
 # include <stdint.h>
 # include <SDL2/SDL.h>
-# define W (1920 / 2)
+# define W (2560 / 2)
 # define H (1080 / 2)
 # define HEIGHT 32
 # define TEX_WIDTH 64
@@ -60,31 +60,6 @@ typedef struct	s_2d_p
 	int		x;
 	int		y;
 }				t_2d_p;
-
-typedef struct	s_m4x4_i
-{
-	t_m4x4	forward;
-	t_m4x4	inverse;
-}				t_m4x4_inv;
-
-typedef struct	s_pts
-{
-	t_2d	min;
-	t_2d	max;
-}				t_pts;
-
-typedef struct	s_min_max
-{
-	int		min;
-	int		max;
-}				t_min_max;
-
-typedef struct	s_ln
-{
-	t_2d	d;
-	t_2d	s;
-	int		p;
-}				t_ln;
 
 typedef struct	s_obj
 {
@@ -136,21 +111,19 @@ t_texture	tex[4];
 				unsigned int flag;
 	}				t_wolf;
 
-void ft_frametimes(int *frames, int *count);
-int		direction_movement(t_wolf *wolf, int **map);
-void	set_flag(t_wolf *wolf, SDL_Event event);
-double fov_calculator(t_wolf *wolf);
+void			ft_frametimes(int *frames, int *count);
+int				direction_movement(t_wolf *wolf, int **map, int frametime);
+void			set_flag(t_wolf *wolf, SDL_Event event);
+double		fov_calculator(t_wolf *wolf);
 int				print_map(int **map, t_obj obj, t_player *player);
 void			render(t_wolf *wolf);
 void			raycast(t_wolf *wf);
-//render(t_wolf *wolf, double dirX, double dirY, double planeX, double planeY);
-//render(&wolf, wolf.player.direction.x, wolf.player.direction.y, wolf.player.plane.x, wolf.player.plane.y);
 void			calculate_distance(t_player *p, t_2d_p *a);
 void			ft_raycast(t_wolf *wolf, t_player *player);
-int			**int_to_tab(t_wolf *wolf);
+int				**int_to_tab(t_wolf *wolf);
 int				rgb_lerp(int color1, float t, int color2);
-int				lerp(int a, float t, int b);
-double			ft_abs(double x);
+//int				lerp(int a, float t, int b);
+double		ft_abs(double x);
 int				tkneizer(int fd, t_wolf *wolf);
 int				is_valid(float x, float y);
 int				is_invalid(char *str);

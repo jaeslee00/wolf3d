@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:24:28 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/24 23:45:02 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/25 07:52:04 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ double	ft_abs(double x)
 	return (x);
 }
 
-int		lerp(int a, float t, int b)
+int		lerp(double a, float t, double b)
 {
 	int	result;
 
@@ -106,6 +106,6 @@ int		rgb_lerp(int color1, float t, int color2)
 	r = lerp(color1 / 0x10000, t, color2 / 0x10000);
 	g = lerp(((color1 / 0x100) % 0x100), t, ((color2 / 0x100) % 0x100));
 	b = lerp(color1 % 0x100, t, color2 % 0x100);
-	return ((r * 0x10000) + (g * 0x100) + b);
+	return ((r << 16) + (g << 8) + b);
 }
 
