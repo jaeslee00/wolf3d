@@ -60,13 +60,17 @@ int		draw_wall(t_wolf *wf, int start, int end, int line_height, int x, t_raycast
 	if (ray->side == EW_WALL)
 	{
 		tex_id = ray->step.x < 0 ? 0 : 1;
-		tex_width_scale = wf->player.position.y + ray->perp_distance * wf->player.ray.y;
 	}
+	else if (ray->side == 2)
+		tex_id = 4;
 	else
 	{
 		tex_id = ray->step.y < 0 ? 2 : 3;
-		tex_width_scale = wf->player.position.x + ray->perp_distance * wf->player.ray.x;
 	}
+	if (ray->side == EW_WALL)
+		tex_width_scale = wf->player.position.y + ray->perp_distance * wf->player.ray.y;
+	else
+		tex_width_scale = wf->player.position.x + ray->perp_distance * wf->player.ray.x;
 	// if (ray->side == EW_WALL)
 	// 	tex_width_scale = wf->player.position.y + ray->perp_distance * wf->player.ray.y;
 	// else
@@ -79,9 +83,7 @@ int		draw_wall(t_wolf *wf, int start, int end, int line_height, int x, t_raycast
 		tex_height_scale = y * 2 - H + line_height + 1;
 		tex_coord.y = ((tex_height_scale * TEX_WIDTH) / line_height) / 2;
 		color = wf->tex[tex_id].data[TEX_WIDTH * tex_coord.y + tex_coord.x];
-		//NOTE (jae) : we can do distance_table as well
-		if (start != 0 && end != H - 1)
-			color = lighting(color, ray);
+		color = lighting(color, ray);
 		wf->img[x + y * W] = color;
 		y++;
 	}
@@ -90,13 +92,13 @@ int		draw_wall(t_wolf *wf, int start, int end, int line_height, int x, t_raycast
 
 void	raycast(t_wolf *wf)
 {
-	t_raycaster ray;
-	int		hit;
-	double	line_height;
-	int		start;
-	int		end;
-	int		x;
-	double	scale;
+	t_raycaster	ray;
+	int			hit;
+	double		line_height;
+	int			start;
+	int			end;
+	int			x;
+	double		scale;
 
 	scale = 2.0 / (double)W;
 	x = 0;
@@ -149,10 +151,8 @@ void	raycast(t_wolf *wf)
 			}
 			if (wf->map[ray.map.x][ray.map.y] == 3)
 			{
-				if (ray.delta_dist.x < ray.side_dist.y)
-				{
+				if (ray.delta_dist.x < ray.side_dist.y) //TODO (jae): need a working condition...
 					continue ;
-				}
 				else
 				{
 					hit = 1;
@@ -166,7 +166,7 @@ void	raycast(t_wolf *wf)
 			ray.perp_distance = (ray.map.y - wf->player.position.y + (1 - ray.step.y) / 2) / wf->player.ray.y;
 		else if (ray.side == 2)
 			ray.perp_distance = (ray.map.y + 0.5 - wf->player.position.y) / wf->player.ray.y;
-		line_height = (int)(H / ray.perp_distance);
+		line_height = (int)((double)H / ray.perp_distance);
 		start = -line_height / 2 + H / 2;
 		end = line_height / 2 + H / 2;
 		if (start < 0)
