@@ -69,8 +69,8 @@ void	ft_wolf_init(t_wolf *wolf)
 	// TODO(viccarau): We will have to make the textures load depending on
 	//the type of wall it is. Some textures have to be on the same type of wall.
 	wolf->tex[0] = read_bmp("./texture/colorstone.bmp");
-	wolf->tex[1] = read_bmp("./texture/eagle.bmp");
-	wolf->tex[2] = read_bmp("./texture/greystone.bmp");
+	wolf->tex[1] = read_bmp("./texture/greystone.bmp");
+	wolf->tex[2] = read_bmp("./texture/eagle.bmp");
 	wolf->tex[3] = read_bmp("./texture/redbrick.bmp");
 	wolf->tex[4] = read_bmp("./texture/wood.bmp");
 	wolf->player.speed = 0;
@@ -138,7 +138,7 @@ int		main(int ac, char **av)
 	if (fd > 0)
 	{
 		tkneizer(fd, &wolf);
-		print_map(wolf.map, wolf.obj, &wolf.player);
+		print_map(wolf.map, wolf.obj, &wolf.player, wolf.doors, &wolf);
 		ft_wolf_init(&wolf);
 		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
@@ -156,7 +156,7 @@ int		main(int ac, char **av)
 					is_alloc(NULL, wolf, 0);
 				set_flag(&wolf, wolf.sdl.event);
 				if (wolf.sdl.event.type == SDL_KEYDOWN)
-					event_handler(&wolf, wolf.map);
+					event_handler(&wolf, wolf.map, wolf.doors);
 			}
 			if (i != 0)
 				direction_movement(&wolf, wolf.map,

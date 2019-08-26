@@ -46,9 +46,9 @@ int		draw_wall(t_wolf *wf, int start, int end, int line_height, int x, t_raycast
 	else
 		tex_id = ray->step.y < 0 ? 2 : 3;
 	if (ray->side == EW_WALL || ray->side == 3)
-		tex_width_scale = wf->player.position.y + ray->perp_distance * wf->player.ray.y;
+		tex_width_scale = wf->player.pos.y + ray->perp_distance * wf->player.ray.y;
 	else
-		tex_width_scale = wf->player.position.x + ray->perp_distance * wf->player.ray.x;
+		tex_width_scale = wf->player.pos.x + ray->perp_distance * wf->player.ray.x;
 	tex_width_scale = tex_width_scale - floor(tex_width_scale);
 	tex_coord.x = (int)(tex_width_scale * (double)TEX_WIDTH);
 	y = start;
@@ -84,27 +84,27 @@ void	raycast(t_wolf *wf)
 		wf->player.ray.y = wf->player.direction.y + wf->player.plane.y * (x * scale - 1.0);
 		ray.delta_dist.x = fabs(1.0 / wf->player.ray.x);
 		ray.delta_dist.y = fabs(1.0 / wf->player.ray.y);
-		ray.map.x = (int)wf->player.position.x;
-		ray.map.y = (int)wf->player.position.y;
+		ray.map.x = (int)wf->player.pos.x;
+		ray.map.y = (int)wf->player.pos.y;
 		if (wf->player.ray.x < 0)
 		{
 			ray.step.x = -1;
-			ray.side_dist.x = (wf->player.position.x - ray.map.x) * ray.delta_dist.x;
+			ray.side_dist.x = (wf->player.pos.x - ray.map.x) * ray.delta_dist.x;
 		}
 		else
 		{
 			ray.step.x = 1;
-			ray.side_dist.x = (1.0 + ray.map.x - wf->player.position.x) * ray.delta_dist.x;
+			ray.side_dist.x = (1.0 + ray.map.x - wf->player.pos.x) * ray.delta_dist.x;
 		}
 		if (wf->player.ray.y < 0)
 		{
 			ray.step.y = -1;
-			ray.side_dist.y = (wf->player.position.y - ray.map.y) * ray.delta_dist.y;
+			ray.side_dist.y = (wf->player.pos.y - ray.map.y) * ray.delta_dist.y;
 		}
 		else
 		{
 			ray.step.y = 1;
-			ray.side_dist.y = (1.0 + ray.map.y - wf->player.position.y) * ray.delta_dist.y;
+			ray.side_dist.y = (1.0 + ray.map.y - wf->player.pos.y) * ray.delta_dist.y;
 		}
 		while (hit == 0)
 		{
@@ -148,13 +148,13 @@ void	raycast(t_wolf *wf)
 			}
 		}
 		if (ray.side == 0)
-			ray.perp_distance = (ray.map.x - wf->player.position.x + (1 - ray.step.x) / 2) / wf->player.ray.x;
+			ray.perp_distance = (ray.map.x - wf->player.pos.x + (1 - ray.step.x) / 2) / wf->player.ray.x;
 		else if (ray.side == 1)
-			ray.perp_distance = (ray.map.y - wf->player.position.y + (1 - ray.step.y) / 2) / wf->player.ray.y;
+			ray.perp_distance = (ray.map.y - wf->player.pos.y + (1 - ray.step.y) / 2) / wf->player.ray.y;
 		else if (ray.side == 2)
-			ray.perp_distance = (ray.map.y + 0.5 - wf->player.position.y) / wf->player.ray.y;
+			ray.perp_distance = (ray.map.y + 0.5 - wf->player.pos.y) / wf->player.ray.y;
 		else if (ray.side == 3)
-			ray.perp_distance = (ray.map.x + 0.5 - wf->player.position.x) / wf->player.ray.x;
+			ray.perp_distance = (ray.map.x + 0.5 - wf->player.pos.x) / wf->player.ray.x;
 		line_height = (int)((double)H / ray.perp_distance);
 		start = -line_height / 2 + H / 2;
 		end = line_height / 2 + H / 2;

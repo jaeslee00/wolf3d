@@ -12,7 +12,7 @@
 /* ************************************************************************** */
 
 #include "wolf3d.h"
- 
+
 int	verLine(int x, int y1, int y2, const int color, unsigned int *img)
 {
 	int y;
@@ -43,7 +43,7 @@ void	render(t_wolf *wolf)
 
 	t_raycaster r;
 	x = 0;
- 
+
 	while (x < W)
 		{
 		r.hit = 0;
@@ -51,31 +51,31 @@ void	render(t_wolf *wolf)
 		wolf->player.ray.y = wolf->player.direction.y + wolf->player.plane.y * (2 * x / (double)(W) - 1);
 		r.delta_dist.x = ft_abs(1 / wolf->player.ray.x);
 		 r.delta_dist.y = ft_abs(1 / wolf->player.ray.y);
-		  r.map.x = (int)wolf->player.position.x;
-		  r.map.y = (int)wolf->player.position.y;
+		  r.map.x = (int)wolf->player.pos.x;
+		  r.map.y = (int)wolf->player.pos.y;
 			if (wolf->player.ray.x < 0)
 			{
 				r.step.x = -1;
-				r.side_dist.x = (wolf->player.position.x - r.map.x) * r.delta_dist.x;
+				r.side_dist.x = (wolf->player.pos.x - r.map.x) * r.delta_dist.x;
 			}
 			else
 			{
 				r.step.x = 1;
-				r.side_dist.x = (r.map.x + 1.0 - wolf->player.position.x) * r.delta_dist.x;
+				r.side_dist.x = (r.map.x + 1.0 - wolf->player.pos.x) * r.delta_dist.x;
 			}
 			if (wolf->player.ray.y < 0)
 			{
 				r.step.y = -1;
-				r.side_dist.y = (wolf->player.position.y - r.map.y) * r.delta_dist.y;
+				r.side_dist.y = (wolf->player.pos.y - r.map.y) * r.delta_dist.y;
 			}
 			else
 			{
 				r.step.y = 1;
-				r.side_dist.y = (r.map.y + 1.0 - wolf->player.position.y) * r.delta_dist.y;
+				r.side_dist.y = (r.map.y + 1.0 - wolf->player.pos.y) * r.delta_dist.y;
 			}
-			
+
 		//perform DDA
-			
+
 		while (r.hit == 0)
 			{
 				//jump to next map square, OR in x-direction, OR in y-direction
@@ -94,12 +94,12 @@ void	render(t_wolf *wolf)
 			if (wolf->map[r.map.x][r.map.y] == 1 || wolf->map[r.map.x][r.map.y] > 2)
 				r.hit = 1;
 			}
-			
+
 		if (r.side == 0)
-			r.perp_distance = (r.map.x - wolf->player.position.x + (1 - r.step.x) / 2) / wolf->player.ray.x;
-			else
-			 r.perp_distance = (r.map.y - wolf->player.position.y + (1 - r.step.y) / 2) / wolf->player.ray.y;
-		
+			r.perp_distance = (r.map.x - wolf->player.pos.x + (1 - r.step.x) / 2) / wolf->player.ray.x;
+		else
+			 r.perp_distance = (r.map.y - wolf->player.pos.y + (1 - r.step.y) / 2) / wolf->player.ray.y;
+
 		 line_height = (int)(H / r.perp_distance);
 		draw_start = -line_height / 2 + H / 2;
 			if (draw_start < 0)

@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 16:26:36 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/24 14:03:25 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/27 00:56:00 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-int **int_to_tab(t_wolf *wolf)
+char	 **int_to_tab(t_wolf *wolf)
 {
 	int i;
 	int j;
 	int k;
-	int **tab;
+	char **tab;
 	int lines;
 
 	i = 0;
 	k = 0;
 	lines = (wolf->obj.size / wolf->obj.len);
 	is_alloc(tab = ft_mem(&wolf->mem, sizeof(*tab) * lines), *wolf, -1);
-	
+
 	while (i < lines)
 	{
 		j = 0;
@@ -42,9 +42,9 @@ int **int_to_tab(t_wolf *wolf)
 
 void	allocate_atois(t_wolf *wolf, char *line, t_2d_p *xy)
 {
-	ft_mem(&wolf->mem, sizeof(int));
+	ft_mem(&wolf->mem, sizeof(char));
 	wolf->obj.nb = wolf->mem.m;
-	wolf->obj.nb[xy->x] = (int)ft_atoi(line);
+	wolf->obj.nb[xy->x] = (char)ft_atoi(line);
 	xy->x++;
 }
 

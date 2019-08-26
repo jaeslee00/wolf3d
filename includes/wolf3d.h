@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/26 18:38:57 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/27 01:01:35 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include <math.h>
 # include <stdint.h>
 # include <SDL2/SDL.h>
-# define W (2560 / 2)
-# define H (1080 / 2)
+# define W (1280 / 2)
+# define H (720 / 2)
 # define HEIGHT 32
 # define TEX_WIDTH 64
 # define TEX_HEIGHT 64
@@ -28,7 +28,7 @@
 # define RELEASED 0
 # define WALL 1
 # define EW_DOOR 3
-# define NS_DOOR 4
+# define NS_DOOR 5
 # define UP	1UL
 # define DOWN	1UL << 1
 # define RIGHT	1UL << 2
@@ -39,6 +39,20 @@
 # endif
 
 #include <stdio.h>
+
+//TODO (jae) : Not sure if this is what you want to do lul
+typedef unsigned char	uint8;
+typedef char			sint8;
+
+typedef unsigned short int	uint16;
+typedef short int			sint16;
+
+typedef unsigned int	uint32;
+typedef int				sint32;
+
+typedef unsigned long int	uint64;
+typedef long int			sint64;
+
 typedef struct	s_ilst
 {
 	int				content;
@@ -64,9 +78,15 @@ typedef struct	s_2d_p
 	int		y;
 }				t_2d_p;
 
+typedef struct	s_door
+{
+	t_2d_p	pos;
+	char	flag;
+}				t_door;
+
 typedef struct	s_obj
 {
-	int		*nb;
+	char	*nb;
 	int		size;
 	int		len;
 }				t_obj;
@@ -82,7 +102,7 @@ typedef struct	s_sdl
 typedef struct	s_player
 {
 	t_2d	ray;
-	t_2d	position;
+	t_2d	pos;
 	t_2d	offset;
 	t_2d	direction;
 	t_2d	plane;
@@ -110,22 +130,24 @@ typedef struct	s_wolf
 	t_obj		obj;
 	unsigned int	*img;
 	t_mem		mem;
-	int		**map;
+	char		**map;
+	t_door		doors[100];
+	int			nbr_of_doors;
 	t_texture	tex[5];
 	unsigned int flag;
 }				t_wolf;
 
 void			ft_frametimes(int *frames, int *count);
-int				direction_movement(t_wolf *wolf, int **map, int frametime);
+int				direction_movement(t_wolf *wolf, char **map, int frametime);
 void			set_flag(t_wolf *wolf, SDL_Event event);
 double		fov_calculator(t_wolf *wolf);
-int				print_map(int **map, t_obj obj, t_player *player);
-void			event_handler(t_wolf *wolf, int **map);
+int				print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
+void			event_handler(t_wolf *wolf, char **map, t_door *doors);
 void			render(t_wolf *wolf);
 void			raycast(t_wolf *wf);
 void			calculate_distance(t_player *p, t_2d_p *a);
 void			ft_raycast(t_wolf *wolf, t_player *player);
-int				**int_to_tab(t_wolf *wolf);
+char			**int_to_tab(t_wolf *wolf);
 int				rgb_lerp(int color1, float t, int color2);
 //int				lerp(int a, float t, int b);
 double		ft_abs(double x);

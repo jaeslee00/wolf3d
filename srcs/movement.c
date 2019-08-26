@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 03:05:39 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/26 18:16:18 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/27 00:55:11 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	set_flag(t_wolf *wolf, SDL_Event event)
 	check_key(wolf, event, SDL_SCANCODE_LSHIFT, 1UL << 6);
 }
 
-int		direction_movement(t_wolf *wolf, int **map, int framedelta)
+int		direction_movement(t_wolf *wolf, char **map, int framedelta)
 {
 	float	time;
 	float	fov;
@@ -65,31 +65,31 @@ int		direction_movement(t_wolf *wolf, int **map, int framedelta)
 	time = (float)(framedelta / 200.f) * p->speed;
 	if (wolf->flag & UP)
 	{
-		if (map[(int)(p->position.x + p->direction.x * (time + 0.2f))][(int)(p->position.y)] == 0)
-			p->position.x += p->direction.x * time;
-		if (map[(int)(p->position.x)][(int)(p->position.y + p->direction.y * (time + 0.2f))] == 0)
-			p->position.y += p->direction.y * time;
+		if (map[(int)(p->pos.x + p->direction.x * (time + 0.2f))][(int)(p->pos.y)] == 0)
+			p->pos.x += p->direction.x * time;
+		if (map[(int)(p->pos.x)][(int)(p->pos.y + p->direction.y * (time + 0.2f))] == 0)
+			p->pos.y += p->direction.y * time;
 	}
 	if (wolf->flag & DOWN)
 	{
-		if (map[(int)(p->position.x - p->direction.x * (time + 0.2f))][(int)(p->position.y)] == 0)
-			p->position.x -= p->direction.x * time;
-		if (map[(int)(p->position.x)][(int)(p->position.y - p->direction.y * (time + 0.2f))] == 0)
-			p->position.y -= p->direction.y * time;
+		if (map[(int)(p->pos.x - p->direction.x * (time + 0.2f))][(int)(p->pos.y)] == 0)
+			p->pos.x -= p->direction.x * time;
+		if (map[(int)(p->pos.x)][(int)(p->pos.y - p->direction.y * (time + 0.2f))] == 0)
+			p->pos.y -= p->direction.y * time;
 	}
 	if (wolf->flag & RIGHT)
 	{
-		if (map[(int)(p->position.x + p->plane.x * (time + 0.2f))][(int)(p->position.y)] == 0)
-			p->position.x += p->plane.x * time;
-		if (map[(int)(p->position.x)][(int)(p->position.y + p->plane.y * (time + 0.2f))] == 0)
-			p->position.y += p->plane.y * time;
+		if (map[(int)(p->pos.x + p->plane.x * (time + 0.2f))][(int)(p->pos.y)] == 0)
+			p->pos.x += p->plane.x * time;
+		if (map[(int)(p->pos.x)][(int)(p->pos.y + p->plane.y * (time + 0.2f))] == 0)
+			p->pos.y += p->plane.y * time;
 	}
 	if (wolf->flag & LEFT)
 	{
-		if (map[(int)(p->position.x - p->plane.x * (time + 0.2f))][(int)(p->position.y)] == 0)
-			p->position.x -= p->plane.x * time;
-		if (map[(int)(p->position.x)][(int)(p->position.y - p->plane.y * (time + 0.2f))] == 0)
-			p->position.y -= p->plane.y * time;
+		if (map[(int)(p->pos.x - p->plane.x * (time + 0.2f))][(int)(p->pos.y)] == 0)
+			p->pos.x -= p->plane.x * time;
+		if (map[(int)(p->pos.x)][(int)(p->pos.y - p->plane.y * (time + 0.2f))] == 0)
+			p->pos.y -= p->plane.y * time;
 	}
 	if (wolf->flag & 1UL << 4 && fov < 120.0f)
 	{
