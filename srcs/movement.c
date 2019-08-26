@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 03:05:39 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/26 18:08:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/26 18:16:18 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,5 @@ int		direction_movement(t_wolf *wolf, int **map, int framedelta)
 	wolf->player.speed = 1.5f;
 		else
 		wolf->player.speed = 1;
-	//NOTE (jae) : testing open/closing doors coordinates are hardcoded lul some keys cannot be like movement i think!! dunno where to change though
 	return (1);
 }

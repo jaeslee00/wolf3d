@@ -41,11 +41,11 @@ int		draw_wall(t_wolf *wf, int start, int end, int line_height, int x, t_raycast
 
 	if (ray->side == EW_WALL)
 		tex_id = ray->step.x < 0 ? 0 : 1;
-	else if (ray->side == 2)
+	else if (ray->side == 2 || ray->side == 3)
 		tex_id = 4;
 	else
 		tex_id = ray->step.y < 0 ? 2 : 3;
-	if (ray->side == EW_WALL)
+	if (ray->side == EW_WALL || ray->side == 3)
 		tex_width_scale = wf->player.position.y + ray->perp_distance * wf->player.ray.y;
 	else
 		tex_width_scale = wf->player.position.x + ray->perp_distance * wf->player.ray.x;
@@ -124,14 +124,26 @@ void	raycast(t_wolf *wf)
 			{
 				hit = 1;
 			}
-			if (wf->map[ray.map.x][ray.map.y] == 3)
+			if (wf->map[ray.map.x][ray.map.y] == EW_DOOR)
 			{
-				if (ray.side_dist.x < ray.side_dist.y - 0.5) //TODO (jae): need a working condition... getting better though!!
+				//TODO (jae): need a working condition... getting better though!!
+				if (ray.side_dist.x < ray.side_dist.y - 0.5)
 					continue ;
 				else
 				{
 					hit = 1;
 					ray.side = 2;
+				}
+			}
+			if (wf->map[ray.map.x][ray.map.y] == NS_DOOR)
+			{
+				//TODO (jae): need a working condition... getting better though!!
+				if (ray.side_dist.y < ray.side_dist.x - 0.5)
+					continue ;
+				else
+				{
+					hit = 1;
+					ray.side = 3;
 				}
 			}
 		}
@@ -141,6 +153,8 @@ void	raycast(t_wolf *wf)
 			ray.perp_distance = (ray.map.y - wf->player.position.y + (1 - ray.step.y) / 2) / wf->player.ray.y;
 		else if (ray.side == 2)
 			ray.perp_distance = (ray.map.y + 0.5 - wf->player.position.y) / wf->player.ray.y;
+		else if (ray.side == 3)
+			ray.perp_distance = (ray.map.x + 0.5 - wf->player.position.x) / wf->player.ray.x;
 		line_height = (int)((double)H / ray.perp_distance);
 		start = -line_height / 2 + H / 2;
 		end = line_height / 2 + H / 2;

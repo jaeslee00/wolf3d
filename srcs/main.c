@@ -13,27 +13,6 @@
 
 #include "wolf3d.h"
 
-/*
- if (event.key.keysym.scancode == SDL_SCANCODE_Q)
- {
-  old.x = p->direction.x;
-  p->direction.x = p->direction.x * cos(0.2f) - p->direction.y * sin(0.2f);
-  p->direction.y = old.x * sin(0.2f) + p->direction.y * cos(0.2f);
-  old.y = p->plane.x;
-  p->plane.x = p->plane.x * cos(0.2f) - p->plane.y * sin(0.2f);
-  p->plane.y = old.y * sin(0.2f) + p->plane.y * cos(0.2f);
- }
- if (event.key.keysym.scancode == SDL_SCANCODE_E)
- {
-  old.x = p->direction.x;
-  p->direction.x = p->direction.x * cos(-0.2f) - p->direction.y * sin(-0.2f);
-  p->direction.y = old.x * sin(-0.2f) + p->direction.y * cos(-0.2f);
-  old.y = p->plane.x;
-  p->plane.x = p->plane.x * cos(-0.2f) - p->plane.y * sin(-0.2f);
-  p->plane.y = old.y * sin(-0.2f) + p->plane.y * cos(-0.2f);
- }
-*/
-
 int		read_all(int fd, uint8_t *data, int size)
 {
 	int	read_bytes;
@@ -141,32 +120,6 @@ void img_to_screen(unsigned int *img, t_texture t)
 			y++;
 		}
 		x++;
-	}
-}
-
-void	event_handler(t_wolf *wolf, int **map)
-{
-	t_player *p;
-
-	p = &wolf->player;
-	if (wolf->sdl.event.key.keysym.scancode == SDL_SCANCODE_F)
-	{
-		if (map[5][5] == 3
-			&& (((int)p->position.x == 5 && (int)p->position.y == 6)
-			|| ((int)p->position.x == 5 && (int)p->position.y == 4)))
-			map[5][5] = 0;
-		else if (map[5][5] == 0
-			&& (((int)p->position.x == 5 && (int)p->position.y == 6)
-			|| ((int)p->position.x == 5 && (int)p->position.y == 4)))
-			map[5][5] = 3;
-		else if (map[9][5] == 3
-			&& (((int)p->position.x == 9 && (int)p->position.y == 6)
-			|| ((int)p->position.x == 9 && (int)p->position.y == 4)))
-			map[9][5] = 0;
-		else if (map[9][5] == 0
-			&& (((int)p->position.x == 9 && (int)p->position.y == 6)
-			|| ((int)p->position.x == 9 && (int)p->position.y == 4)))
-			map[9][5] = 3;
 	}
 }
 

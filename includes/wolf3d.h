@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/26 16:28:59 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/26 18:38:57 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@
 # define PRESSED 1
 # define RELEASED 0
 # define WALL 1
-# define DOOR 3
+# define EW_DOOR 3
+# define NS_DOOR 4
 # define UP	1UL
 # define DOWN	1UL << 1
 # define RIGHT	1UL << 2
@@ -119,6 +120,7 @@ int				direction_movement(t_wolf *wolf, int **map, int frametime);
 void			set_flag(t_wolf *wolf, SDL_Event event);
 double		fov_calculator(t_wolf *wolf);
 int				print_map(int **map, t_obj obj, t_player *player);
+void			event_handler(t_wolf *wolf, int **map);
 void			render(t_wolf *wolf);
 void			raycast(t_wolf *wf);
 void			calculate_distance(t_player *p, t_2d_p *a);
