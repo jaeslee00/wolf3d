@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 03:05:39 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/26 17:12:32 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/26 18:08:38 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	set_flag(t_wolf *wolf, SDL_Event event)
 	check_key(wolf, event, SDL_SCANCODE_EQUALS, 1UL << 4);
 	check_key(wolf, event, SDL_SCANCODE_MINUS, 1UL << 5);
 	check_key(wolf, event, SDL_SCANCODE_LSHIFT, 1UL << 6);
-	check_key(wolf, event, SDL_SCANCODE_F, 1UL << 7);
 }
 
 int		direction_movement(t_wolf *wolf, int **map, int framedelta)
@@ -109,24 +108,5 @@ int		direction_movement(t_wolf *wolf, int **map, int framedelta)
 		else
 		wolf->player.speed = 1;
 	//NOTE (jae) : testing open/closing doors coordinates are hardcoded lul some keys cannot be like movement i think!! dunno where to change though
-	if (wolf->flag & 1UL << 7)
-	{
-		if (map[5][5] == 3
-			&& (((int)p->position.x == 5 && (int)p->position.y == 6)
-			|| ((int)p->position.x == 5 && (int)p->position.y == 4)))
-			map[5][5] = 0;
-		else if (map[5][5] == 0
-			&& (((int)p->position.x == 5 && (int)p->position.y == 6)
-			|| ((int)p->position.x == 5 && (int)p->position.y == 4)))
-			map[5][5] = 3;
-		else if (map[9][5] == 3
-			&& (((int)p->position.x == 9 && (int)p->position.y == 6)
-			|| ((int)p->position.x == 9 && (int)p->position.y == 4)))
-			map[9][5] = 0;
-		else if (map[9][5] == 0
-			&& (((int)p->position.x == 9 && (int)p->position.y == 6)
-			|| ((int)p->position.x == 9 && (int)p->position.y == 4)))
-			map[9][5] = 3;
-	}
 	return (1);
 }

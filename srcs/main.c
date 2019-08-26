@@ -144,6 +144,32 @@ void img_to_screen(unsigned int *img, t_texture t)
 	}
 }
 
+void	event_handler(t_wolf *wolf, int **map)
+{
+	t_player *p;
+
+	p = &wolf->player;
+	if (wolf->sdl.event.key.keysym.scancode == SDL_SCANCODE_F)
+	{
+		if (map[5][5] == 3
+			&& (((int)p->position.x == 5 && (int)p->position.y == 6)
+			|| ((int)p->position.x == 5 && (int)p->position.y == 4)))
+			map[5][5] = 0;
+		else if (map[5][5] == 0
+			&& (((int)p->position.x == 5 && (int)p->position.y == 6)
+			|| ((int)p->position.x == 5 && (int)p->position.y == 4)))
+			map[5][5] = 3;
+		else if (map[9][5] == 3
+			&& (((int)p->position.x == 9 && (int)p->position.y == 6)
+			|| ((int)p->position.x == 9 && (int)p->position.y == 4)))
+			map[9][5] = 0;
+		else if (map[9][5] == 0
+			&& (((int)p->position.x == 9 && (int)p->position.y == 6)
+			|| ((int)p->position.x == 9 && (int)p->position.y == 4)))
+			map[9][5] = 3;
+	}
+}
+
 int		main(int ac, char **av)
 {
 	int		i;
@@ -176,6 +202,8 @@ int		main(int ac, char **av)
 				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 					is_alloc(NULL, wolf, 0);
 				set_flag(&wolf, wolf.sdl.event);
+				if (wolf.sdl.event.type == SDL_KEYDOWN)
+					event_handler(&wolf, wolf.map);
 			}
 			if (i != 0)
 				direction_movement(&wolf, wolf.map,
