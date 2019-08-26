@@ -58,23 +58,15 @@ int		draw_wall(t_wolf *wf, int start, int end, int line_height, int x, t_raycast
 	int	color;
 
 	if (ray->side == EW_WALL)
-	{
 		tex_id = ray->step.x < 0 ? 0 : 1;
-	}
 	else if (ray->side == 2)
 		tex_id = 4;
 	else
-	{
 		tex_id = ray->step.y < 0 ? 2 : 3;
-	}
 	if (ray->side == EW_WALL)
 		tex_width_scale = wf->player.position.y + ray->perp_distance * wf->player.ray.y;
 	else
 		tex_width_scale = wf->player.position.x + ray->perp_distance * wf->player.ray.x;
-	// if (ray->side == EW_WALL)
-	// 	tex_width_scale = wf->player.position.y + ray->perp_distance * wf->player.ray.y;
-	// else
-	// 	tex_width_scale = wf->player.position.x + ray->perp_distance * wf->player.ray.x;
 	tex_width_scale = tex_width_scale - floor(tex_width_scale);
 	tex_coord.x = (int)(tex_width_scale * (double)TEX_WIDTH);
 	y = start;
@@ -151,7 +143,7 @@ void	raycast(t_wolf *wf)
 			}
 			if (wf->map[ray.map.x][ray.map.y] == 3)
 			{
-				if (ray.delta_dist.x < ray.side_dist.y) //TODO (jae): need a working condition...
+				if (ray.side_dist.x < ray.side_dist.y - 0.5) //TODO (jae): need a working condition... getting better though!!
 					continue ;
 				else
 				{
