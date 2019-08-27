@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 01:01:35 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/27 01:50:47 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include <math.h>
 # include <stdint.h>
 # include <SDL2/SDL.h>
-# define W (1280 / 2)
-# define H (720 / 2)
+# define W (1280)
+# define H (720)
 # define HEIGHT 32
 # define TEX_WIDTH 64
 # define TEX_HEIGHT 64

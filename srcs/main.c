@@ -68,11 +68,11 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.plane.y = 1;
 	// TODO(viccarau): We will have to make the textures load depending on
 	//the type of wall it is. Some textures have to be on the same type of wall.
-	wolf->tex[0] = read_bmp("./texture/colorstone.bmp");
-	wolf->tex[1] = read_bmp("./texture/greystone.bmp");
-	wolf->tex[2] = read_bmp("./texture/eagle.bmp");
-	wolf->tex[3] = read_bmp("./texture/redbrick.bmp");
-	wolf->tex[4] = read_bmp("./texture/wood.bmp");
+	wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp");
+	wolf->tex[1] = read_bmp("./texture/BrownbrickD.bmp");
+	wolf->tex[2] = read_bmp("./texture/BookshelfD.bmp");
+	wolf->tex[3] = read_bmp("./texture/WoodbrickD.bmp");
+	wolf->tex[4] = read_bmp("./texture/Wooddoor.bmp");
 	wolf->player.speed = 0;
 	wolf->flag = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 18:38:10 by jaelee            #+#    #+#             */
-/*   Updated: 2019/08/27 00:55:12 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/27 01:49:54 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void interaction_door(t_door *doors, char **map, int i)
 	else if (doors[i].flag == 0b11)
 	{
 		doors[i].flag = 0b10;
-		map[doors[i].pos.x][doors[i].pos.y] = 4;
+		map[doors[i].pos.x][doors[i].pos.y] = 5;
 	}
 }
 
