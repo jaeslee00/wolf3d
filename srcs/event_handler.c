@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 18:38:10 by jaelee            #+#    #+#             */
-/*   Updated: 2019/08/27 13:51:13 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/27 21:49:08 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	interaction_door(t_door *doors, sint8 **map, sint32 i)
 
 void	event_handler(t_wolf *wolf, sint8 **map, t_door *doors)
 {
-	t_player *p;
+	t_player	*p;
 	sint32		i;
 
 	i = 0;
@@ -53,10 +53,14 @@ void	event_handler(t_wolf *wolf, sint8 **map, t_door *doors)
 	{
 		while (i < wolf->nbr_of_doors)
 		{
-			if ( ((sint32)p->pos.x == doors[i].pos.x && (sint32)p->pos.y == doors[i].pos.y + 1)
-				|| ((sint32)p->pos.x == doors[i].pos.x && (sint32)p->pos.y == doors[i].pos.y - 1)
-				|| ((sint32)p->pos.x == doors[i].pos.x + 1 && (sint32)p->pos.y == doors[i].pos.y)
-				|| ((sint32)p->pos.x == doors[i].pos.x - 1 && (sint32)p->pos.y == doors[i].pos.y))
+			if (((sint32)p->pos.x == doors[i].pos.x
+					&& (sint32)p->pos.y == doors[i].pos.y + 1)
+				|| ((sint32)p->pos.x == doors[i].pos.x
+					&& (sint32)p->pos.y == doors[i].pos.y - 1)
+				|| ((sint32)p->pos.x == doors[i].pos.x + 1
+					&& (sint32)p->pos.y == doors[i].pos.y)
+				|| ((sint32)p->pos.x == doors[i].pos.x - 1
+					&& (sint32)p->pos.y == doors[i].pos.y))
 				interaction_door(doors, map, i);
 			i++;
 		}
