@@ -13,7 +13,7 @@
 
 #include "wolf3d.h"
 
-int		lighting(int color, t_raycaster *ray)
+sint32		lighting(sint32 color, t_raycaster *ray)
 {
 	if(ray->perp_distance > 20)
 		return (0);
@@ -30,14 +30,14 @@ int		lighting(int color, t_raycaster *ray)
 	return (rgb_lerp(0.0, ray->light, color));
 }
 
-int		draw_wall(t_wolf *wf, int start, int end, int line_height, int x, t_raycaster *ray)
+sint32		draw_wall(t_wolf *wf, sint32 start, sint32 end, sint32 line_height, sint32 x, t_raycaster *ray)
 {
 	t_2d_p	tex_coord;
-	double	tex_width_scale;
-	int		tex_height_scale;
-	int		tex_id;
-	int		y;
-	int	color;
+	f64	tex_width_scale;
+	sint32		tex_height_scale;
+	sint32		tex_id;
+	sint32		y;
+	sint32	color;
 
 	if (ray->side == EW_WALL)
 		tex_id = ray->step.x < 0 ? 0 : 1;
@@ -50,7 +50,7 @@ int		draw_wall(t_wolf *wf, int start, int end, int line_height, int x, t_raycast
 	else
 		tex_width_scale = wf->player.pos.x + ray->perp_distance * wf->player.ray.x;
 	tex_width_scale = tex_width_scale - floor(tex_width_scale);
-	tex_coord.x = (int)(tex_width_scale * (double)TEX_WIDTH);
+	tex_coord.x = (sint32)(tex_width_scale * (f64)TEX_WIDTH);
 	y = start;
 
 	while (y < end)
@@ -68,14 +68,14 @@ int		draw_wall(t_wolf *wf, int start, int end, int line_height, int x, t_raycast
 void	raycast(t_wolf *wf)
 {
 	t_raycaster	ray;
-	int			hit;
-	double		line_height;
-	int			start;
-	int			end;
-	int			x;
-	double		scale;
+	sint32			hit;
+	f64		line_height;
+	sint32			start;
+	sint32			end;
+	sint32			x;
+	f64		scale;
 
-	scale = 2.0 / (double)W;
+	scale = 2.0 / (f64)W;
 	x = 0;
 	while (x < W)
 	{
@@ -84,8 +84,8 @@ void	raycast(t_wolf *wf)
 		wf->player.ray.y = wf->player.direction.y + wf->player.plane.y * (x * scale - 1.0);
 		ray.delta_dist.x = fabs(1.0 / wf->player.ray.x);
 		ray.delta_dist.y = fabs(1.0 / wf->player.ray.y);
-		ray.map.x = (int)wf->player.pos.x;
-		ray.map.y = (int)wf->player.pos.y;
+		ray.map.x = (sint32)wf->player.pos.x;
+		ray.map.y = (sint32)wf->player.pos.y;
 		if (wf->player.ray.x < 0)
 		{
 			ray.step.x = -1;
@@ -155,7 +155,7 @@ void	raycast(t_wolf *wf)
 			ray.perp_distance = (ray.map.y + 0.5 - wf->player.pos.y) / wf->player.ray.y;
 		else if (ray.side == 3)
 			ray.perp_distance = (ray.map.x + 0.5 - wf->player.pos.x) / wf->player.ray.x;
-		line_height = (int)((double)H / ray.perp_distance);
+		line_height = (sint32)((f64)H / ray.perp_distance);
 		start = -line_height / 2 + H / 2;
 		end = line_height / 2 + H / 2;
 		if (start < 0)

@@ -6,13 +6,13 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 18:38:10 by jaelee            #+#    #+#             */
-/*   Updated: 2019/08/27 04:39:26 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/27 06:18:57 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	interaction_door(t_door *doors, char **map, int i)
+void	interaction_door(t_door *doors, sint8 **map, sint32 i)
 {
 	if (doors[i].flag == 0b00)
 	{
@@ -36,10 +36,10 @@ void	interaction_door(t_door *doors, char **map, int i)
 	}
 }
 
-void	event_handler(t_wolf *wolf, char **map, t_door *doors)
+void	event_handler(t_wolf *wolf, sint8 **map, t_door *doors)
 {
 	t_player *p;
-	int		i;
+	sint32		i;
 
 	i = 0;
 	p = &wolf->player;
@@ -47,10 +47,10 @@ void	event_handler(t_wolf *wolf, char **map, t_door *doors)
 	{
 		while (i < wolf->nbr_of_doors)
 		{
-			if ( ((int)p->pos.x == doors[i].pos.x && (int)p->pos.y == doors[i].pos.y + 1)
-			|| ((int)p->pos.x == doors[i].pos.x && (int)p->pos.y == doors[i].pos.y - 1)
-			|| ((int)p->pos.x == doors[i].pos.x + 1 && (int)p->pos.y == doors[i].pos.y)
-			|| ((int)p->pos.x == doors[i].pos.x - 1 && (int)p->pos.y == doors[i].pos.y) )
+			if ( ((sint32)p->pos.x == doors[i].pos.x && (sint32)p->pos.y == doors[i].pos.y + 1)
+			|| ((sint32)p->pos.x == doors[i].pos.x && (sint32)p->pos.y == doors[i].pos.y - 1)
+			|| ((sint32)p->pos.x == doors[i].pos.x + 1 && (sint32)p->pos.y == doors[i].pos.y)
+			|| ((sint32)p->pos.x == doors[i].pos.x - 1 && (sint32)p->pos.y == doors[i].pos.y) )
 				interaction_door(doors, map, i);
 			i++;
 		}

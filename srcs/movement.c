@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 03:05:39 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 00:55:11 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/27 06:18:46 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 void	mouse_movement(t_wolf *wolf, SDL_Event event)
 {
 	t_2d		old;
-	double	motion;
+	f64	motion;
 	t_player	*p;
 
 	p = &wolf->player;
 	if (event.type == SDL_MOUSEMOTION)
 	{
-		motion = -(double)(event.motion.xrel * 0.001f);
+		motion = -(f64)(event.motion.xrel * 0.001f);
 		old.x = p->direction.x;
 		p->direction.x = p->direction.x * cos(motion) - p->direction.y * sin(motion);
 		p->direction.y = old.x * sin(motion) + p->direction.y * cos(motion);
@@ -31,7 +31,7 @@ void	mouse_movement(t_wolf *wolf, SDL_Event event)
 	}
 }
 
-void	check_key(t_wolf *wolf, SDL_Event event, SDL_Scancode key, int bit)
+void	check_key(t_wolf *wolf, SDL_Event event, SDL_Scancode key, sint32 bit)
 {
 	if (event.key.keysym.scancode == key)
 	{
@@ -54,41 +54,41 @@ void	set_flag(t_wolf *wolf, SDL_Event event)
 	check_key(wolf, event, SDL_SCANCODE_LSHIFT, 1UL << 6);
 }
 
-int		direction_movement(t_wolf *wolf, char **map, int framedelta)
+sint32		direction_movement(t_wolf *wolf, sint8 **map, sint32 framedelta)
 {
-	float	time;
-	float	fov;
+	f32	time;
+	f32	fov;
 	t_player	*p;
 
 	fov = fov_calculator(wolf);
 	p = &wolf->player;
-	time = (float)(framedelta / 200.f) * p->speed;
+	time = (f32)(framedelta / 200.f) * p->speed;
 	if (wolf->flag & UP)
 	{
-		if (map[(int)(p->pos.x + p->direction.x * (time + 0.2f))][(int)(p->pos.y)] == 0)
+		if (map[(sint32)(p->pos.x + p->direction.x * (time + 0.2f))][(sint32)(p->pos.y)] == 0)
 			p->pos.x += p->direction.x * time;
-		if (map[(int)(p->pos.x)][(int)(p->pos.y + p->direction.y * (time + 0.2f))] == 0)
+		if (map[(sint32)(p->pos.x)][(sint32)(p->pos.y + p->direction.y * (time + 0.2f))] == 0)
 			p->pos.y += p->direction.y * time;
 	}
 	if (wolf->flag & DOWN)
 	{
-		if (map[(int)(p->pos.x - p->direction.x * (time + 0.2f))][(int)(p->pos.y)] == 0)
+		if (map[(sint32)(p->pos.x - p->direction.x * (time + 0.2f))][(sint32)(p->pos.y)] == 0)
 			p->pos.x -= p->direction.x * time;
-		if (map[(int)(p->pos.x)][(int)(p->pos.y - p->direction.y * (time + 0.2f))] == 0)
+		if (map[(sint32)(p->pos.x)][(sint32)(p->pos.y - p->direction.y * (time + 0.2f))] == 0)
 			p->pos.y -= p->direction.y * time;
 	}
 	if (wolf->flag & RIGHT)
 	{
-		if (map[(int)(p->pos.x + p->plane.x * (time + 0.2f))][(int)(p->pos.y)] == 0)
+		if (map[(sint32)(p->pos.x + p->plane.x * (time + 0.2f))][(sint32)(p->pos.y)] == 0)
 			p->pos.x += p->plane.x * time;
-		if (map[(int)(p->pos.x)][(int)(p->pos.y + p->plane.y * (time + 0.2f))] == 0)
+		if (map[(sint32)(p->pos.x)][(sint32)(p->pos.y + p->plane.y * (time + 0.2f))] == 0)
 			p->pos.y += p->plane.y * time;
 	}
 	if (wolf->flag & LEFT)
 	{
-		if (map[(int)(p->pos.x - p->plane.x * (time + 0.2f))][(int)(p->pos.y)] == 0)
+		if (map[(sint32)(p->pos.x - p->plane.x * (time + 0.2f))][(sint32)(p->pos.y)] == 0)
 			p->pos.x -= p->plane.x * time;
-		if (map[(int)(p->pos.x)][(int)(p->pos.y - p->plane.y * (time + 0.2f))] == 0)
+		if (map[(sint32)(p->pos.x)][(sint32)(p->pos.y - p->plane.y * (time + 0.2f))] == 0)
 			p->pos.y -= p->plane.y * time;
 	}
 	if (wolf->flag & 1UL << 4 && fov < 120.0f)

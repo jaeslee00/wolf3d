@@ -13,12 +13,12 @@
 
 #include "wolf3d.h"
 
-int print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf)
+sint32 print_map(sint8 **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf)
 {
-	int	lines;
-	int	i;
-	int	j;
-	int k;
+	sint32	lines;
+	sint32	i;
+	sint32	j;
+	sint32 k;
 
 	lines = (obj.size / obj.len);
 	i = 0;
@@ -54,9 +54,9 @@ int print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wo
 	return (0);
 }
 
-void ft_frametimes(int *frames, int *count)
+void ft_frametimes(sint32 *frames, sint32 *count)
 {
-	int	j;
+	sint32	j;
 
 	if (*count == 60)
 	{
@@ -71,7 +71,7 @@ void ft_frametimes(int *frames, int *count)
 			// 	ft_putchar('\n');
 			j++;
 		}
-		ft_bzero(frames, sizeof(int) * 61);
+		ft_bzero(frames, sizeof(sint32) * 61);
 		// ft_putchar('\n');
 		*count = -1;
 	}

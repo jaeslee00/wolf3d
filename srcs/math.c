@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:24:28 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/25 07:52:04 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/27 06:22:34 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 ** Calculate from radians to degrees - (angle * 180 / PI32) degrees
 */
 
-double fov_calculator(t_wolf *wolf)
+f64 fov_calculator(t_wolf *wolf)
 {
-	double fov;
+	f64 fov;
 	t_2d *pn;
 	t_2d *d;
 
@@ -29,79 +29,79 @@ double fov_calculator(t_wolf *wolf)
 	return (fov);
 }
 
-float	degree_radian(int degree)
+f32	degree_radian(sint32 degree)
 {
 	return (degree * PI32 / 180);
 }
 
-float	my_sin(float angle)
+f32	my_sin(f32 angle)
 {
-	float	r;
+	f32	r;
 
 	r = sinf(angle);
 	return (r);
 }
 
-float	my_cos(float angle)
+f32	my_cos(f32 angle)
 {
-	float	r;
+	f32	r;
 
 	r = cosf(angle);
 	return (r);
 }
 
-float	my_tan(float angle)
+f32	my_tan(f32 angle)
 {
-	float	r;
+	f32	r;
 
 	r = tanf(angle);
 	return (r);
 }
 
-float	my_asin(float angle)
+f32	my_asin(f32 angle)
 {
-	float	r;
+	f32	r;
 
 	r = asinf(angle);
 	return (r);
 }
 
-float	my_acos(float angle)
+f32	my_acos(f32 angle)
 {
-	float	r;
+	f32	r;
 
 	r = acosf(angle);
 	return (r);
 }
 
-float	my_atan(float angle)
+f32	my_atan(f32 angle)
 {
-	float	r;
+	f32	r;
 
 	r = atanf(angle);
 	return (r);
 }
 
-double	ft_abs(double x)
+f64	ft_abs(f64 x)
 {
 	if (x < 0)
 		x = -x;
 	return (x);
 }
 
-int		lerp(double a, float t, double b)
+sint32		lerp(f64 a, f32 t, f64 b)
 {
-	int	result;
+	sint32	result;
 
 	result = (1.0f - t) * a + t * b;
 	return (result);
 }
 
-int		rgb_lerp(int color1, float t, int color2)
+sint32		rgb_lerp(sint32 color1, f32 t, sint32 color2)
 {
-	int	r;
-	int	g;
-	int	b;
+	sint32	r;
+	sint32	g;
+	sint32	b;
 
 	r = lerp(color1 / 0x10000, t, color2 / 0x10000);
 	g = lerp(((color1 / 0x100) % 0x100), t, ((color2 / 0x100) % 0x100));

@@ -6,19 +6,19 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 16:26:36 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 04:18:08 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/27 06:25:11 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-char	 **int_to_tab(t_wolf *wolf)
+sint8 **int_to_tab(t_wolf *wolf)
 {
-	int i;
-	int j;
-	int k;
-	char **tab;
-	int lines;
+	sint32	i;
+	sint32	j;
+	sint32	k;
+	sint8	**tab;
+	sint32	lines;
 
 	i = 0;
 	k = 0;
@@ -41,18 +41,18 @@ char	 **int_to_tab(t_wolf *wolf)
 	return (tab);
 }
 
-void	allocate_atois(t_wolf *wolf, char *line, t_2d_p *xy)
+void	allocate_atois(t_wolf *wolf, sint8 *line, t_2d_p *xy)
 {
-	ft_mem(&wolf->mem, sizeof(char));
+	ft_mem(&wolf->mem, sizeof(sint8));
 	wolf->obj.nb = wolf->mem.m;
-	wolf->obj.nb[xy->x] = (char)ft_atoi(line);
+	wolf->obj.nb[xy->x] = (sint8)ft_atoi(line);
 	xy->x++;
 }
 
-int		tkneizer(int fd, t_wolf *wolf)
+sint32		tkneizer(sint32 fd, t_wolf *wolf)
 {
-	char	*line;
-	int		i;
+	sint8	*line;
+	sint32		i;
 	t_2d_p	xy;
 
 	ft_bzero(&xy, sizeof(xy));
