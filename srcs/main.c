@@ -166,11 +166,7 @@ int		main(int ac, char **av)
 			ceiling(wolf.img);
 			//render(&wolf);
 			raycast(&wolf);
-<<<<<<< HEAD
 			minimap(&wolf);
-=======
-			draw_minimap(&wolf);
->>>>>>> de03e5d510344a094cbca1c1ef4b85b4fba63ebf
 			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img,
 				W * sizeof(unsigned int));
 			SDL_RenderCopy(wolf.sdl.renderer, wolf.sdl.texture, NULL, NULL);
