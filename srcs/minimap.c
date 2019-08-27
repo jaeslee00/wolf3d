@@ -33,7 +33,7 @@ void	draw_square(uint32 *img, t_2d_p minimap, sint32 size, sint32 color)
 
 void	minimap(t_wolf *wolf)
 {
-	t_2d_p		minimap;
+	t_2d_p			minimap;
 	sint32			square_size;
 	sint32			map_width;
 	sint32			map_height;

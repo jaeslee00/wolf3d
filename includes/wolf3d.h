@@ -17,8 +17,8 @@
 # include <math.h>
 # include <stdint.h>
 # include <SDL2/SDL.h>
-# define W (1280)
-# define H (720)
+# define W (1280/2)
+# define H (720/2)
 # define HEIGHT 32
 # define TEX_WIDTH 64
 # define TEX_HEIGHT 64
@@ -85,7 +85,7 @@ typedef struct	s_door
 
 typedef struct	s_obj
 {
-	sint8*nb;
+	sint8*	nb;
 	sint32	size;
 	sint32	len;
 }				t_obj;

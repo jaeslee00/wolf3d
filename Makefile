@@ -16,7 +16,7 @@ SRC_DIR = ./srcs/
 INC = includes/camera.h includes/wolf3d.h includes/draw.h
 SRC = $(SRC_DIR)checks.c $(SRC_DIR)main.c $(SRC_DIR)keycode.c $(SRC_DIR)math.c \
 	$(SRC_DIR)parsing.c $(SRC_DIR)raycaster.c $(SRC_DIR)debug.c $(SRC_DIR)movement.c \
-	$(SRC_DIR)event_handler.c
+	$(SRC_DIR)event_handler.c $(SRC_DIR)minimap.c
 OBJ = $(SRC:$(SRC_DIR)%.c=%.o)
 
 LIB_INC=-Iincludes -Ilibft/includes -I ~/Work/wolf3d/SDL2.framework/Headers

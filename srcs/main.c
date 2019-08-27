@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-
-/*   Updated: 2019/08/25 17:39:31 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/27 08:13:50 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-sint32	read_all(sint32 fd, uint8_t *data, sint32 size)
+sint32	read_all(sint32 fd, uint8 *data, sint32 size)
 {
 	sint32	read_bytes;
 	sint32	ret;
@@ -28,9 +27,9 @@ sint32	read_all(sint32 fd, uint8_t *data, sint32 size)
 
 t_texture	read_bmp(const sint8 *filename)
 {
-	uint8_t	data[3 * 64 * 64];
+	uint8	data[3 * 64 * 64];
 	sint32	fd;
-	uint8_t	header[54];
+	uint8	header[54];
 	t_texture		tex;
 
 	fd = open(filename, O_RDONLY);
@@ -42,7 +41,7 @@ t_texture	read_bmp(const sint8 *filename)
 
 	sint32 i = 0;
 	sint32 j = 0;
-	tex.data = (uint32_t*)malloc(tex.width * tex.height * sizeof(uint32_t));
+	tex.data = (uint32*)malloc(tex.width * tex.height * sizeof(uint32));
 	read_all(fd, data, tex.size);
 	i = (64 * 64) - 1;
 	while (i >= 0)
