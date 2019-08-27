@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 01:50:47 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/27 04:29:33 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,5 +165,5 @@ float			my_acos(float angle);
 float			my_tan(float angle);
 float			my_atan(float angle);
 float			degree_radian(int degree);
-
+void			minimap(t_wolf *wolf);
 #endif
