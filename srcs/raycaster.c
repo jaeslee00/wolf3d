@@ -27,7 +27,7 @@ sint32		lighting(sint32 color, t_raycaster *ray)
 		ray->light = 0.0;
 	if (ray->light > 1.0)
 		ray->light = 1.0;
-	return (rgb_lerp(0.0, ray->light, color));
+	return (rgb_lerp(0.0, ray->light + 0.19f, color));
 }
 
 sint32		draw_wall(t_wolf *wf, sint32 start, sint32 end, sint32 line_height, sint32 x, t_raycaster *ray)

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 08:13:50 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/27 11:34:33 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,12 +152,11 @@ int	main(int ac, char **av)
 				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 					is_alloc(NULL, wolf, 0);
 				set_flag(&wolf, wolf.sdl.event);
-				if (wolf.sdl.event.type == SDL_KEYDOWN)
-					event_handler(&wolf, wolf.map, wolf.doors);
-			}
+				}
 			if (i != 0)
 				direction_movement(&wolf, wolf.map,
 					SDL_GetTicks() - frames[i - 1]);
+			event_handler(&wolf, wolf.map, wolf.doors);
 			frames[i] = SDL_GetTicks();
 			//ft_bzero(wolf.img, sizeof(uint32) * W * H);
 			ceiling(wolf.img);

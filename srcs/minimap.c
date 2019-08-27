@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 04:27:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/08/27 06:23:30 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/27 11:36:47 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	minimap(t_wolf *wolf)
 	sint32			square_size;
 	sint32			map_width;
 	sint32			map_height;
+	
 	square_size = W / 10 / wolf->obj.len;
 	map_height = wolf->obj.size / wolf->obj.len;
 	map_width = wolf->obj.len;
