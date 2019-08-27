@@ -69,8 +69,8 @@ void	ft_wolf_init(t_wolf *wolf)
 	// TODO(viccarau): We will have to make the textures load depending on
 	//the type of wall it is. Some textures have to be on the same type of wall.
 	wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp");
-	wolf->tex[1] = read_bmp("./texture/BrownbrickD.bmp");
-	wolf->tex[2] = read_bmp("./texture/BookshelfD.bmp");
+	wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp");
+	wolf->tex[2] = read_bmp("./texture/BrownbrickD.bmp");
 	wolf->tex[3] = read_bmp("./texture/WoodbrickD.bmp");
 	wolf->tex[4] = read_bmp("./texture/Wooddoor.bmp");
 	wolf->player.speed = 0;
@@ -166,7 +166,11 @@ int		main(int ac, char **av)
 			ceiling(wolf.img);
 			//render(&wolf);
 			raycast(&wolf);
+<<<<<<< HEAD
 			minimap(&wolf);
+=======
+			draw_minimap(&wolf);
+>>>>>>> de03e5d510344a094cbca1c1ef4b85b4fba63ebf
 			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img,
 				W * sizeof(unsigned int));
 			SDL_RenderCopy(wolf.sdl.renderer, wolf.sdl.texture, NULL, NULL);

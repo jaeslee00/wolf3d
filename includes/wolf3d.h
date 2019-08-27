@@ -6,7 +6,11 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2019/08/27 04:29:33 by jaelee           ###   ########.fr       */
+=======
+/*   Updated: 2019/08/27 03:37:43 by jaelee           ###   ########.fr       */
+>>>>>>> de03e5d510344a094cbca1c1ef4b85b4fba63ebf
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +153,8 @@ void			calculate_distance(t_player *p, t_2d_p *a);
 void			ft_raycast(t_wolf *wolf, t_player *player);
 char			**int_to_tab(t_wolf *wolf);
 int				rgb_lerp(int color1, float t, int color2);
+
+void			draw_minimap(t_wolf *wolf);
 //int				lerp(int a, float t, int b);
 double		ft_abs(double x);
 int				tkneizer(int fd, t_wolf *wolf);
