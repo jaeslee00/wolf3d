@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 18:38:10 by jaelee            #+#    #+#             */
-/*   Updated: 2019/08/27 11:55:32 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/27 13:51:13 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	interaction_door(t_door *doors, sint8 **map, sint32 i)
 {
 	if (doors[i].flag & 1UL << 1)
-{
+	{
 		if (doors[i].flag & 1UL)
 		{
 			doors[i].flag &= ~(1UL);
@@ -24,7 +24,7 @@ void	interaction_door(t_door *doors, sint8 **map, sint32 i)
 		else
 		{
 			doors[i].flag |= 1UL;
-			map[doors[i].pos.x][doors[i].pos.y] = 3;
+			map[doors[i].pos.x][doors[i].pos.y] = EW_DOOR;
 		}
 	}
 	else
@@ -37,10 +37,10 @@ void	interaction_door(t_door *doors, sint8 **map, sint32 i)
 		else
 		{
 			doors[i].flag |= 1UL;
-			map[doors[i].pos.x][doors[i].pos.y] = 5;
+			map[doors[i].pos.x][doors[i].pos.y] = NS_DOOR;
 		}
 	}
-	}
+}
 
 void	event_handler(t_wolf *wolf, sint8 **map, t_door *doors)
 {
@@ -54,9 +54,9 @@ void	event_handler(t_wolf *wolf, sint8 **map, t_door *doors)
 		while (i < wolf->nbr_of_doors)
 		{
 			if ( ((sint32)p->pos.x == doors[i].pos.x && (sint32)p->pos.y == doors[i].pos.y + 1)
-			|| ((sint32)p->pos.x == doors[i].pos.x && (sint32)p->pos.y == doors[i].pos.y - 1)
-			|| ((sint32)p->pos.x == doors[i].pos.x + 1 && (sint32)p->pos.y == doors[i].pos.y)
-			|| ((sint32)p->pos.x == doors[i].pos.x - 1 && (sint32)p->pos.y == doors[i].pos.y) )
+				|| ((sint32)p->pos.x == doors[i].pos.x && (sint32)p->pos.y == doors[i].pos.y - 1)
+				|| ((sint32)p->pos.x == doors[i].pos.x + 1 && (sint32)p->pos.y == doors[i].pos.y)
+				|| ((sint32)p->pos.x == doors[i].pos.x - 1 && (sint32)p->pos.y == doors[i].pos.y))
 				interaction_door(doors, map, i);
 			i++;
 		}

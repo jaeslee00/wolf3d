@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 11:34:33 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/27 13:49:33 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,8 @@ int	main(int ac, char **av)
 			ceiling(wolf.img);
 			//render(&wolf);
 			raycast(&wolf);
-			minimap(&wolf);
+			if (wolf.flag & 1UL << 8)
+				minimap(&wolf);
 			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img,
 				W * sizeof(uint32));
 			SDL_RenderCopy(wolf.sdl.renderer, wolf.sdl.texture, NULL, NULL);

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 03:05:39 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 11:34:02 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/27 13:07:08 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,12 @@ void	set_flag(t_wolf *wolf, SDL_Event event)
 	check_key(wolf, event, SDL_SCANCODE_MINUS, 1UL << 5);
 	check_key(wolf, event, SDL_SCANCODE_LSHIFT, 1UL << 6);
 	if (wolf->sdl.event.key.repeat == 0)
-	check_key(wolf, event, SDL_SCANCODE_E, 1UL << 7);
+	{
+		check_key(wolf, event, SDL_SCANCODE_E, 1UL << 7);
+	if (wolf->sdl.event.key.keysym.scancode == SDL_SCANCODE_TAB)
+		if (wolf->sdl.event.type == SDL_KEYDOWN)
+			wolf->flag ^= 1UL << 8;
+	}
 	}
 
 sint32		direction_movement(t_wolf *wolf, sint8 **map, sint32 framedelta)

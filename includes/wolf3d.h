@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 06:08:30 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/27 13:45:59 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 # include "libft.h"
 # include "draw.h"
 # include <math.h>
-# include <stdint.h>
 # include <SDL2/SDL.h>
-# define W (1280/2)
-# define H (720/2)
+# define W (1280 / 2)
+# define H (720 / 2)
 # define HEIGHT 32
 # define TEX_WIDTH 64
 # define TEX_HEIGHT 64
@@ -41,8 +40,7 @@
 #include <stdio.h>
 
 //TODO (jae) : Not sure if this is what you want to do lul
-// NOTE(viccarau): That's exactly what I wanted, we'll see if you like it though.
-//				I personally hate it how it looks and how it feels
+
 typedef unsigned char	uint8;
 typedef char			sint8;
 
@@ -136,36 +134,34 @@ typedef struct	s_wolf
 	uint32		flag;
 }				t_wolf;
 
-void			ft_frametimes(sint32 *frames, sint32 *count);
-sint32			direction_movement(t_wolf *wolf, char **map, sint32 frametime);
-void			set_flag(t_wolf *wolf, SDL_Event event);
-f64		fov_calculator(t_wolf *wolf);
-sint32			print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
-void			event_handler(t_wolf *wolf, char **map, t_door *doors);
-void			render(t_wolf *wolf);
-void			raycast(t_wolf *wf);
-void			calculate_distance(t_player *p, t_2d_p *a);
-void			ft_raycast(t_wolf *wolf, t_player *player);
-sint8			**int_to_tab(t_wolf *wolf);
-sint32			rgb_lerp(sint32 color1, f32 t, sint32 color2);
-
-void			draw_minimap(t_wolf *wolf);
-//sint32			lerp(int a, f32 t, int b);
-f64			ft_abs(f64 x);
-sint32			tkneizer(sint32 fd, t_wolf *wolf);
-sint32			is_valid(f32 x, f32 y);
+f32				my_sin(f32 angle);
+f32				my_cos(f32 angle);
+f32				my_asin(f32 angle);
+f32				my_acos(f32 angle);
+f32				my_tan(f32 angle);
+f32				my_atan(f32 angle);
+f32				degree_radian(sint32 degree);
+f64				fov_calculator(t_wolf *wolf);
+f64				ft_abs(f64 x);
+sint8				**int_to_tab(t_wolf *wolf);
 sint32			is_invalid(char *str);
-void			mem_init(t_wolf *wolf);
-void			is_alloc(void *mem, t_wolf wolf, sint32 error);
-void			draw_to_img(t_wolf wolf);
-void			pers_keys(sint32 keycode, t_wolf *wolf);
-f32			my_sin(f32 angle);
-f32			my_cos(f32 angle);
-f32			my_asin(f32 angle);
-f32			my_acos(f32 angle);
-f32			my_tan(f32 angle);
-f32			my_atan(f32 angle);
-f32			degree_radian(sint32 degree);
-void			minimap(t_wolf *wolf);
+sint32			is_valid(f32 x, f32 y);
+sint32			tkneizer(sint32 fd, t_wolf *wolf);
+sint32			rgb_lerp(sint32 color1, f32 t, sint32 color2);
+sint32			direction_movement(t_wolf *wolf, char **map, sint32 frametime);
+sint32			print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
+void				set_flag(t_wolf *wolf, SDL_Event event);
+void				ft_frametimes(sint32 *frames, sint32 *count);
+void				event_handler(t_wolf *wolf, char **map, t_door *doors);
+void				render(t_wolf *wolf);
+void				raycast(t_wolf *wf);
+void				calculate_distance(t_player *p, t_2d_p *a);
+void				ft_raycast(t_wolf *wolf, t_player *player);
+void				draw_minimap(t_wolf *wolf);
+void				mem_init(t_wolf *wolf);
+void				is_alloc(void *mem, t_wolf wolf, sint32 error);
+void				draw_to_img(t_wolf wolf);
+void				pers_keys(sint32 keycode, t_wolf *wolf);
+void				minimap(t_wolf *wolf);
 
 #endif

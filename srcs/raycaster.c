@@ -30,15 +30,23 @@ sint32		lighting(sint32 color, t_raycaster *ray)
 	return (rgb_lerp(0.0, ray->light + 0.19f, color));
 }
 
-sint32		draw_wall(t_wolf *wf, sint32 start, sint32 end, sint32 line_height, sint32 x, t_raycaster *ray)
+sint32		draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray)
 {
 	t_2d_p	tex_coord;
-	f64	tex_width_scale;
+	f32	tex_width_scale;
 	sint32		tex_height_scale;
 	sint32		tex_id;
 	sint32		y;
 	sint32	color;
+	sint32	start;
+	sint32	end;
 
+	start = -line_height / 2 + H / 2;
+	end = line_height / 2 + H / 2;
+	if (start < 0)
+		start = 0;
+	if (end >= H)
+		end = H - 1;
 	if (ray->side == EW_WALL)
 		tex_id = ray->step.x < 0 ? 0 : 1;
 	else if (ray->side == 2 || ray->side == 3)
@@ -50,7 +58,7 @@ sint32		draw_wall(t_wolf *wf, sint32 start, sint32 end, sint32 line_height, sint
 	else
 		tex_width_scale = wf->player.pos.x + ray->perp_distance * wf->player.ray.x;
 	tex_width_scale = tex_width_scale - floor(tex_width_scale);
-	tex_coord.x = (sint32)(tex_width_scale * (f64)TEX_WIDTH);
+	tex_coord.x = (sint32)(tex_width_scale * (f32)TEX_WIDTH);
 	y = start;
 
 	while (y < end)
@@ -69,13 +77,11 @@ void	raycast(t_wolf *wf)
 {
 	t_raycaster	ray;
 	sint32			hit;
-	f64		line_height;
-	sint32			start;
-	sint32			end;
+	f32		line_height;
 	sint32			x;
-	f64		scale;
+	f32		scale;
 
-	scale = 2.0 / (f64)W;
+	scale = 2.0 / (f32)W;
 	x = 0;
 	while (x < W)
 	{
@@ -155,15 +161,9 @@ void	raycast(t_wolf *wf)
 			ray.perp_distance = (ray.map.y + 0.5 - wf->player.pos.y) / wf->player.ray.y;
 		else if (ray.side == 3)
 			ray.perp_distance = (ray.map.x + 0.5 - wf->player.pos.x) / wf->player.ray.x;
-		line_height = (sint32)((f64)H / ray.perp_distance);
-		start = -line_height / 2 + H / 2;
-		end = line_height / 2 + H / 2;
-		if (start < 0)
-			start = 0;
-		if (end >= H)
-			end = H - 1;
+		line_height = (sint32)((f32)H / ray.perp_distance);
 		if (line_height > 1)
-			draw_wall(wf, start, end, line_height, x, &ray);
+			draw_wall(wf, line_height, x, &ray);
 		x++;
 	}
 }
