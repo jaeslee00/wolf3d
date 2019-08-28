@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/28 05:17:19 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/28 05:22:35 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ void	ft_wolf_init(t_wolf *wolf)
 	//NOTE (jae) : lol loading music....
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
-		printf("asdf\n");
+		printf("%s\n", Mix_GetError());
 		exit(0);
 	}
 	if (!(wolf->sdl.music = Mix_LoadMUS("music/hallo.wav")))
 	{
-		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+		printf("%s\n", Mix_GetError());
 		exit(0);
 	}
 	wolf->player.direction.x = -1;

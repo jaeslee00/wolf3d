@@ -5,3 +5,5 @@
 // TODO(viccarau): GUN sprite animation
 // TODO(viccarau): Sounds
 // TODO(viccarau): Text menus
+// TODO(jae): loading music sounds figured out. need to control them with key_event! lul
+// TODO(jae): loading framekwork for sdl2_mixer also needs to be done in makefile.. dunno how to do it
