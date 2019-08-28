@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:24:28 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 06:22:34 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/28 12:28:05 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ f64 fov_calculator(t_wolf *wolf)
 
 	d = &wolf->player.direction;
 	pn = &wolf->player.plane;
-	fov = (sqrt(pn->x * pn->x) + (pn->y * pn->y)) / (sqrt(d->x * d->x) + (d->y * d->y));
+	fov = (sqrt(pn->x * pn->x) + (pn->y * pn->y))
+		/ (sqrt(d->x * d->x) + (d->y * d->y));
 	fov = round(atan(fov) * 180 / PI32) * 2;
 	return (fov);
 }
@@ -32,54 +33,6 @@ f64 fov_calculator(t_wolf *wolf)
 f32	degree_radian(sint32 degree)
 {
 	return (degree * PI32 / 180);
-}
-
-f32	my_sin(f32 angle)
-{
-	f32	r;
-
-	r = sinf(angle);
-	return (r);
-}
-
-f32	my_cos(f32 angle)
-{
-	f32	r;
-
-	r = cosf(angle);
-	return (r);
-}
-
-f32	my_tan(f32 angle)
-{
-	f32	r;
-
-	r = tanf(angle);
-	return (r);
-}
-
-f32	my_asin(f32 angle)
-{
-	f32	r;
-
-	r = asinf(angle);
-	return (r);
-}
-
-f32	my_acos(f32 angle)
-{
-	f32	r;
-
-	r = acosf(angle);
-	return (r);
-}
-
-f32	my_atan(f32 angle)
-{
-	f32	r;
-
-	r = atanf(angle);
-	return (r);
 }
 
 f64	ft_abs(f64 x)

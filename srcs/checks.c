@@ -6,6 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
+
 /*   Updated: 2019/08/27 13:45:37 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -50,7 +51,7 @@ void	mem_init(t_wolf *wolf)
 	
 	//printf("size of wolf = %d\n", sizeof(*wolf));
 	//printf("size of ind %d\n", sizeof(t_sdl) + sizeof(t_mem) + sizeof(t_obj) + sizeof(wolf->img) + sizeof(char));
-	is_alloc(wolf->mem.m = ft_memalloc((11075444)), *wolf, -5);
-	wolf->mem.tsize = 11075444;
+	is_alloc(wolf->mem.m = ft_memalloc((2079124)), *wolf, -5);
+	wolf->mem.tsize = 2079124;
 	wolf->mem.usize = sizeof(sint32);
 	}

@@ -6,13 +6,13 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 16:26:36 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 07:49:04 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/28 12:32:49 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-sint8 **int_to_tab(t_wolf *wolf)
+sint8		**int_to_tab(t_wolf *wolf)
 {
 	sint32	i;
 	sint32	j;
@@ -24,15 +24,15 @@ sint8 **int_to_tab(t_wolf *wolf)
 	k = 0;
 	lines = (wolf->obj.size / wolf->obj.len);
 	is_alloc(tab = ft_mem(&wolf->mem, sizeof(*tab) * lines), *wolf, -1);
-
 	while (i < lines)
 	{
 		j = 0;
-		is_alloc(tab[i] = ft_mem(&wolf->mem, sizeof(**tab) * (wolf->obj.len)), *wolf, -1);
+		is_alloc(tab[i] = ft_mem(&wolf->mem,
+			sizeof(**tab) * (wolf->obj.len)), *wolf, -1);
 		while (j < wolf->obj.len)
 		{
 			tab[i][j] = wolf->obj.nb[k];
-				j++;
+			j++;
 			k++;
 		}
 		i++;
@@ -40,7 +40,7 @@ sint8 **int_to_tab(t_wolf *wolf)
 	return (tab);
 }
 
-void	allocate_atois(t_wolf *wolf, sint8 *line, t_2d_p *xy)
+void		allocate_atois(t_wolf *wolf, sint8 *line, t_2d_p *xy)
 {
 	ft_mem(&wolf->mem, sizeof(sint8));
 	wolf->obj.nb = wolf->mem.m;
@@ -51,7 +51,7 @@ void	allocate_atois(t_wolf *wolf, sint8 *line, t_2d_p *xy)
 sint32		tkneizer(sint32 fd, t_wolf *wolf)
 {
 	sint8	*line;
-	sint32		i;
+	sint32	i;
 	t_2d_p	xy;
 
 	ft_bzero(&xy, sizeof(xy));
@@ -74,6 +74,5 @@ sint32		tkneizer(sint32 fd, t_wolf *wolf)
 		free(line);
 	}
 	wolf->obj.size = xy.x;
-	wolf->map = int_to_tab(wolf);
 	return (1);
-	}
+}

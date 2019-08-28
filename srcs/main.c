@@ -6,62 +6,21 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/28 05:22:35 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/28 12:33:58 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-sint32	read_all(sint32 fd, uint8 *data, sint32 size)
-{
-	sint32	read_bytes;
-	sint32	ret;
-
-	read_bytes = 0;
-	while (((ret = read(fd, data + read_bytes, size - read_bytes)) > 0))
-		read_bytes = read_bytes + ret;
-	if (ret <= 0)
-		return (ret);
-	return (read_bytes + ret);
-}
-
-t_texture	read_bmp(const sint8 *filename)
-{
-	uint8	data[3 * 64 * 64];
-	sint32	fd;
-	uint8	header[54];
-	t_texture		tex;
-
-	fd = open(filename, O_RDONLY);
-	read(fd, header, 54);
-
-	tex.width = TEX_WIDTH;
-	tex.height = TEX_HEIGHT;
-	tex.size = 3 * tex.width * tex.height;
-
-	sint32 i = 0;
-	sint32 j = 0;
-	tex.data = (uint32*)malloc(tex.width * tex.height * sizeof(uint32));
-	read_all(fd, data, tex.size);
-	i = (64 * 64) - 1;
-	while (i >= 0)
-	{
-		tex.data[i] = data[j] | data[j + 1] << 8 | data[j + 2] << 16;
-		i--;
-		j += 3;
-	}
-	return (tex);
-}
-
 void	ft_wolf_init(t_wolf *wolf)
 {
+	wolf->map = int_to_tab(wolf);
 	SDL_Init(SDL_INIT_EVERYTHING);
 	//wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 	//SDL_WINDOWPOS_CENTERED, 1920, 1080, 0);
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, W * 2, H * 2, 0);
 	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(uint32));
-	//NOTE (jae) : lol loading music....
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		printf("%s\n", Mix_GetError());
@@ -83,7 +42,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->tex[4] = read_bmp("./texture/Wooddoor.bmp");
 	wolf->player.speed = 0;
 	wolf->flag = 0;
-}
+	}
 
 void	ceiling(uint32 *img)
 {
@@ -100,6 +59,9 @@ void	ceiling(uint32 *img)
 	while (y < H / 2)
 	{
 		x = 0;
+		if (color == 0)
+			color = 0;
+else
 		color = rgb_lerp(0x111111, per, 0x222222);
 		while (x < W)
 		{
@@ -146,8 +108,8 @@ int	main(int ac, char **av)
 	if (fd > 0)
 	{
 		tkneizer(fd, &wolf);
-		print_map(wolf.map, wolf.obj, &wolf.player, wolf.doors, &wolf);
 		ft_wolf_init(&wolf);
+		print_map(wolf.map, wolf.obj, &wolf.player, wolf.doors, &wolf);
 		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
 			SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
@@ -157,7 +119,7 @@ int	main(int ac, char **av)
 		Mix_PlayMusic(wolf.sdl.music, -1);
 		while (1)
 		{
-			//NOTE (jae) : loading music.... needs event handler to change volume || pause/resume music I guess!
+			//printf("wolf %ld\n", wolf.mem.usize);
 			while (SDL_PollEvent(&wolf.sdl.event))
 			{
 				if (wolf.sdl.event.type == SDL_QUIT)
@@ -165,10 +127,11 @@ int	main(int ac, char **av)
 				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 					is_alloc(NULL, wolf, 0);
 				set_flag(&wolf, wolf.sdl.event);
+				mouse_movement(&wolf, wolf.sdl.event);
 				}
 			if (i != 0)
-				direction_movement(&wolf, wolf.map,
-					SDL_GetTicks() - frames[i - 1]);
+				check_flag(&wolf, wolf.map,
+			SDL_GetTicks() - frames[i - 1]);
 			event_handler(&wolf, wolf.map, wolf.doors);
 			frames[i] = SDL_GetTicks();
 			//ft_bzero(wolf.img, sizeof(uint32) * W * H);

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/28 04:46:30 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/28 12:24:11 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include <math.h>
 # include <SDL.h>
 # include <SDL_mixer.h>
-# define W (1280/2)
-# define H (720/2)
+# define W (1920 / 4)
+# define H (1080 / 4)
 # define HEIGHT 32
 
 # define TEX_WIDTH	64
@@ -151,6 +151,13 @@ typedef struct	s_wolf
 	uint32		flag;
 }				t_wolf;
 
+typedef f32 (*perp_distance)(t_raycaster * ray, t_player player);
+
+perp_distance *perp_dist();
+f32				perp_distance_ew(t_raycaster *ray, t_player player);
+f32				perp_distance_sn(t_raycaster *ray, t_player player);
+f32				perp_distance_ew_door(t_raycaster *ray, t_player player);
+f32				perp_distance_sn_door(t_raycaster *ray, t_player player);
 f32				my_sin(f32 angle);
 f32				my_cos(f32 angle);
 f32				my_asin(f32 angle);
@@ -167,6 +174,7 @@ sint32			tkneizer(sint32 fd, t_wolf *wolf);
 sint32			rgb_lerp(sint32 color1, f32 t, sint32 color2);
 sint32			direction_movement(t_wolf *wolf, char **map, sint32 frametime);
 sint32			print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
+void			check_flag(t_wolf *wolf, sint8 **map, sint32 framedelta);
 void			set_flag(t_wolf *wolf, SDL_Event event);
 void			ft_frametimes(sint32 *frames, sint32 *count);
 void			event_handler(t_wolf *wolf, char **map, t_door *doors);
@@ -180,13 +188,8 @@ void			is_alloc(void *mem, t_wolf wolf, sint32 error);
 void			draw_to_img(t_wolf wolf);
 void			pers_keys(sint32 keycode, t_wolf *wolf);
 void			minimap(t_wolf *wolf);
-
-f32				(*g_perp_dist_tab[4])(t_raycaster*, t_player);
-f32				perp_distance_ew(t_raycaster *ray, t_player player);
-f32				perp_distance_sn(t_raycaster *ray, t_player player);
-f32				perp_distance_ew_door(t_raycaster *ray, t_player player);
-f32				perp_distance_sn_door(t_raycaster *ray, t_player player);
-
+void			mouse_movement(t_wolf *wolf, SDL_Event event);
 void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
 sint32			lighting(sint32 color, t_raycaster *ray);
+t_texture		read_bmp(const sint8 *filename);
 #endif

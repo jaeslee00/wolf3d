@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/28 00:30:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/28 12:25:58 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,11 @@ void	raycast(t_wolf *wf)
 	f32			line_height;
 	sint32		x;
 	f32			scale;
+	perp_distance *dist;
 
 	scale = 2.0f / (f32)W;
 	x = 0;
+	dist = perp_dist();
 	while (x < W)
 	{
 		wf->player.ray.y = wf->player.direction.y +
@@ -109,7 +111,7 @@ void	raycast(t_wolf *wf)
 			wf->player.plane.x * (x * scale - 1.0f);
 		dda_init(&ray, wf->player);
 		dda_raycast(wf, &ray);
-		ray.perp_dist = g_perp_dist_tab[ray.side](&ray, wf->player);
+		ray.perp_dist = dist[ray.side](&ray, wf->player);
 		line_height = (sint32)((f32)H / ray.perp_dist);
 		if (line_height > 1)
 			draw_wall(wf, line_height, x, &ray);
