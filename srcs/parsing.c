@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 16:26:36 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/28 12:32:49 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/28 14:45:08 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ sint8		**int_to_tab(t_wolf *wolf)
 	i = 0;
 	k = 0;
 	lines = (wolf->obj.size / wolf->obj.len);
-	is_alloc(tab = ft_mem(&wolf->mem, sizeof(*tab) * lines), *wolf, -1);
+	is_alloc(tab = ft_mem(&wolf->mem, sizeof(*tab) * lines), wolf, -1);
 	while (i < lines)
 	{
 		j = 0;
 		is_alloc(tab[i] = ft_mem(&wolf->mem,
-			sizeof(**tab) * (wolf->obj.len)), *wolf, -1);
+			sizeof(**tab) * (wolf->obj.len)), wolf, -1);
 		while (j < wolf->obj.len)
 		{
 			tab[i][j] = wolf->obj.nb[k];
@@ -70,7 +70,7 @@ sint32		tkneizer(sint32 fd, t_wolf *wolf)
 			wolf->obj.len = xy.x;
 		xy.y++;
 		if ((xy.x) % wolf->obj.len != 0 || is_invalid(line))
-			is_alloc(NULL, *wolf, -2);
+			is_alloc(NULL, wolf, -2);
 		free(line);
 	}
 	wolf->obj.size = xy.x;

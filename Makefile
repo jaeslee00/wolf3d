@@ -13,7 +13,7 @@
 NAME = wolf3d
 SDL2 = ./SDL2.framework
 SDL2_mixer = ./SDL2_mixer.framework
-SRC_DIR = ./srcs/
+SRC_DIR = ~/Work/wolf3d/srcs/
 INC = includes/camera.h includes/wolf3d.h includes/draw.h
 SRC = $(SRC_DIR)checks.c $(SRC_DIR)main.c $(SRC_DIR)keycode.c $(SRC_DIR)math.c \
 	$(SRC_DIR)parsing.c $(SRC_DIR)raycaster.c $(SRC_DIR)debug.c \

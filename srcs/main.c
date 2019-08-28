@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/28 12:33:58 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/28 14:44:47 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,17 @@
 
 void	ft_wolf_init(t_wolf *wolf)
 {
+	printf("mem = %ld\n", wolf->mem.usize);
 	wolf->map = int_to_tab(wolf);
+	printf("mem = %ld\n", wolf->mem.usize);
 	SDL_Init(SDL_INIT_EVERYTHING);
 	//wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 	//SDL_WINDOWPOS_CENTERED, 1920, 1080, 0);
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED, W * 2, H * 2, 0);
+		SDL_WINDOWPOS_CENTERED, W, H, 0);
+	printf("mem = %ld\n", wolf->mem.usize);
 	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(uint32));
+	printf("mem = %ld\n", wolf->mem.usize);
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		printf("%s\n", Mix_GetError());
@@ -35,13 +39,14 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.direction.y = 0;
 	wolf->player.plane.x = 0;
 	wolf->player.plane.y = 1;
-	wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp");
-	wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp");
-	wolf->tex[2] = read_bmp("./texture/BrownbrickD.bmp");
-	wolf->tex[3] = read_bmp("./texture/WoodbrickD.bmp");
-	wolf->tex[4] = read_bmp("./texture/Wooddoor.bmp");
+	wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp", wolf);
+	wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp", wolf);
+	wolf->tex[2] = read_bmp("./texture/BrownbrickD.bmp", wolf);
+	wolf->tex[3] = read_bmp("./texture/WoodbrickD.bmp", wolf);
+	wolf->tex[4] = read_bmp("./texture/Wooddoor.bmp", wolf);
 	wolf->player.speed = 0;
 	wolf->flag = 0;
+	wolf->dist = perp_dist(&wolf->mem);
 	}
 
 void	ceiling(uint32 *img)
@@ -54,16 +59,16 @@ void	ceiling(uint32 *img)
 
 	x = 0;
 	y = 0;
-	y1 = H;
+	y1 = H - 1;
 	per = 2.71f;
-	while (y < H / 2)
+	while (y < (H / 2))
 	{
 		x = 0;
 		if (color == 0)
 			color = 0;
 else
 		color = rgb_lerp(0x111111, per, 0x222222);
-		while (x < W)
+		while (x < W - 1)
 		{
 			img[x + y * W] = color;
 			img[x + y1 * W] = 0x222222 + color;
@@ -109,6 +114,7 @@ int	main(int ac, char **av)
 	{
 		tkneizer(fd, &wolf);
 		ft_wolf_init(&wolf);
+		printf("mem = %ld\n", wolf.mem.usize);
 		print_map(wolf.map, wolf.obj, &wolf.player, wolf.doors, &wolf);
 		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
@@ -117,15 +123,16 @@ int	main(int ac, char **av)
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
 		Mix_PlayMusic(wolf.sdl.music, -1);
+		//ft_print_memory(wolf.mem.m, wolf.mem.usize);
+		printf("wolf %ld\n", wolf.mem.usize);
 		while (1)
 		{
-			//printf("wolf %ld\n", wolf.mem.usize);
 			while (SDL_PollEvent(&wolf.sdl.event))
 			{
 				if (wolf.sdl.event.type == SDL_QUIT)
 					exit(0);
 				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
-					is_alloc(NULL, wolf, 0);
+					is_alloc(NULL, &wolf, 0);
 				set_flag(&wolf, wolf.sdl.event);
 				mouse_movement(&wolf, wolf.sdl.event);
 				}

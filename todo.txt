@@ -1,9 +1,12 @@
-// TODO(viccarau): Make doors generalized
-// TODO(viccarau): Make door animation
-// TODO(viccarau): Make the door ilussion better
-// TODO(viccarau): Handle the segfault when low fps, running in wall
-// TODO(viccarau): GUN sprite animation
-// TODO(viccarau): Sounds
-// TODO(viccarau): Text menus
-// TODO(jae): loading music sounds figured out. need to control them with key_event! lul
-// TODO(jae): loading framekwork for sdl2_mixer also needs to be done in makefile.. dunno how to do it
+/*
+ 
+TODO(viccarau): Make doors generalized ( when initializing doors, 
+check how they're facing)
+ TODO(viccarau): GUN sprite animation
+ TODO(viccarau): Sounds
+ TODO(viccarau): Text menus
+ TODO(jae): loading music sounds figured out. need to control them with
+ key_event! lul
+ TODO(jae): loading framekwork for sdl2_mixer also needs to be done in
+ makefile.. dunno how to do it
+/*

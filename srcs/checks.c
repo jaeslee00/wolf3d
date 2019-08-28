@@ -28,7 +28,7 @@ sint32		is_invalid(sint8 *str)
 	return (0);
 }
 
-void	is_alloc(void *mem, t_wolf wolf, sint32 error)
+void	is_alloc(void *mem, t_wolf *wolf, sint32 error)
 {
 	(void)wolf;
 	if (mem == NULL)
@@ -43,15 +43,14 @@ void	is_alloc(void *mem, t_wolf wolf, sint32 error)
 	}
 	}
 
+// TODO(viccarau): All the allocations of memory will be done here
+//                Music, textures, EVERYTHING
 void	mem_init(t_wolf *wolf)
 {
 	ft_bzero(&wolf[0], sizeof(*wolf));
-	// NOTE(viccarau): This comments will help me see the size of my structures
-	//				I'll optimize them by the way I need them
-	
 	//printf("size of wolf = %d\n", sizeof(*wolf));
 	//printf("size of ind %d\n", sizeof(t_sdl) + sizeof(t_mem) + sizeof(t_obj) + sizeof(wolf->img) + sizeof(char));
-	is_alloc(wolf->mem.m = ft_memalloc((2079124)), *wolf, -5);
-	wolf->mem.tsize = 2079124;
+	is_alloc(wolf->mem.m = ft_memalloc((8299924 * 2)), wolf, -5);
+	wolf->mem.tsize = 8299924 * 2;
 	wolf->mem.usize = sizeof(sint32);
 	}
