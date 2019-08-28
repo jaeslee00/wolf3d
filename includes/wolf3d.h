@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/28 00:30:51 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/28 04:46:30 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 # include "libft.h"
 # include "draw.h"
 # include <math.h>
-# include <SDL2/SDL.h>
+# include <SDL.h>
+# include <SDL_mixer.h>
 # define W (1280/2)
 # define H (720/2)
 # define HEIGHT 32
@@ -109,6 +110,7 @@ typedef struct	s_sdl
 	SDL_Renderer	*renderer;
 	SDL_Event	event;
 	SDL_Texture	*texture;
+	Mix_Music	*music;
 }				t_sdl;
 
 typedef struct	s_player
@@ -142,7 +144,7 @@ typedef struct	s_wolf
 	t_obj		obj;
 	uint32		*img;
 	t_mem		mem;
-	sint8	**map;
+	sint8		**map;
 	t_door		doors[100];
 	sint32		nbr_of_doors;
 	t_texture	tex[5];

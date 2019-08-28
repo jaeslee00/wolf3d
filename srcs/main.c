@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 13:49:33 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/28 05:02:38 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,17 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, W * 2, H * 2, 0);
 	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(uint32));
+	//NOTE (jae) : lol loading music....
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0)
+	{
+		printf("asdf\n");
+		exit(0);
+	}
+	if (!(wolf->sdl.music = Mix_LoadMUS("music/halloween.wav")))
+	{
+		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+		exit(0);
+	}
 	wolf->player.direction.x = -1;
 	wolf->player.direction.y = 0;
 	wolf->player.plane.x = 0;
@@ -125,7 +136,7 @@ int	main(int ac, char **av)
 	sint32	i;
 	t_wolf	wolf;
 	sint32	fd;
-		sint32	frames[61];
+	sint32	frames[61];
 
 	mem_init(&wolf);
 	if (ac == 2)
@@ -145,6 +156,8 @@ int	main(int ac, char **av)
 		SDL_SetRelativeMouseMode(SDL_TRUE);
 		while (1)
 		{
+			//NOTE (jae) : loading music.... needs event handler to change volume || pause/resume music I guess!
+			Mix_PlayMusic(wolf.sdl.music, -1);
 			while (SDL_PollEvent(&wolf.sdl.event))
 			{
 				if (wolf.sdl.event.type == SDL_QUIT)
