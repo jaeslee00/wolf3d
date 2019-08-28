@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/08/28 00:31:53 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/28 16:14:45 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ void	texture_map(t_wolf *wf, t_texture_map tex_map, sint32 x,
 			((tex_height_scale * TEX_WIDTH) / tex_map.column_height) / 2;
 		color =
 			wf->tex[tex_id].data[TEX_WIDTH * tex_map.coord.y + tex_map.coord.x];
-		color = lighting(color, ray);
-		wf->img[x + tex_map.start * W] = color;
+		wf->img[x + tex_map.start * W] = lighting(color, ray);
 		tex_map.start++;
 	}
 }

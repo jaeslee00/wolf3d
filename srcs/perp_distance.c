@@ -6,15 +6,11 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:50:11 by jaelee            #+#    #+#             */
-/*   Updated: 2019/08/28 13:51:32 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/28 15:02:44 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-// NOTE (victor): Never use global variables, even if the subject allows it
-//               The only time to use global variables is if you want to test
-//               something fast, or if something really needs to be global.
 
 f32		perp_distance_ew(t_raycaster *ray, t_player player)
 {
@@ -36,11 +32,11 @@ f32		perp_distance_sn_door(t_raycaster *ray, t_player player)
 	return ((ray->map.x + 0.5f - player.pos.x) / player.ray.x);
 }
 
-funct	*perp_dist(t_mem *mem)
+funct	*perp_dist(t_wolf *wolf)
 {
 	funct	*dist;
 
-	dist = ft_mem(mem, sizeof(funct) * 4);
+	is_alloc(dist = ft_mem(&wolf->mem, sizeof(funct) * 4), wolf, -1);
 	dist[0] = perp_distance_ew;
 		dist[1] = perp_distance_sn;
 		dist[2] = perp_distance_ew_door;
