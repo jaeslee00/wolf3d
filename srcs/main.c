@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/28 05:02:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/28 05:17:19 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ void	ft_wolf_init(t_wolf *wolf)
 		SDL_WINDOWPOS_CENTERED, W * 2, H * 2, 0);
 	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(uint32));
 	//NOTE (jae) : lol loading music....
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0)
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		printf("asdf\n");
 		exit(0);
 	}
-	if (!(wolf->sdl.music = Mix_LoadMUS("music/halloween.wav")))
+	if (!(wolf->sdl.music = Mix_LoadMUS("music/hallo.wav")))
 	{
 		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
 		exit(0);
@@ -154,10 +154,10 @@ int	main(int ac, char **av)
 		i = 1;
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
+		Mix_PlayMusic(wolf.sdl.music, -1);
 		while (1)
 		{
 			//NOTE (jae) : loading music.... needs event handler to change volume || pause/resume music I guess!
-			Mix_PlayMusic(wolf.sdl.music, -1);
 			while (SDL_PollEvent(&wolf.sdl.event))
 			{
 				if (wolf.sdl.event.type == SDL_QUIT)
