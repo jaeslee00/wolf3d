@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/28 14:48:13 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/29 00:03:51 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 # include "libft.h"
 # include "draw.h"
 # include <math.h>
-# include <SDL.h>
-# include <SDL_mixer.h>
-# define W (1920)
-# define H (1080)
+# include <SDL2/SDL.h>
+
+# define W	(1920)
+# define H	(1080)
 
 # define TEX_WIDTH	64
 # define TEX_HEIGHT	64
@@ -28,17 +28,17 @@
 # define TEXTURE_3	3
 # define TEXTURE_4	4
 
-# define EW_WALL 0
-# define SN_WALL 1
+# define EW_WALL	0
+# define SN_WALL	1
 
-# define PRESSED 1
-# define RELEASED 0
+# define PRESSED	1
+# define RELEASED 	0
 
-# define WALL 1
-# define EW_DOOR 3
-# define NS_DOOR 5
+# define WALL 		1
+# define EW_DOOR	3
+# define NS_DOOR	5
 
-# define UP	1UL
+# define UP		1UL
 # define DOWN	1UL << 1
 # define RIGHT	1UL << 2
 # define LEFT	1UL << 3
@@ -49,20 +49,20 @@
 
 #include <stdio.h>
 
-typedef unsigned char	uint8;
-typedef char			sint8;
+typedef unsigned char		uint8;
+typedef char				sint8;
 
 typedef unsigned short int	uint16;
 typedef short int			sint16;
 
-typedef unsigned int	uint32;
-typedef int				sint32;
+typedef unsigned int		uint32;
+typedef int					sint32;
 
 typedef unsigned long int	uint64;
 typedef long int			sint64;
 
-typedef float			f32;
-typedef double			f64;
+typedef float				f32;
+typedef double				f64;
 
 /*
 ** E[ROW][COLUMN]
@@ -96,9 +96,17 @@ typedef struct	s_door
 	uint8	flag;
 }				t_door;
 
+typedef struct	s_minimap
+{
+	sint32	x;
+	sint32	y;
+	sint32	type;
+}				t_minimap;
+
 typedef struct	s_obj
 {
-	sint8*	nb;
+
+	sint8	*nb;
 	sint32	size;
 	sint32	len;
 }				t_obj;
@@ -109,7 +117,6 @@ typedef struct	s_sdl
 	SDL_Renderer	*renderer;
 	SDL_Event	event;
 	SDL_Texture	*texture;
-	Mix_Music	*music;
 }				t_sdl;
 
 typedef struct	s_player
@@ -152,7 +159,7 @@ typedef struct	s_wolf
 	uint32		flag;
 }				t_wolf;
 
-funct			*perp_dist(t_mem *mem);
+funct			*perp_dist(t_wolf *wolf);
 f32				perp_distance_ew(t_raycaster *ray, t_player player);
 f32				perp_distance_sn(t_raycaster *ray, t_player player);
 f32				perp_distance_ew_door(t_raycaster *ray, t_player player);
