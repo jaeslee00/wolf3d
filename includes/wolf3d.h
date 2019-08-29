@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/29 02:28:12 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/29 14:09:52 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ typedef struct	s_player
 	t_2d	direction;
 	t_2d	plane;
 	f32		speed;
+	t_minimap *m;
 }				t_player;
 
 typedef struct	s_raycaster

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/29 02:11:40 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/29 14:25:19 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,13 @@
 
 void	ft_wolf_init(t_wolf *wolf)
 {
-	printf("mem = %ld\n", wolf->mem.usize);
 	wolf->map = int_to_tab(wolf);
-	printf("mem = %ld\n", wolf->mem.usize);
 	SDL_Init(SDL_INIT_EVERYTHING);
 	//wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 	//SDL_WINDOWPOS_CENTERED, 1920, 1080, 0);
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, W, H, 0);
-	printf("mem = %ld\n", wolf->mem.usize);
 	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(uint32));
-	printf("mem = %ld\n", wolf->mem.usize);
 	wolf->player.direction.x = -1;
 	wolf->player.direction.y = 0;
 	wolf->player.plane.x = 0;
@@ -37,7 +33,8 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.speed = 0;
 	wolf->flag = 0;
 	wolf->dist = perp_dist(wolf);
-	}
+	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, (wolf->obj.size / wolf->obj.len) * (wolf->obj.len) * sizeof(t_minimap)), wolf, -1);
+}
 
 void	ceiling(uint32 *img)
 {
@@ -56,8 +53,8 @@ void	ceiling(uint32 *img)
 		x = 0;
 		if (color == 0)
 			color = 0;
-else
-		color = rgb_lerp(0x111111, per, 0x222222);
+		else
+			color = rgb_lerp(0x111111, per, 0x222222);
 		while (x < W - 1)
 		{
 			img[x + y * W] = color;
@@ -104,7 +101,6 @@ int	main(int ac, char **av)
 	{
 		tkneizer(fd, &wolf);
 		ft_wolf_init(&wolf);
-		printf("mem = %ld\n", wolf.mem.usize);
 		print_map(wolf.map, wolf.obj, &wolf.player, wolf.doors, &wolf);
 		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
@@ -112,8 +108,6 @@ int	main(int ac, char **av)
 		i = 1;
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
-		//ft_print_memory(wolf.mem.m, wolf.mem.usize);
-		printf("wolf %ld\n", wolf.mem.usize);
 		while (1)
 		{
 			while (SDL_PollEvent(&wolf.sdl.event))
@@ -132,8 +126,8 @@ int	main(int ac, char **av)
 			frames[i] = SDL_GetTicks();
 			ceiling(wolf.img);
 			raycast(&wolf);
-			// if (wolf.flag & 1UL << 8)
-			// 	minimap(&wolf);
+			if (wolf.flag & 1UL << 8)
+				minimap(&wolf);
 			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img,
 				W * sizeof(uint32));
 			SDL_RenderCopy(wolf.sdl.renderer, wolf.sdl.texture, NULL, NULL);
