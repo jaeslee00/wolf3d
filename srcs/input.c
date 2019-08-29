@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:02:53 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/28 14:34:47 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/29 02:36:25 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,13 @@ void	mouse_movement(t_wolf *wolf, SDL_Event event)
 	if (event.type == SDL_MOUSEMOTION)
 	{
 		motion = -(f64)(event.motion.xrel * 0.001f);
+		wolf->cos_rot = cos(motion);
+		wolf->sin_rot = sin(motion);
 		old.x = p->direction.x;
-		p->direction.x = p->direction.x * cos(motion) - p->direction.y * sin(motion);
-		p->direction.y = old.x * sin(motion) + p->direction.y * cos(motion);
+		p->direction.x = p->direction.x * wolf->cos_rot - p->direction.y * wolf->sin_rot;
+		p->direction.y = old.x * wolf->sin_rot + p->direction.y * wolf->cos_rot;
 		old.y = p->plane.x;
-		p->plane.x = p->plane.x * cos(motion) - p->plane.y * sin(motion);
-		p->plane.y = old.y * sin(motion) + p->plane.y * cos(motion);
+		p->plane.x = p->plane.x * wolf->cos_rot - p->plane.y * wolf->sin_rot;
+		p->plane.y = old.y * wolf->sin_rot + p->plane.y * wolf->cos_rot;
 	}
 }

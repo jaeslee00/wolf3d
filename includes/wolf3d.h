@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/29 00:03:51 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/29 02:28:12 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,8 @@ typedef struct	s_wolf
 	sint32		nbr_of_doors;
 	t_texture	tex[5];
 	uint32		flag;
+	f32			sin_rot;
+	f32			cos_rot;
 }				t_wolf;
 
 funct			*perp_dist(t_wolf *wolf);
