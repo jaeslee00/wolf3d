@@ -6,12 +6,9 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 04:27:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/08/29 23:33:53 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/30 04:09:54 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// minimap[x + y * map_width].x = x * zoom + W / 2 - zoom * (map_width / 2) - zoom * (wolf->player.pos.y * 2 - map_width) / 2.0 + zoom;
-// minimap[x + y * map_width].y = y * zoom + H / 2 - zoom * (map_height / 2) - zoom * (wolf->player.pos.x * 2 - map_height) / 2.0 + zoom;
 
 #include "wolf3d.h"
 
@@ -48,10 +45,7 @@ void	draw_line_x(t_minimap p1, t_minimap p2, uint32 *img)
 	t_2d_p curr;
 	int yi;
 	int diff;
-	if (!gflag)
-	{	printf("%d %d\n", p1.type, p2.type);
-		gflag++;
-	}
+
 	curr.y = p1.y;
 	curr.x = p1.x;
 	d.x = p2.x - p1.x;
@@ -62,7 +56,20 @@ void	draw_line_x(t_minimap p1, t_minimap p2, uint32 *img)
 	while (curr.x < p2.x)
 	{
 		if (curr.x + curr.y * W < H * W && curr.x > 0 && curr.y > 0)
-			img[curr.x + curr.y * W] = (p1.type == 1 && p2.type == 1) ? 0xFFFFFF : 0;
+		{
+			if (p1.h_color_head == p2.h_color_tail && p1.h_color_head > 0)
+			{
+				img[curr.x + curr.y * W] =  0xFFFFFF;
+			}
+			else if (p1.h_color_head == p2.h_color_tail && p1.h_color_head < 0)
+			{
+				img[curr.x + curr.y * W] = 0xFF;
+			}
+			else
+			{
+				img[curr.x + curr.y * W] = 0;
+			}
+		}
 		if (diff > 0)
 		{
 			curr.y += yi;
@@ -90,7 +97,20 @@ void draw_line_y(t_minimap p1, t_minimap p2, uint32 *img)
 	while (curr.y < p2.y)
 	{
 		if (curr.x + curr.y * W < H * W && curr.x > 0 && curr.y > 0)
-			img[curr.x + curr.y * W] = (p1.type == 1 && p2.type == 1) ? 0xFFFFFF : 0;
+		{
+			if (p1.v_color_head == p2.v_color_tail && p1.v_color_head > 0)
+			{
+				img[curr.x + curr.y * W] = 0xFFFFFF;
+			}
+			else if (p1.v_color_head == p2.v_color_tail && p1.v_color_head < 0)
+			{
+				img[curr.x + curr.y * W] = 0xFF;
+			}
+			else
+			{
+				img[curr.x + curr.y * W] = 0;
+			}
+		}
 		if (diff > 0)
 		{
 			curr.x += xi;
@@ -121,13 +141,14 @@ void draw_line(t_minimap p1, t_minimap p2, uint32 *img)
 //TODO (jae) : gotta clean this shit up tomorrow... Don't be triggered please.. T-T
 void	minimap(t_wolf *wolf)
 {
-	//t_2d_p			coord;
-	//sint32			square_size;
 	sint32			map_width;
 	sint32			map_height;
 	sint32			minimap_width;
 	sint32			minimap_height;
-	sint32			zoom = 50;
+	sint32			zoom = 20;
+
+	sint32			x_key = 0;
+	sint32			y_key = 0;
 
 	map_height = wolf->obj.size / wolf->obj.len;
 	map_width = wolf->obj.len;
@@ -141,8 +162,8 @@ void	minimap(t_wolf *wolf)
 		while (x < map_width)
 		{
 			//TODO (jae) : figure out exact ways to transform map... and i'm going to change everything to maxtrix later!
-			wolf->player.m[x + y * minimap_width].x = x * zoom + W / 2 - zoom * minimap_width / 2 - zoom * (wolf->player.pos.y * 2 - minimap_width) / 2.0;
-			wolf->player.m[x + y * minimap_width].y = y * zoom + H / 2 - zoom * minimap_height / 2 - zoom * (wolf->player.pos.x * 2 - minimap_height) / 2.0 ;
+			wolf->player.m[x + y * minimap_width].x = x * zoom + W / 2 - zoom * minimap_width / 2 - zoom * (wolf->player.pos.y * 2.0 - minimap_width) / 2.0;
+			wolf->player.m[x + y * minimap_width].y = y * zoom + H / 2 - zoom * minimap_height / 2 - zoom * (wolf->player.pos.x * 2.0 - minimap_height) / 2.0 ;
 
 			wolf->player.m[(x + 1) + y * minimap_width].x = (x + 1) * zoom + W / 2 - zoom * minimap_width / 2 - zoom * (wolf->player.pos.y * 2 - minimap_width) / 2.0 ;
 			wolf->player.m[(x + 1) + y * minimap_width].y = y * zoom + H / 2 - zoom * minimap_height / 2 - zoom * (wolf->player.pos.x * 2 - minimap_height) / 2.0;
@@ -153,30 +174,53 @@ void	minimap(t_wolf *wolf)
 			wolf->player.m[(x + 1) + (y + 1) * minimap_width].x = (x + 1) * zoom + W / 2 - zoom * minimap_width / 2 - zoom * (wolf->player.pos.y * 2 - minimap_width) / 2.0 ;
 			wolf->player.m[(x + 1) + (y + 1) * minimap_width].y = (y + 1) * zoom + H / 2 - zoom * minimap_height / 2 - zoom * (wolf->player.pos.x * 2 - minimap_height) / 2.0 ;
 
-			if (wolf->obj.nb[x + y * map_width] == 1)
+			if (x > 0 && y > 0)
 			{
-				wolf->player.m[x + y * minimap_width].type = 1;
-				wolf->player.m[(x + 1) + y * minimap_width].type = 1;
-				wolf->player.m[x + (y + 1) * minimap_width].type = 1;
-				wolf->player.m[(x + 1) + (y + 1) * minimap_width].type = 1;
+				if (y == 1)
+					wolf->player.m[x + y * minimap_width].v_color_tail = 2147483647;
+				if (x == 1)
+					wolf->player.m[x + y * minimap_width].h_color_tail = 2147483647;
+				if (!(wolf->obj.nb[x + y * map_width] == 0 && wolf->obj.nb[x - 1 + y * map_width] == 0))
+				{
+					if (wolf->obj.nb[x + y * map_width] > 2 || wolf->obj.nb[x - 1 + y * map_width] > 2)
+					{
+						wolf->player.m[x + y * minimap_width].v_color_head = -1;
+						wolf->player.m[x + (y + 1) * minimap_width].v_color_tail = -1;
+					}
+					else
+					{
+						y_key++;
+						wolf->player.m[x + y * minimap_width].v_color_head = y_key;
+						wolf->player.m[x + (y + 1) * minimap_width].v_color_tail = y_key;
+					}
+				}
+				if (!(wolf->obj.nb[x + y * map_width] == 0 && wolf->obj.nb[x + (y - 1) * map_width] == 0))
+				{
+					if (wolf->obj.nb[x + y * map_width] > 2 || wolf->obj.nb[x + (y - 1 ) * map_width] > 2)
+					{
+						wolf->player.m[x + y * minimap_width].h_color_head = -1;
+						wolf->player.m[x + 1 + y * minimap_width].h_color_tail = -1;
+					}
+					else
+					{
+						x_key++;
+						wolf->player.m[x + y * minimap_width].h_color_head = x_key;
+						wolf->player.m[x + 1 + y * minimap_width].h_color_tail = x_key;
+					}
+				}
 			}
-			else if (wolf->obj.nb[x + y * map_width] == 0)
+			else
 			{
-				if (wolf->player.m[x + y * minimap_width].type != 1)
-					wolf->player.m[x + y * minimap_width].type = 0;
-				if (wolf->player.m[x + 1 + y * minimap_width].type != 1)
-					wolf->player.m[x + 1 + y * minimap_width].type = 0;
-				if (wolf->player.m[x + (y + 1) * minimap_width].type != 1)
-					wolf->player.m[x + (y + 1) * minimap_width].type = 0;
-				if (wolf->player.m[x + 1 + (y + 1) * minimap_width].type != 1)
-					wolf->player.m[x + 1 + (y + 1) * minimap_width].type = 0;
+				wolf->player.m[x + y * minimap_width].h_color_head = 2147483647;
+				wolf->player.m[x + y * minimap_width].h_color_tail = 2147483647;
+				wolf->player.m[x + y * minimap_width].v_color_head = 2147483647;
+				wolf->player.m[x + y * minimap_width].v_color_tail = 2147483647;
 			}
 			x++;
 		}
 		y++;
 	}
 	y = 0;
-	//printf("%d %d\n", minimap[0].type, minimap[1].type);
 	while (y < minimap_height)
 	{
 		x = 0;

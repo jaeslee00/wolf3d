@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/29 14:09:52 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/30 03:30:52 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,10 @@ typedef struct	s_minimap
 {
 	sint32	x;
 	sint32	y;
-	sint32	type;
+	sint32	h_color_head;
+	sint32	h_color_tail;
+	sint32	v_color_head;
+	sint32	v_color_tail;
 }				t_minimap;
 
 typedef struct	s_obj
