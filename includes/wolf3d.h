@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/30 03:30:52 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/30 04:12:10 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@
 # define RIGHT	1UL << 2
 # define LEFT	1UL << 3
 # define BMP_HEADER_SIZE 54
+# ifndef INT_MAX
+#  define INT_MAX 2147483647
+# endif
 # ifndef PI32
 #  define PI32 3.14159265359f
 # endif
