@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:43:55 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/29 21:43:41 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/30 08:51:15 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_texture	read_bmp(const sint8 *filename, t_wolf *wolf)
 	bitmap = get_header(header);
 	tex.width = bitmap.width;
 	tex.height = bitmap.height;
-	tex.size = 3 * tex.width * tex.height;
+tex.size = 3 * tex.width * tex.height;
 	is_alloc(tex.data = (uint32*)ft_mem(&wolf->mem, tex.width * tex.height * sizeof(uint32)), wolf, -1);
 	read_all(fd, data, tex.size);
 	i = (64 * 64) - 1;

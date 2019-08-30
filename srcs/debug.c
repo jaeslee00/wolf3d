@@ -13,14 +13,16 @@
 
 #include "wolf3d.h"
 
-int print_map(int **map, t_obj obj, t_player *player)
+sint32 print_map(sint8 **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf)
 {
-	int	lines;
-	int	i;
-	int	j;
-	
+	sint32	lines;
+	sint32	i;
+	sint32	j;
+	sint32 k;
+
 	lines = (obj.size / obj.len);
 	i = 0;
+	k = 0;
 	//printf("\n \t0  1  2  3  4  5  6  7  8  9  10 11\n\n");
 	while (i < lines)
 	{
@@ -29,24 +31,32 @@ int print_map(int **map, t_obj obj, t_player *player)
 		{
 			//if (j == 0)
 				//printf("%d\t", i);
-			if (map[i][j] == 2)
+			if (map[i][j] == 9)
 			{
 				map[i][j] = 0;
-				player->position.x = i;
-				player->position.y = j;
+				player->pos.x = i;
+				player->pos.y = j;
 			}
-			//printf("%d  ", map[i][j]);
+			else if (map[i][j] == 3 || map[i][j] == 5)
+			{
+				if (map[i][j] == 3)
+					doors[k].flag |= 1UL << 1;
+				doors[k].flag |= 1UL;
+				doors[k].pos.x = i;
+				doors[k].pos.y = j;
+				k++;
+				wolf->nbr_of_doors = k;
+			}
 			j++;
 		}
 		i++;
-		//printf("\n");
-	}
+		}
 	return (0);
 }
 
-void ft_frametimes(int *frames, int *count)
+void ft_frametimes(sint32 *frames, sint32 *count)
 {
-	int	j;
+	sint32	j;
 
 	if (*count == 60)
 	{
@@ -58,10 +68,11 @@ void ft_frametimes(int *frames, int *count)
 			ft_putstr(" ms ");
 			*count += 1;
 			if (*count % 12 == 0)
-				ft_putchar('\n');
+			ft_putchar('\n');
 			j++;
 		}
-ft_putchar('\n');
+		ft_bzero(frames, sizeof(sint32) * 61);
+		ft_putchar('\n');
 		*count = -1;
 	}
 }

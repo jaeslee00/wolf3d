@@ -1,17 +1,7 @@
-<<<<<<< Updated upstream
-// TODO(viccarau): Make doors generalized
-// TODO(viccarau): Make door animation
-// TODO(viccarau): Make the door ilussion better
-// TODO(viccarau): Handle the segfault when low fps, running in wall
-// TODO(viccarau): GUN sprite animation
-// TODO(viccarau): Sounds
-// TODO(viccarau): Text menus
-=======
 /*
  TODO(viccarau): Make doors generalized ( when initializing doors, 
 check how they're facing)
  TODO(viccarau): GUN sprite animation
  TODO(viccarau): Sounds
  TODO(viccarau): Text menus
- /*
->>>>>>> Stashed changes
+/*
