@@ -13,27 +13,6 @@
 
 #include "wolf3d.h"
 
-/*
- if (event.key.keysym.scancode == SDL_SCANCODE_Q)
- {
-  old.x = p->direction.x;
-  p->direction.x = p->direction.x * cos(0.2f) - p->direction.y * sin(0.2f);
-  p->direction.y = old.x * sin(0.2f) + p->direction.y * cos(0.2f);
-  old.y = p->plane.x;
-  p->plane.x = p->plane.x * cos(0.2f) - p->plane.y * sin(0.2f);
-  p->plane.y = old.y * sin(0.2f) + p->plane.y * cos(0.2f);
- }
- if (event.key.keysym.scancode == SDL_SCANCODE_E)
- {
-  old.x = p->direction.x;
-  p->direction.x = p->direction.x * cos(-0.2f) - p->direction.y * sin(-0.2f);
-  p->direction.y = old.x * sin(-0.2f) + p->direction.y * cos(-0.2f);
-  old.y = p->plane.x;
-  p->plane.x = p->plane.x * cos(-0.2f) - p->plane.y * sin(-0.2f);
-  p->plane.y = old.y * sin(-0.2f) + p->plane.y * cos(-0.2f);
- }
-*/
-
 int		read_all(int fd, uint8_t *data, int size)
 {
 	int	read_bytes;
@@ -77,33 +56,34 @@ t_texture	read_bmp(const char *filename)
 
 void	ft_wolf_init(t_wolf *wolf)
 {
-	SDL_Init(SDL_INIT_EVERYTHING);
+SDL_Init(SDL_INIT_EVERYTHING);
 	//wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 	//SDL_WINDOWPOS_CENTERED, 1920, 1080, 0);
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED, W * 2, H * 2, 0);
-	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(unsigned int));
-	wolf->player.direction.x = -1;
+SDL_WINDOWPOS_CENTERED, W, H, 0);
+	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(uint32));
+wolf->player.direction.x = -1;
 	wolf->player.direction.y = 0;
 	wolf->player.plane.x = 0;
 	wolf->player.plane.y = 1;
-	// TODO(viccarau): We will have to make the textures load depending on
-	//the type of wall it is. Some textures have to be on the same type of wall.
-	wolf->tex[0] = read_bmp("./texture/colorstone.bmp");
-	wolf->tex[1] = read_bmp("./texture/eagle.bmp");
-	wolf->tex[2] = read_bmp("./texture/greystone.bmp");
-	wolf->tex[3] = read_bmp("./texture/redbrick.bmp");
+wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp", wolf);
+	wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp", wolf);
+	wolf->tex[2] = read_bmp("./texture/BrownbrickD.bmp", wolf);
+	wolf->tex[3] = read_bmp("./texture/WoodbrickD.bmp", wolf);
+	wolf->tex[4] = read_bmp("./texture/Wooddoor.bmp", wolf);
+	wolf->tex[5] = read_bmp("./texture/gun0.bmp", wolf);
 	wolf->player.speed = 0;
 	wolf->flag = 0;
+	wolf->dist = perp_dist(wolf);
 }
 
 void	ceiling(unsigned int *img)
 {
-	int x;
-	int y;
-	int y1;
-	int color;
-	float per;
+sint32	x;
+	sint32	y;
+	sint32	y1;
+	sint32	color;
+	f32		per;
 
 	x = 0;
 	y = 0;
@@ -112,9 +92,12 @@ void	ceiling(unsigned int *img)
 	while (y < H / 2)
 	{
 		x = 0;
-		color = rgb_lerp(0x111111, per, 0x222222);
-		while (x < W)
-		{
+if (color == 0)
+			color = 0;
+		else
+			color = rgb_lerp(0x111111, per, 0x222222);
+		while (x < W - 1)
+{
 			img[x + y * W] = color;
 			img[x + y1 * W] = 0x222222 + color;
 			x++;
@@ -125,7 +108,7 @@ void	ceiling(unsigned int *img)
 	}
 }
 
-void img_to_screen(unsigned int *img, t_texture t)
+void	img_to_screen(uint32 *img, t_texture t)
 {
 	int x;
 	int y;
@@ -160,13 +143,14 @@ int		main(int ac, char **av)
 		tkneizer(fd, &wolf);
 		print_map(wolf.map, wolf.obj, &wolf.player);
 		ft_wolf_init(&wolf);
-		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
+print_map(wolf.map, wolf.obj, &wolf.player, wolf.doors, &wolf);
+wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
 			SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
 		i = 1;
 		ft_bzero(frames, sizeof(int) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
-		while (1)
+while (1)
 		{
 			while (SDL_PollEvent(&wolf.sdl.event))
 			{
@@ -175,14 +159,14 @@ int		main(int ac, char **av)
 				if (wolf.sdl.event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 					is_alloc(NULL, wolf, 0);
 				set_flag(&wolf, wolf.sdl.event);
+mouse_movement(&wolf, wolf.sdl.event);
 			}
 			if (i != 0)
-				direction_movement(&wolf, wolf.map,
+				check_flag(&wolf, wolf.map,
 					SDL_GetTicks() - frames[i - 1]);
+			event_handler(&wolf, wolf.map, wolf.doors);
 			frames[i] = SDL_GetTicks();
-			//ft_bzero(wolf.img, sizeof(unsigned int) * W * H);
-			ceiling(wolf.img);
-			//render(&wolf);
+ceiling(wolf.img);
 			raycast(&wolf);
 			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img,
 				W * sizeof(unsigned int));

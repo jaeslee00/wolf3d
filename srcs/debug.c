@@ -61,8 +61,7 @@ void ft_frametimes(int *frames, int *count)
 				ft_putchar('\n');
 			j++;
 		}
-		ft_bzero(frames, sizeof(int) * 61);
-		ft_putchar('\n');
+ft_putchar('\n');
 		*count = -1;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/25 17:18:43 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/30 08:36:21 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,19 @@
 # define WOLF3D_H
 # include "libft.h"
 # include "draw.h"
+# include "bmp_reader.h"
 # include <math.h>
 # include <stdint.h>
 # include <SDL2/SDL.h>
-# define W (2560 / 2)
-# define H (1080 / 2)
-# define HEIGHT 32
-# define TEX_WIDTH 64
-# define TEX_HEIGHT 64
+# define W (1920)
+# define H (1080)
+
+# define TEXTURE_0	0
+# define TEXTURE_1	1
+# define TEXTURE_2	2
+# define TEXTURE_3	3
+# define TEXTURE_4	4
+
 # define EW_WALL 0
 # define SN_WALL 1
 # define PRESSED 1
