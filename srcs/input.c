@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:02:53 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/30 08:51:41 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/30 15:07:50 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	check_key(t_wolf *wolf, SDL_Event event, SDL_Scancode key, sint32 bit)
 
 void	set_flag(t_wolf *wolf, SDL_Event event)
 {
+	if (event.type == SDL_MOUSEBUTTONDOWN)
+		wolf->flag |= 1UL << 9;
 	check_key(wolf, event, SDL_SCANCODE_W, 1UL);
 	check_key(wolf, event, SDL_SCANCODE_S, 1UL << 1);
 	check_key(wolf, event, SDL_SCANCODE_A, 1UL << 2);

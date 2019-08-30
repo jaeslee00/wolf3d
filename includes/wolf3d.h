@@ -6,9 +6,15 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/30 09:16:21 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/30 14:17:26 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* TODO(viccarau): For optimisation purposes we need to make the size of the
+   **				 structs64-bytes maximum. That is the cache-line size on the
+**				processor we're working on.
+**				I think we should allocate all the structs inside our wolf.
+*/
 
 #ifndef WOLF3D_H
 # define WOLF3D_H
@@ -34,6 +40,7 @@
 #  define PI32 3.14159265359f
 # endif
 
+//
 #include <stdio.h>
 
 typedef unsigned char		uint8;
@@ -103,21 +110,21 @@ typedef struct	s_obj
 
 typedef struct	s_sdl
 {
-	SDL_Window	*win;
+	SDL_Window		*win;
 	SDL_Renderer	*renderer;
-	SDL_Event	event;
-	SDL_Texture	*texture;
+	SDL_Event		event;
+	SDL_Texture		*texture;
 }				t_sdl;
 
 typedef struct	s_player
 {
-	t_2d	ray;
-	t_2d	pos;
-	t_2d	direction;
-	t_2d	plane;
-	f32		speed;
-	t_minimap *m;
-	int	health;
+	t_2d		ray;
+	t_2d		pos;
+	t_2d		direction;
+	t_2d		plane;
+	f32			speed;
+	t_minimap	*m;
+	int			health;
 }				t_player;
 
 typedef struct	s_raycaster
@@ -145,14 +152,16 @@ typedef struct	s_wolf
 	uint32		*img;
 	t_mem		mem;
 	sint8		**map;
-	t_door		doors[100];
+	t_door		*doors;
 	sint32		nbr_of_doors;
-	t_texture	tex[6];
+	t_texture	*tex;
 	uint32		flag;
 	f32			sin_rot;
 	f32			cos_rot;
 }				t_wolf;
 
+t_2d_p			init_2d(sint32 x, sint32 y);
+void	draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex);
 funct			*perp_dist(t_wolf *wolf);
 f32				perp_distance_ew(t_raycaster *ray, t_player player);
 f32				perp_distance_sn(t_raycaster *ray, t_player player);

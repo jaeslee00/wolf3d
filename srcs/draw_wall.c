@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/08/30 08:56:05 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/30 15:10:43 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,8 @@
 
 sint32	lighting(sint32 color, t_raycaster *ray)
 {
-if (ray->perp_dist > 20)
-		return (0);
-	else if (ray->perp_dist > 10)
-		ray->light = 0.2;
-	else if (ray->perp_dist < 3)
-return (color);
+	if (ray->perp_dist < 3)
+		return (color);
 	else
 		ray->light = (1.0 - ray->perp_dist / 12.0);
 	if (ray->light < 0.0)
@@ -40,7 +36,7 @@ sint8	texture_pick(t_raycaster *ray)
 }
 
 void	texture_map(t_wolf *wf, t_texture_map tex_map, sint32 x,
-			t_raycaster *ray)
+				 t_raycaster *ray)
 {
 	sint32	tex_id;
 	sint32	tex_height_scale;
