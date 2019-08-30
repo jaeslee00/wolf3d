@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/30 08:49:15 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/30 09:16:21 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ typedef struct	s_player
 	t_2d	plane;
 	f32		speed;
 	t_minimap *m;
+	int	health;
 }				t_player;
 
 typedef struct	s_raycaster
@@ -170,6 +171,7 @@ sint8			**int_to_tab(t_wolf *wolf);
 sint32			is_invalid(char *str);
 sint32			is_valid(f32 x, f32 y);
 sint32			tkneizer(sint32 fd, t_wolf *wolf);
+sint32			lerp(f64 a, f32 t, f64 b);
 sint32			rgb_lerp(sint32 color1, f32 t, sint32 color2);
 sint32			direction_movement(t_wolf *wolf, sint8 **map, sint32 framedelta);
 sint32			print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
