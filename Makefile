@@ -6,7 +6,7 @@
 #    By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/09 12:55:04 by viccarau          #+#    #+#              #
-#    Updated: 2019/08/31 05:22:10 by jaelee           ###   ########.fr        #
+#    Updated: 2019/08/31 05:34:10 by jaelee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ LIB_INC = -Iincludes -Ilibft/includes -I ./SDL2.framework/Headers
 #-I$(LIB)
 FLAGS += -Llibft -lft -lm -framework SDL2
 
-CFLAGS += $(LIB_INC) -F. -Wall -Wextra -Werror -fsanitize=address -g
+CFLAGS += $(LIB_INC) -F. -Wall -Wextra -Werror #-fsanitize=address -g
 
 all: $(NAME)
 
