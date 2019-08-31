@@ -19,7 +19,8 @@ INC = includes/camera.h includes/wolf3d.h includes/draw.h
 SRC = $(SRC_DIR)checks.c $(SRC_DIR)main.c $(SRC_DIR)keycode.c $(SRC_DIR)math.c \
 	$(SRC_DIR)parsing.c $(SRC_DIR)raycaster.c $(SRC_DIR)debug.c \
 	$(SRC_DIR)input1.c $(SRC_DIR)minimap.c $(SRC_DIR)perp_distance.c \
-	$(SRC_DIR)draw_wall.c $(SRC_DIR)input.c $(SRC_DIR)bmp_reader.c $(SRC_DIR)draw_sprite.c
+	$(SRC_DIR)draw_wall.c $(SRC_DIR)input.c $(SRC_DIR)bmp_reader.c \
+	$(SRC_DIR)draw_sprite.c $(SRC_DIR)hud.c 
 OBJ = $(SRC:$(SRC_DIR)%.c=%.o)
 
 LIB_INC = -Iincludes -Ilibft/includes -I ./SDL2.framework/Headers
