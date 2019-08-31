@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/30 14:17:26 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/31 04:24:50 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,12 @@ typedef struct	s_player
 	t_2d		direction;
 	t_2d		plane;
 	f32			speed;
+	//TODO (jae) : maybe it's better to put t_minimap + minimap infos into another structure heheh
 	t_minimap	*m;
+	sint32		minimap_width;
+	sint32		minimap_height;
+	sint32		minimap_zoom;
+	//////////////////////////////////////
 	int			health;
 }				t_player;
 
@@ -152,6 +157,8 @@ typedef struct	s_wolf
 	uint32		*img;
 	t_mem		mem;
 	sint8		**map;
+	sint32		map_width;
+	sint32		map_height;
 	t_door		*doors;
 	sint32		nbr_of_doors;
 	t_texture	*tex;
@@ -197,7 +204,7 @@ void			mem_init(t_wolf *wolf);
 void			is_alloc(void *mem, t_wolf *wolf, sint32 error);
 void			draw_to_img(t_wolf wolf);
 void			pers_keys(sint32 keycode, t_wolf *wolf);
-void			minimap(t_wolf *wolf);
+void			minimap(t_wolf *wolf, sint32 minimap_width, sint32 minimap_height);
 void			mouse_movement(t_wolf *wolf, SDL_Event event);
 void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
 sint32			lighting(sint32 color, t_raycaster *ray);

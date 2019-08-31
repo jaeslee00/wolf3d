@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 04:27:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/08/31 03:43:07 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/31 04:31:06 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,50 +132,102 @@ void draw_line(t_minimap p1, t_minimap p2, uint32 *img)
 			draw_line_y(p1, p2, img);
 	}
 }
-//TODO (jae) : gotta clean this shit up tomorrow... Don't be triggered please.. T-T
-void	minimap(t_wolf *wolf)
-{
-	sint32			map_width;
-	sint32			map_height;
-	sint32			minimap_width;
-	sint32			minimap_height;
-	sint32			zoom = 20;
-	sint32			x_key = 0;
-	sint32			y_key = 0;
 
-	map_height = wolf->obj.size / wolf->obj.len;
-	map_width = wolf->obj.len;
-	minimap_width = map_width + 1;
-	minimap_height = map_height + 1;
-	int x = 0;
-	int y = 0;
-	while (y < map_height)
+void	transform_minimap(t_minimap *m, t_wolf *wolf, sint32 x, sint32 y)
+{
+	sint32		width;
+	sint32		height;
+	sint32		zoom;
+
+	width = wolf->player.minimap_width;
+	height = wolf->player.minimap_height;
+	zoom = wolf->player.minimap_zoom;
+	wolf->player.m[x + y * width].x = x * zoom + W / 2 - zoom * width / 2 - zoom * (wolf->player.pos.y * 2.0f - width) / 2.0f;
+	wolf->player.m[x + y * width].y = y * zoom + H / 2 - zoom * height / 2 - zoom * (wolf->player.pos.x * 2.0f - height) / 2.0f;
+
+	wolf->player.m[(x + 1) + y * width].x = (x + 1) * zoom + W / 2 - zoom * width / 2 - zoom * (wolf->player.pos.y * 2.0f - width) / 2.0f ;
+	wolf->player.m[(x + 1) + y * width].y = y * zoom + H / 2 - zoom * height / 2 - zoom * (wolf->player.pos.x * 2.0f - height) / 2.0f;
+
+	wolf->player.m[x + (y + 1) * width].x = x * zoom + W / 2 - zoom * width / 2 - zoom * (wolf->player.pos.y * 2.0f - width) / 2.0f;
+	wolf->player.m[x + (y + 1) * width].y = (y + 1) * zoom + H / 2 - zoom * height / 2 - zoom * (wolf->player.pos.x * 2.0f - height) / 2.0f;
+
+	wolf->player.m[(x + 1) + (y + 1) * width].x = (x + 1) * zoom + W / 2 - zoom * width / 2 - zoom * (wolf->player.pos.y * 2.0f - width) / 2.0f;
+	wolf->player.m[(x + 1) + (y + 1) * width].y = (y + 1) * zoom + H / 2 - zoom * height / 2 - zoom * (wolf->player.pos.x * 2.0f - height) / 2.0f;
+}
+
+void	set_minimap_edge_color(t_minimap *m, sint32 minimap_width, sint32 minimap_height)
+{
+	sint32	x;
+	sint32	y;
+
+	y = 0;
+	while (y < minimap_height)
+	{
+		m[minimap_width - 1 + y * minimap_width].v_color_head = INT_MAX;
+		m[minimap_width - 1 + y * minimap_width].v_color_tail = INT_MAX;
+		y++;
+	}
+	x = 0;
+	while (x < minimap_width)
+	{
+		m[x + (minimap_height -1) * minimap_width].h_color_head = INT_MAX;
+		m[x + (minimap_height - 1) * minimap_width].h_color_tail = INT_MAX;
+		x++;
+	}
+	m[minimap_width - 2].h_color_head = INT_MAX;
+	m[minimap_width - 1].h_color_tail = INT_MAX;
+	m[(minimap_height - 2) * minimap_width].v_color_head = INT_MAX;
+	m[(minimap_height - 1) * minimap_width].v_color_tail = INT_MAX;
+}
+
+void	render_minimap(t_wolf *wolf, sint32 minimap_width, sint32 minimap_height)
+{
+	sint32	x;
+	sint32	y;
+
+	y = 0;
+	while (y < minimap_height)
 	{
 		x = 0;
-		while (x < map_width)
+		while (x < minimap_width)
 		{
-			//TODO (jae) : figure out exact ways to transform map... and i'm going to change everything to maxtrix later!
-			wolf->player.m[x + y * minimap_width].x = x * zoom + W / 2 - zoom * minimap_width / 2 - zoom * (wolf->player.pos.y * 2.0 - minimap_width) / 2.0;
-			wolf->player.m[x + y * minimap_width].y = y * zoom + H / 2 - zoom * minimap_height / 2 - zoom * (wolf->player.pos.x * 2.0 - minimap_height) / 2.0 ;
+			if (x < minimap_width - 1)
+				draw_line(wolf->player.m[x + y * minimap_width],
+					wolf->player.m[(x + 1) + y * minimap_width], wolf->img);
+			if (y < minimap_height - 1)
+			{
+				draw_line(wolf->player.m[x + y * minimap_width],
+					wolf->player.m[x + (y + 1) * minimap_width], wolf->img);
+			}
+			x++;
+		}
+		y++;
+	}
+}
 
-			wolf->player.m[(x + 1) + y * minimap_width].x = (x + 1) * zoom + W / 2 - zoom * minimap_width / 2 - zoom * (wolf->player.pos.y * 2 - minimap_width) / 2.0 ;
-			wolf->player.m[(x + 1) + y * minimap_width].y = y * zoom + H / 2 - zoom * minimap_height / 2 - zoom * (wolf->player.pos.x * 2 - minimap_height) / 2.0;
+void	minimap(t_wolf *wolf, sint32 minimap_width, sint32 minimap_height)
+{
+	sint32			x_key = 0;
+	sint32			y_key = 0;
+	sint32 			x;
+	sint32 			y;
 
-			wolf->player.m[x + (y + 1) * minimap_width].x = x * zoom + W / 2 - zoom * minimap_width / 2 - zoom * (wolf->player.pos.y * 2 - minimap_width) / 2.0 ;
-			wolf->player.m[x + (y + 1) * minimap_width].y = (y + 1) * zoom + H / 2 - zoom * minimap_height / 2 - zoom * (wolf->player.pos.x * 2 - minimap_height) / 2.0 ;
-
-			wolf->player.m[(x + 1) + (y + 1) * minimap_width].x = (x + 1) * zoom + W / 2 - zoom * minimap_width / 2 - zoom * (wolf->player.pos.y * 2 - minimap_width) / 2.0 ;
-			wolf->player.m[(x + 1) + (y + 1) * minimap_width].y = (y + 1) * zoom + H / 2 - zoom * minimap_height / 2 - zoom * (wolf->player.pos.x * 2 - minimap_height) / 2.0 ;
-
+	y = 0;
+	while (y < wolf->map_height)
+	{
+		x = 0;
+		while (x < wolf->map_width)
+		{
+			transform_minimap(wolf->player.m, wolf, x, y);
 			if (x > 0 && y > 0)
 			{
 				if (y == 1)
 					wolf->player.m[x + y * minimap_width].v_color_tail = INT_MAX;
 				if (x == 1)
 					wolf->player.m[x + y * minimap_width].h_color_tail = INT_MAX;
-				if (!(wolf->obj.nb[x + y * map_width] == 0 && wolf->obj.nb[x - 1 + y * map_width] == 0))
+				if (!(wolf->obj.nb[x + y * wolf->map_width] == 0 && wolf->obj.nb[x - 1 + y * wolf->map_width] == 0))
 				{
-					if (wolf->obj.nb[x + y * map_width] > 2 || wolf->obj.nb[x - 1 + y * map_width] > 2)
+					if (wolf->obj.nb[x + y * wolf->map_width] > 2 || wolf->obj.nb[x - 1 + y * wolf->map_width] > 2)
 					{
 						wolf->player.m[x + y * minimap_width].v_color_head = -1;
 						wolf->player.m[x + (y + 1) * minimap_width].v_color_tail = -1;
@@ -187,9 +239,9 @@ void	minimap(t_wolf *wolf)
 						wolf->player.m[x + (y + 1) * minimap_width].v_color_tail = y_key;
 					}
 				}
-				if (!(wolf->obj.nb[x + y * map_width] == 0 && wolf->obj.nb[x + (y - 1) * map_width] == 0))
+				if (!(wolf->obj.nb[x + y * wolf->map_width] == 0 && wolf->obj.nb[x + (y - 1) * wolf->map_width] == 0))
 				{
-					if (wolf->obj.nb[x + y * map_width] > 2 || wolf->obj.nb[x + (y - 1 ) * map_width] > 2)
+					if (wolf->obj.nb[x + y * wolf->map_width] > 2 || wolf->obj.nb[x + (y - 1 ) * wolf->map_width] > 2)
 					{
 						wolf->player.m[x + y * minimap_width].h_color_head = -1;
 						wolf->player.m[x + 1 + y * minimap_width].h_color_tail = -1;
@@ -213,41 +265,7 @@ void	minimap(t_wolf *wolf)
 		}
 		y++;
 	}
-	y = 0;
-	while (y < minimap_height)
-	{
-		wolf->player.m[minimap_width - 1 + y * minimap_width].v_color_head = INT_MAX;
-		wolf->player.m[minimap_width - 1 + y * minimap_width].v_color_tail = INT_MAX;
-		y++;
-	}
-	x = 0;
-	while (x < minimap_width)
-	{
-		wolf->player.m[x + (minimap_height -1) * minimap_width].h_color_head = INT_MAX;
-		wolf->player.m[x + (minimap_height - 1) * minimap_width].h_color_tail = INT_MAX;
-		x++;
-	}
-	wolf->player.m[minimap_width - 2].h_color_head = INT_MAX;
-	wolf->player.m[minimap_width - 1].h_color_tail = INT_MAX;
-	wolf->player.m[(minimap_height - 2) * minimap_width].v_color_head = INT_MAX;
-	wolf->player.m[(minimap_height - 1) * minimap_width].v_color_tail = INT_MAX;
-	y = 0;
-	while (y < minimap_height)
-	{
-		x = 0;
-		while (x < minimap_width)
-		{
-			if (x < minimap_width - 1)
-				draw_line(wolf->player.m[x + y * minimap_width],
-					wolf->player.m[(x + 1) + y * minimap_width], wolf->img);
-			if (y < minimap_height - 1)
-			{
-				draw_line(wolf->player.m[x + y * minimap_width],
-					wolf->player.m[x + (y + 1) * minimap_width], wolf->img);
-			}
-			x++;
-		}
-		y++;
-	}
+	set_minimap_edge_color(wolf->player.m, minimap_width, minimap_height);
+	render_minimap(wolf, minimap_width, minimap_height);
 	draw_player(wolf->img);
 }

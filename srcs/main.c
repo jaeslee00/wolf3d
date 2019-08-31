@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/30 15:12:01 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/31 04:25:07 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,11 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->flag = 0;
 	wolf->dist = perp_dist(wolf);
 	wolf->player.health = 75;
+	wolf->map_width = wolf->obj.len;
+	wolf->map_height = wolf->obj.size / wolf->obj.len;
+	wolf->player.minimap_width = wolf->map_width + 1;
+	wolf->player.minimap_height = wolf->map_height + 1;
+	wolf->player.minimap_zoom = 20;
 	is_alloc(wolf->doors = ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
 	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, (wolf->obj.size / wolf->obj.len) * (wolf->obj.len) * sizeof(t_minimap)), wolf, -1);
 }
@@ -142,7 +147,7 @@ int	main(int ac, char **av)
 			ceiling(wolf.img);
 			raycast(&wolf);
 			if (wolf.flag & 1UL << 8)
-				minimap(&wolf);
+				minimap(&wolf, wolf.player.minimap_width, wolf.player.minimap_height);
 			draw_memory(&wolf, wolf.player.health);
 //			if (wolf.flag & 1UL << 9)
 //			{
