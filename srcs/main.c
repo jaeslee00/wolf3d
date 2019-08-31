@@ -6,38 +6,23 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/31 04:25:07 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/31 18:08:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	draw_memory(t_wolf *wolf, int percent)
+void	load_textures(t_wolf *wolf)
 {
-	sint32	size;
-	sint32	i;
-	sint32	j;
-	sint32	color;
-	f32		norm;
-
-	size = 250;
-	i = W / 2 - size / 2;
-	j = 100;
-	norm = (f32)(percent * 0.01f);
-	percent = lerp(i, norm, size + (W / 2 - size / 2));
-	while (j < (H / 10))
-	{
-		i = W / 2 - size / 2;
-		color = 0x00FF00;
-		while(i < (size + (W / 2 - size / 2)))
-		{
-			if (i == percent)
-				color = 0xFF0000;
-			wolf->img[i + W * j] = color;
-			i++;
-		}
-		j++;
-	}
+	wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp", wolf);
+	wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp", wolf);
+	wolf->tex[2] = read_bmp("./texture/BrownbrickD.bmp", wolf);
+	wolf->tex[3] = read_bmp("./texture/WoodbrickD.bmp", wolf);
+	wolf->tex[4] = read_bmp("./texture/Wooddoor.bmp", wolf);
+	wolf->tex[5] = read_bmp("./texture/shotgun0.bmp", wolf);
+	wolf->tex[6] = read_bmp("./texture/shotgun1.bmp", wolf);
+	wolf->tex[7] = read_bmp("./texture/shotgun2.bmp", wolf);
+	wolf->tex[8] = read_bmp("./texture/shotgun3.bmp", wolf);
 }
 
 void	ft_wolf_init(t_wolf *wolf)
@@ -45,20 +30,15 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->map = int_to_tab(wolf);
 	SDL_Init(SDL_INIT_EVERYTHING);
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED, W, H, 0);
+									 SDL_WINDOWPOS_CENTERED, W, H, 0);
+	SDL_SetWindowBordered(wolf->sdl.win, SDL_FALSE);
 	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(uint32));
 	wolf->player.direction.x = -1;
 	wolf->player.direction.y = 0;
 	wolf->player.plane.x = 0;
 	wolf->player.plane.y = 1;
 	is_alloc(wolf->tex = ft_mem(&wolf->mem, sizeof(t_texture) * 10), wolf, -1);
-	wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp", wolf);
-	wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp", wolf);
-	wolf->tex[2] = read_bmp("./texture/BrownbrickD.bmp", wolf);
-	wolf->tex[3] = read_bmp("./texture/WoodbrickD.bmp", wolf);
-	wolf->tex[4] = read_bmp("./texture/Wooddoor.bmp", wolf);
-	wolf->tex[5] = read_bmp("./texture/gun0.bmp", wolf);
-	wolf->tex[6] = read_bmp("./texture/gun1.bmp", wolf);
+	load_textures(wolf);
 	wolf->player.speed = 0;
 	wolf->flag = 0;
 	wolf->dist = perp_dist(wolf);
@@ -67,7 +47,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->map_height = wolf->obj.size / wolf->obj.len;
 	wolf->player.minimap_width = wolf->map_width + 1;
 	wolf->player.minimap_height = wolf->map_height + 1;
-	wolf->player.minimap_zoom = 20;
+	wolf->player.minimap_zoom = 10;
 	is_alloc(wolf->doors = ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
 	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, (wolf->obj.size / wolf->obj.len) * (wolf->obj.len) * sizeof(t_minimap)), wolf, -1);
 }
@@ -128,6 +108,7 @@ int	main(int ac, char **av)
 		i = 1;
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
+		SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
 		while (1)
 		{
 			while (SDL_PollEvent(&wolf.sdl.event))
@@ -146,16 +127,10 @@ int	main(int ac, char **av)
 			frames[i] = SDL_GetTicks();
 			ceiling(wolf.img);
 			raycast(&wolf);
-			if (wolf.flag & 1UL << 8)
-				minimap(&wolf, wolf.player.minimap_width, wolf.player.minimap_height);
-			draw_memory(&wolf, wolf.player.health);
-//			if (wolf.flag & 1UL << 9)
-//			{
-//				draw_sprite(&wolf, init_2d(760, 760), wolf.tex[6]);
-//				wolf.flag &= ~(1UL << 9);
-//			}
-//			else
-//				draw_sprite(&wolf, init_2d(760, 770), wolf.tex[5]);
+			if (i == 0)
+				draw_hud(&wolf, 16);
+else
+				draw_hud(&wolf, frames[i] - frames[i - 1]);
 			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img,
 				W * sizeof(uint32));
 			SDL_RenderCopy(wolf.sdl.renderer, wolf.sdl.texture, NULL, NULL);

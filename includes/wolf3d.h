@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/31 04:24:50 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/08/31 18:05:26 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 **				processor we're working on.
 **				I think we should allocate all the structs inside our wolf.
 */
+// TODO(viccarau): protect the textures SHERLOCK
 
 #ifndef WOLF3D_H
 # define WOLF3D_H
@@ -23,8 +24,10 @@
 # include "bmp_reader.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-# define W	(1920)
-# define H	(1080)
+//# define W	(2560 / 4)
+//# define H	(1440 / 4)
+# define W	(1280)
+# define H	(720)
 
 # define TEXTURE_0	0
 # define TEXTURE_1	1
@@ -132,6 +135,11 @@ typedef struct	s_player
 	int			health;
 }				t_player;
 
+typedef struct	s_animation
+{
+	sint32 gun;
+	}				t_animation;
+
 typedef struct	s_raycaster
 {
 	t_2d_p	step;
@@ -165,10 +173,12 @@ typedef struct	s_wolf
 	uint32		flag;
 	f32			sin_rot;
 	f32			cos_rot;
+	t_animation	a;
 }				t_wolf;
 
+void				draw_hud(t_wolf *wolf, uint32 deltaframe);
 t_2d_p			init_2d(sint32 x, sint32 y);
-void	draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex);
+void				draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex);
 funct			*perp_dist(t_wolf *wolf);
 f32				perp_distance_ew(t_raycaster *ray, t_player player);
 f32				perp_distance_sn(t_raycaster *ray, t_player player);
