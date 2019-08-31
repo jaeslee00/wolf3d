@@ -144,13 +144,13 @@ int	main(int ac, char **av)
 			if (wolf.flag & 1UL << 8)
 				minimap(&wolf);
 			draw_memory(&wolf, wolf.player.health);
-			if (wolf.flag & 1UL << 9)
-			{
-				draw_sprite(&wolf, init_2d(760, 760), wolf.tex[6]);
-				wolf.flag &= ~(1UL << 9);
-			}
-			else
-				draw_sprite(&wolf, init_2d(760, 770), wolf.tex[5]);
+//			if (wolf.flag & 1UL << 9)
+//			{
+//				draw_sprite(&wolf, init_2d(760, 760), wolf.tex[6]);
+//				wolf.flag &= ~(1UL << 9);
+//			}
+//			else
+//				draw_sprite(&wolf, init_2d(760, 770), wolf.tex[5]);
 			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img,
 				W * sizeof(uint32));
 			SDL_RenderCopy(wolf.sdl.renderer, wolf.sdl.texture, NULL, NULL);

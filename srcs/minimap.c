@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 04:27:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/08/30 09:17:13 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/08/31 03:43:07 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,27 @@ void	draw_player(uint32 *img)
 		y++;
 	}
 }
-int gflag;
+
+sint32	get_color_horiz(t_minimap *p1, t_minimap *p2)
+{
+	if (p1->h_color_head == p2->h_color_tail && p1->h_color_head > 0)
+		return (0xFFFFFF);
+	else if (p1->h_color_head == p2->h_color_tail && p1->h_color_head < 0)
+		return (0xFF0000);
+	else
+		return (0x00);
+}
+
+sint32	get_color_vertical(t_minimap *p1, t_minimap *p2)
+{
+	if (p1->v_color_head == p2->v_color_tail && p1->v_color_head > 0)
+		return (0xFFFFFF);
+	else if (p1->v_color_head == p2->v_color_tail && p1->v_color_head < 0)
+		return (0xFF0000);
+	else
+		return (0x00);
+}
+
 void	draw_line_x(t_minimap p1, t_minimap p2, uint32 *img)
 {
 	t_2d_p d;
@@ -56,20 +76,7 @@ void	draw_line_x(t_minimap p1, t_minimap p2, uint32 *img)
 	while (curr.x < p2.x)
 	{
 		if (curr.x + curr.y * W < H * W && curr.x > 0 && curr.y > 0)
-		{
-			if (p1.h_color_head == p2.h_color_tail && p1.h_color_head > 0)
-			{
-				img[curr.x + curr.y * W] =  0xFFFFFF;
-			}
-			else if (p1.h_color_head == p2.h_color_tail && p1.h_color_head < 0)
-			{
-				img[curr.x + curr.y * W] = 0xFF0000;
-			}
-			else
-			{
-				img[curr.x + curr.y * W] = 0;
-			}
-		}
+			img[curr.x + curr.y * W] =  get_color_horiz(&p1, &p2);
 		if (diff > 0)
 		{
 			curr.y += yi;
@@ -97,20 +104,7 @@ void draw_line_y(t_minimap p1, t_minimap p2, uint32 *img)
 	while (curr.y < p2.y)
 	{
 		if (curr.x + curr.y * W < H * W && curr.x > 0 && curr.y > 0)
-		{
-			if (p1.v_color_head == p2.v_color_tail && p1.v_color_head > 0)
-			{
-				img[curr.x + curr.y * W] = 0xFFFFFF;
-			}
-			else if (p1.v_color_head == p2.v_color_tail && p1.v_color_head < 0)
-			{
-				img[curr.x + curr.y * W] = 0xFF0000;
-			}
-			else
-			{
-				img[curr.x + curr.y * W] = 0;
-			}
-		}
+			img[curr.x + curr.y * W] = get_color_vertical(&p1, &p2);
 		if (diff > 0)
 		{
 			curr.x += xi;
@@ -235,8 +229,8 @@ void	minimap(t_wolf *wolf)
 	}
 	wolf->player.m[minimap_width - 2].h_color_head = INT_MAX;
 	wolf->player.m[minimap_width - 1].h_color_tail = INT_MAX;
-	wolf->player.m[(minimap_width - 2) * minimap_width].v_color_head = INT_MAX;
-	wolf->player.m[(minimap_width - 1)*minimap_width].v_color_tail = INT_MAX;
+	wolf->player.m[(minimap_height - 2) * minimap_width].v_color_head = INT_MAX;
+	wolf->player.m[(minimap_height - 1) * minimap_width].v_color_tail = INT_MAX;
 	y = 0;
 	while (y < minimap_height)
 	{
@@ -247,8 +241,10 @@ void	minimap(t_wolf *wolf)
 				draw_line(wolf->player.m[x + y * minimap_width],
 					wolf->player.m[(x + 1) + y * minimap_width], wolf->img);
 			if (y < minimap_height - 1)
+			{
 				draw_line(wolf->player.m[x + y * minimap_width],
 					wolf->player.m[x + (y + 1) * minimap_width], wolf->img);
+			}
 			x++;
 		}
 		y++;
