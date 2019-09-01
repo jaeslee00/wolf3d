@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/01 07:45:35 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/01 13:19:24 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	load_textures(t_wolf *wolf)
 	wolf->tex[6] = read_bmp("./texture/shotgun1.bmp", wolf);
 	wolf->tex[7] = read_bmp("./texture/shotgun2.bmp", wolf);
 	wolf->tex[8] = read_bmp("./texture/shotgun3.bmp", wolf);
+	wolf->tex[9] = read_bmp("./texture/shotgun4.bmp", wolf);
 }
 
 void	ft_wolf_init(t_wolf *wolf)
@@ -43,7 +44,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->flag = 0;
 	wolf->dist = perp_dist(wolf);
 	wolf->player.health = 75;
-	wolf->a.size = (W * H) / ((W * H) / 2);
+	wolf->a.size = round(W / (2560 / 4));
 	is_alloc(wolf->doors = ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
 	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, (wolf->obj.size / wolf->obj.len) * (wolf->obj.len) * sizeof(t_minimap)), wolf, -1);
 }

@@ -42,7 +42,7 @@ void	draw_bar(t_wolf *wolf, int percent)
 
 void	draw_gun(t_wolf *wolf, uint32 tex_id)
 {
-	draw_sprite(wolf, init_2d((W / 2) - (wolf->tex[tex_id].width / 2) + 2,
+	draw_sprite(wolf, init_2d((W / 2) - ((wolf->tex[tex_id].width * wolf->a.size) / 2) + 2,
 		H - (wolf->tex[tex_id].height * wolf->a.size) + (2 * wolf->a.size)) ,
 		wolf->tex[tex_id], wolf->a.size);
 }
@@ -54,11 +54,15 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 		wolf->a.gun += deltaframe;
 		if (wolf->a.gun < 100)
 			draw_gun(wolf, 6);
-		else if(wolf->a.gun < 150)
+		else if(wolf->a.gun < 145)
 			draw_gun(wolf, 7);
-		else
+		else if (wolf->a.gun < 250)
+			draw_gun(wolf, 9);
+		else if (wolf->a.gun < 500)
 			draw_gun(wolf, 8);
-		if (wolf->a.gun >= 400)
+		else
+			draw_gun(wolf, 9);
+		if (wolf->a.gun >= 600)
 		{
 			wolf->flag &= ~(1UL << 9);
 			wolf->a.gun = 0;

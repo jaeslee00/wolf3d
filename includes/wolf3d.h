@@ -165,10 +165,11 @@ typedef struct	s_wolf
 	sint32		nbr_of_doors;
 	t_texture	*tex;
 	uint32		flag;
+	uint8		res;
 	f32			sin_rot;
 	f32			cos_rot;
 	t_animation	a;
-}				t_wolf;
+	}				t_wolf;
 
 void				draw_hud(t_wolf *wolf, uint32 deltaframe);
 t_2d_p			init_2d(sint32 x, sint32 y);
