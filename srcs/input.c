@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:02:53 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/30 15:07:50 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/01 12:19:26 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,19 +73,25 @@ void	mouse_movement(t_wolf *wolf, SDL_Event event)
 {
 	t_2d		old;
 	f64	motion;
+
 	t_player	*p;
 
 	p = &wolf->player;
 	if (event.type == SDL_MOUSEMOTION)
 	{
 		motion = -(f64)(event.motion.xrel * 0.001f);
-		wolf->cos_rot = cos(motion);
-		wolf->sin_rot = sin(motion);
+		wolf->view += (sint32)(event.motion.yrel);
+		if (wolf->view > H/2)
+			wolf->view = H/2;
+		else if (wolf->view < -H/2)
+			wolf->view = -H/2;
+		wolf->cosine = cos(motion);
+		wolf->sine = sin(motion);
 		old.x = p->direction.x;
-		p->direction.x = p->direction.x * wolf->cos_rot - p->direction.y * wolf->sin_rot;
-		p->direction.y = old.x * wolf->sin_rot + p->direction.y * wolf->cos_rot;
+		p->direction.x = p->direction.x * wolf->cosine - p->direction.y * wolf->sine;
+		p->direction.y = old.x * wolf->sine + p->direction.y * wolf->cosine;
 		old.y = p->plane.x;
-		p->plane.x = p->plane.x * wolf->cos_rot - p->plane.y * wolf->sin_rot;
-		p->plane.y = old.y * wolf->sin_rot + p->plane.y * wolf->cos_rot;
+		p->plane.x = p->plane.x * wolf->cosine - p->plane.y * wolf->sine;
+		p->plane.y = old.y * wolf->sine + p->plane.y * wolf->cosine;
 	}
 }

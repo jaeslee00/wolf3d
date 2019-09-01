@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hud.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 17:19:22 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/31 17:35:57 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/01 11:46:59 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 void	draw_hud(t_wolf *wolf, uint32 deltaframe)
 {
 	if (wolf->flag & 1UL << 8)
-		minimap(wolf);
+		minimap(wolf, wolf->player.minimap_width, wolf->player.minimap_height);
 	draw_bar(wolf, wolf->player.health);
 	draw_shotgun(wolf, deltaframe);
 }

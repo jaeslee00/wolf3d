@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/31 18:28:51 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/01 12:32:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@
 # include "bmp_reader.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-# define W	(2560)
+// # define W	(2560)
+// # define H	(1080)
+# define W	(1920)
 # define H	(1080)
-//# define W	(1920)
-//# define H	(1080)
 
 # define TEXTURE_0	0
 # define TEXTURE_1	1
@@ -126,7 +126,12 @@ typedef struct	s_player
 	t_2d		direction;
 	t_2d		plane;
 	f32			speed;
+	//TODO (jae) : maybe it's better to put t_minimap + minimap infos into another structure heheh
 	t_minimap	*m;
+	sint32		minimap_width;
+	sint32		minimap_height;
+	sint32		minimap_zoom;
+	//////////////////////////////////////
 	int			health;
 }				t_player;
 
@@ -161,15 +166,18 @@ typedef struct	s_wolf
 	uint32		*img;
 	t_mem		mem;
 	sint8		**map;
+	sint32		map_width;
+	sint32		map_height;
 	t_door		*doors;
 	sint32		nbr_of_doors;
 	t_texture	*tex;
 	uint32		flag;
-	uint8		res;
-	f32			sin_rot;
-	f32			cos_rot;
+uint8		res;
+	f32			sine;
+	f32			cosine;
 	t_animation	a;
-	}				t_wolf;
+	sint32		view;
+}				t_wolf;
 
 void				draw_hud(t_wolf *wolf, uint32 deltaframe);
 t_2d_p			init_2d(sint32 x, sint32 y);
@@ -209,7 +217,7 @@ void			mem_init(t_wolf *wolf);
 void			is_alloc(void *mem, t_wolf *wolf, sint32 error);
 void			draw_to_img(t_wolf wolf);
 void			pers_keys(sint32 keycode, t_wolf *wolf);
-void			minimap(t_wolf *wolf);
+void			minimap(t_wolf *wolf, sint32 minimap_width, sint32 minimap_height);
 void			mouse_movement(t_wolf *wolf, SDL_Event event);
 void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
 sint32			lighting(sint32 color, t_raycaster *ray);
