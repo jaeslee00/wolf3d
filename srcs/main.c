@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/31 18:08:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/01 11:51:50 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	SDL_Init(SDL_INIT_EVERYTHING);
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 									 SDL_WINDOWPOS_CENTERED, W, H, 0);
-	SDL_SetWindowBordered(wolf->sdl.win, SDL_FALSE);
+	SDL_SetWindowBordered(wolf->sdl.win, SDL_TRUE);
 	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(uint32));
 	wolf->player.direction.x = -1;
 	wolf->player.direction.y = 0;
@@ -47,14 +47,15 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->map_height = wolf->obj.size / wolf->obj.len;
 	wolf->player.minimap_width = wolf->map_width + 1;
 	wolf->player.minimap_height = wolf->map_height + 1;
-	wolf->player.minimap_zoom = 10;
+	wolf->player.minimap_zoom = 20;
+	wolf->a.size = 4;
 	is_alloc(wolf->doors = ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
 	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, (wolf->obj.size / wolf->obj.len) * (wolf->obj.len) * sizeof(t_minimap)), wolf, -1);
 }
 
 void	ceiling(uint32 *img)
 {
-sint32	x;
+	sint32	x;
 	sint32	y;
 	sint32	y1;
 	sint32	color;
@@ -129,7 +130,7 @@ int	main(int ac, char **av)
 			raycast(&wolf);
 			if (i == 0)
 				draw_hud(&wolf, 16);
-else
+			else
 				draw_hud(&wolf, frames[i] - frames[i - 1]);
 			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img,
 				W * sizeof(uint32));

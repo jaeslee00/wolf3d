@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:02:53 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/30 15:07:50 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/01 12:04:19 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,14 @@ void	mouse_movement(t_wolf *wolf, SDL_Event event)
 {
 	t_2d		old;
 	f64	motion;
+
 	t_player	*p;
 
 	p = &wolf->player;
 	if (event.type == SDL_MOUSEMOTION)
 	{
 		motion = -(f64)(event.motion.xrel * 0.001f);
+		wolf->view += (sint32)(event.motion.yrel);
 		wolf->cos_rot = cos(motion);
 		wolf->sin_rot = sin(motion);
 		old.x = p->direction.x;
