@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/01 11:51:50 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/01 12:32:43 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, (wolf->obj.size / wolf->obj.len) * (wolf->obj.len) * sizeof(t_minimap)), wolf, -1);
 }
 
-void	ceiling(uint32 *img)
+void	ceiling(uint32 *img, t_wolf *wolf)
 {
 	sint32	x;
 	sint32	y;
@@ -66,7 +66,7 @@ void	ceiling(uint32 *img)
 	y = 0;
 	y1 = H - 1;
 	per = 2.71f;
-	while (y < (H / 2))
+	while (y < (H / 2) - wolf->view)
 	{
 		x = 0;
 		if (color == 0)
@@ -76,7 +76,22 @@ void	ceiling(uint32 *img)
 		while (x < W - 1)
 		{
 			img[x + y * W] = color;
-			img[x + y1 * W] = 0x222222 + color;
+			x++;
+		}
+		per -= 0.01f;
+		y++;
+	}
+	y = 0;
+	while (y < (H / 2) + wolf->view)
+	{
+		x = 0;
+		if (color == 0)
+			color = 0;
+		else
+			color = rgb_lerp(0x111111, per, 0x222222);
+		while (x < W - 1)
+		{
+			img[x + y1 * W] = 0x333333 + color;
 			x++;
 		}
 		per -= 0.01f;
@@ -126,7 +141,7 @@ int	main(int ac, char **av)
 					SDL_GetTicks() - frames[i - 1]);
 			event_handler(&wolf, wolf.map, wolf.doors);
 			frames[i] = SDL_GetTicks();
-			ceiling(wolf.img);
+			ceiling(wolf.img, &wolf);
 			raycast(&wolf);
 			if (i == 0)
 				draw_hud(&wolf, 16);
