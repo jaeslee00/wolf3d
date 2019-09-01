@@ -40,20 +40,24 @@ void	draw_bar(t_wolf *wolf, int percent)
 	}
 }
 
+void	draw_gun(t_wolf *wolf, uint32 tex_id)
+{
+	draw_sprite(wolf, init_2d((W / 2) - (wolf->tex[tex_id].width / 2) + 2,
+		H - (wolf->tex[tex_id].height * wolf->a.size) + (2 * wolf->a.size)) ,
+		wolf->tex[tex_id], wolf->a.size);
+}
+
 void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 {
 	if (wolf->flag & 1UL << 9)
 	{
 		wolf->a.gun += deltaframe;
 		if (wolf->a.gun < 100)
-			draw_sprite(wolf, init_2d((W / 2) - (wolf->tex[6].width / 2)+
-									   2, H - wolf->tex[6].height + 2),wolf->tex[6]);
+			draw_gun(wolf, 6);
 		else if(wolf->a.gun < 150)
-			draw_sprite(wolf, init_2d((W / 2) - (wolf->tex[7].width / 2)+
-									   2, H - wolf->tex[7].height + 2),wolf->tex[7]);
+			draw_gun(wolf, 7);
 		else
-			draw_sprite(wolf, init_2d((W / 2) - (wolf->tex[7].width / 2)+
-									   2, H - wolf->tex[8].height + 2),wolf->tex[8]);
+			draw_gun(wolf, 8);
 		if (wolf->a.gun >= 400)
 		{
 			wolf->flag &= ~(1UL << 9);
@@ -61,8 +65,7 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 		}
 	}
 	else
-		draw_sprite(wolf, init_2d((W / 2) - (wolf->tex[5].width / 2) + 2,
-								   H - wolf->tex[5].height + 2), wolf->tex[5]);
+		draw_gun(wolf, 5);
 }
 
 void	draw_hud(t_wolf *wolf, uint32 deltaframe)
@@ -71,4 +74,4 @@ void	draw_hud(t_wolf *wolf, uint32 deltaframe)
 		minimap(wolf);
 	draw_bar(wolf, wolf->player.health);
 	draw_shotgun(wolf, deltaframe);
-	}
+}

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/31 17:34:00 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/01 07:45:35 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->flag = 0;
 	wolf->dist = perp_dist(wolf);
 	wolf->player.health = 75;
+	wolf->a.size = (W * H) / ((W * H) / 2);
 	is_alloc(wolf->doors = ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
 	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, (wolf->obj.size / wolf->obj.len) * (wolf->obj.len) * sizeof(t_minimap)), wolf, -1);
 }
@@ -91,7 +92,7 @@ int	main(int ac, char **av)
 		fd = open(av[1], O_RDONLY);
 	else
 		fd = open("wolf3d.map", O_RDONLY);
-	printf("size of wolf = %ld texture %ld door %ld\n", sizeof(wolf), sizeof(t_texture) , sizeof(t_door));
+	//printf("size of wolf = %ld texture %ld door %ld\n", sizeof(wolf), sizeof(t_texture) , sizeof(t_door));
 	if (fd > 0)
 	{
 		tkneizer(fd, &wolf);
