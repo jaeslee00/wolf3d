@@ -21,12 +21,11 @@
 # define WOLF3D_H
 # include "libft.h"
 # include "draw.h"
-# include "bmp_reader.h"
 # include <math.h>
 # include <SDL2/SDL.h>
 // # define W	(2560)
 // # define H	(1080)
-# define W	(1920)
+# define W	(2560)
 # define H	(1080)
 
 # define TEXTURE_0	0
@@ -35,7 +34,6 @@
 # define TEXTURE_3	3
 # define TEXTURE_4	4
 
-# define BMP_HEADER_SIZE 54
 # ifndef INT_MAX
 #  define INT_MAX 2147483647
 # endif
@@ -55,8 +53,8 @@ typedef short int			sint16;
 typedef unsigned int		uint32;
 typedef int					sint32;
 
-typedef unsigned long int	uint64;
-typedef long int			sint64;
+typedef unsigned long long int	uint64;
+typedef long long int			sint64;
 
 typedef float				f32;
 typedef double				f64;
@@ -137,8 +135,9 @@ typedef struct	s_player
 
 typedef struct	s_animation
 {
-	sint32 gun;
-	uint32 size;
+	sint32	gun;
+	uint32	frame;
+	uint32	size;
 	}				t_animation;
 
 typedef struct	s_raycaster
@@ -179,6 +178,7 @@ uint8		res;
 	sint32		view;
 }				t_wolf;
 
+void				*test(void *b, int c, size_t len);
 void				draw_hud(t_wolf *wolf, uint32 deltaframe);
 t_2d_p			init_2d(sint32 x, sint32 y);
 void				draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, uint32 size);
@@ -219,6 +219,8 @@ void			draw_to_img(t_wolf wolf);
 void			pers_keys(sint32 keycode, t_wolf *wolf);
 void			minimap(t_wolf *wolf, sint32 minimap_width, sint32 minimap_height);
 void			mouse_movement(t_wolf *wolf, SDL_Event event);
+void			draw_gun(t_wolf *wolf, uint32 tex_id);
+void			draw_machinegun(t_wolf *wolf, uint32 deltaframe);
 void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
 sint32			lighting(sint32 color, t_raycaster *ray);
 t_texture		read_bmp(const sint8 *filename, t_wolf *wolf);

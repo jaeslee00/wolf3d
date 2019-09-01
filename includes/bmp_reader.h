@@ -12,21 +12,6 @@
 
 #include "wolf3d.h"
 
-typedef unsigned char	uint8;
-typedef char			sint8;
-
-typedef unsigned short int	uint16;
-typedef short int			sint16;
-
-typedef unsigned int	uint32;
-typedef int				sint32;
-
-typedef unsigned long int	uint64;
-typedef long int			sint64;
-
-typedef float			f32;
-typedef double			f64;
-
 typedef struct s_bitmap_header
 {
     uint16 file_type; // 0;

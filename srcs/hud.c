@@ -12,6 +12,32 @@
 
 #include "wolf3d.h"
 
+void	draw_crosshair(t_wolf *wolf)
+{
+		uint32	i;
+	uint32	j;
+	uint32	k;
+
+	i = (W / 2) - (5 * wolf->a.size);
+	j = (H / 2);
+	k = 0;
+	while (k < 10 * wolf->a.size)
+	{
+		wolf->img[i + j * W] = 0xFFFF00;
+		i++;
+		k++;
+	}
+	i = (W / 2);
+	j = (H / 2) - (5 * wolf->a.size);
+	k = 0;
+	while (k < 10 * wolf->a.size)
+	{
+		wolf->img[i + j * W] = 0xFFFF00;
+		j++;
+		k++;
+	}
+}
+
 void	draw_bar(t_wolf *wolf, int percent)
 {
 	sint32	size;
@@ -77,5 +103,9 @@ void	draw_hud(t_wolf *wolf, uint32 deltaframe)
 	if (wolf->flag & 1UL << 8)
 		minimap(wolf, wolf->player.minimap_width, wolf->player.minimap_height);
 	draw_bar(wolf, wolf->player.health);
-	draw_shotgun(wolf, deltaframe);
+	if (wolf->flag & 1UL << 10)
+		draw_shotgun(wolf, deltaframe);
+	else
+		draw_machinegun(wolf, deltaframe);
+	draw_crosshair(wolf);
 }

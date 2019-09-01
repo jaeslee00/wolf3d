@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include <string.h>
 
 void	load_textures(t_wolf *wolf)
 {
@@ -24,34 +25,55 @@ void	load_textures(t_wolf *wolf)
 	wolf->tex[7] = read_bmp("./texture/shotgun2.bmp", wolf);
 	wolf->tex[8] = read_bmp("./texture/shotgun3.bmp", wolf);
 	wolf->tex[9] = read_bmp("./texture/shotgun4.bmp", wolf);
-}
+	wolf->tex[10] = read_bmp("./texture/gun0.bmp", wolf);
+	wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf);
+	}
 
 void	ft_wolf_init(t_wolf *wolf)
 {
 	wolf->map = int_to_tab(wolf);
 	SDL_Init(SDL_INIT_EVERYTHING);
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
-									 SDL_WINDOWPOS_CENTERED, W, H, 0);
+		SDL_WINDOWPOS_CENTERED, W, H, 0);
 	SDL_SetWindowBordered(wolf->sdl.win, SDL_TRUE);
 	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(uint32));
 	wolf->player.direction.x = -1;
 	wolf->player.direction.y = 0;
 	wolf->player.plane.x = 0;
 	wolf->player.plane.y = 1;
-	is_alloc(wolf->tex = ft_mem(&wolf->mem, sizeof(t_texture) * 10), wolf, -1);
+	is_alloc(wolf->tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
 	load_textures(wolf);
 	wolf->player.speed = 0;
 	wolf->flag = 0;
 	wolf->dist = perp_dist(wolf);
 	wolf->player.health = 75;
-wolf->a.size = round(W / (2560 / 4));
-wolf->map_width = wolf->obj.len;
+	wolf->a.size = round(W / (2560 / 4));
+	wolf->map_width = wolf->obj.len;
 	wolf->map_height = wolf->obj.size / wolf->obj.len;
 	wolf->player.minimap_width = wolf->map_width + 1;
 	wolf->player.minimap_height = wolf->map_height + 1;
 	wolf->player.minimap_zoom = 20;
+	wolf->view = 0;
+	wolf->a.frame = 100;
 	is_alloc(wolf->doors = ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
 	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, (wolf->obj.size / wolf->obj.len) * (wolf->obj.len) * sizeof(t_minimap)), wolf, -1);
+}
+
+void	*test(void *b, int c, size_t len)
+{
+	uint32	*a1;
+	uint8		*a2;
+
+	a1 = (uint32 *)b;
+	while (len - 4 > 0)
+	{
+		*a1++ = c;
+		len -= 4;
+	}
+	a2 = (uint8 *)b;
+	while (len--)
+		*a2++ = c;
+	return (b);
 }
 
 void	ceiling(uint32 *img, t_wolf *wolf)
@@ -107,7 +129,7 @@ int	main(int ac, char **av)
 	t_wolf	wolf;
 	sint32	fd;
 	sint32	frames[61];
-
+	
 	mem_init(&wolf);
 	if (ac == 2)
 		fd = open(av[1], O_RDONLY);
@@ -137,6 +159,7 @@ int	main(int ac, char **av)
 				set_flag(&wolf, wolf.sdl.event);
 				mouse_movement(&wolf, wolf.sdl.event);
 			}
+			//ft_memset(img, 0, W * H * 4);
 			if (i != 0)
 				check_flag(&wolf, wolf.map,
 					SDL_GetTicks() - frames[i - 1]);

@@ -71,7 +71,7 @@ void ft_frametimes(sint32 *frames, sint32 *count)
 			ft_putchar('\n');
 			j++;
 		}
-		ft_bzero(frames, sizeof(sint32) * 61);
+		test(frames, 0, sizeof(sint32) * 61);
 		ft_putchar('\n');
 		*count = -1;
 	}
