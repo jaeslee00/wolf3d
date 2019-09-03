@@ -14,25 +14,28 @@
 
 void	draw_crosshair(t_wolf *wolf)
 {
-		uint32	i;
+	uint32	i;
 	uint32	j;
 	uint32	k;
 
 	i = (W / 2) - (5 * wolf->a.size);
 	j = (H / 2);
 	k = 0;
-	while (k < 10 * wolf->a.size)
+	while (k <= 10 * wolf->a.size)
 	{
-		wolf->img[i + j * W] = 0xFFFF00;
+		wolf->img[i + j * W] = rgb_lerp(wolf->img[i + j * W] - 0xFFFF00, 0.2f,
+			0xFFFF00);
 		i++;
 		k++;
 	}
 	i = (W / 2);
 	j = (H / 2) - (5 * wolf->a.size);
 	k = 0;
-	while (k < 10 * wolf->a.size)
+	while (k <= 10 * wolf->a.size)
 	{
-		wolf->img[i + j * W] = 0xFFFF00;
+		if (j != (H / 2))
+		wolf->img[i + j * W] = rgb_lerp(wolf->img[i + j * W] - 0xFFFF00,
+			0.2f, 0xFFFF00) - 0x0000FF;
 		j++;
 		k++;
 	}
@@ -70,7 +73,7 @@ void	draw_gun(t_wolf *wolf, uint32 tex_id)
 {
 	draw_sprite(wolf, init_2d((W / 2) - ((wolf->tex[tex_id].width * wolf->a.size) / 2) + 2,
 		H - (wolf->tex[tex_id].height * wolf->a.size) + (2 * wolf->a.size)) ,
-		wolf->tex[tex_id], wolf->a.size);
+				wolf->tex[tex_id], wolf->a.size);
 }
 
 void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
@@ -81,7 +84,10 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 		if (wolf->a.gun < 100)
 			draw_gun(wolf, 6);
 		else if(wolf->a.gun < 145)
+		{
+			wolf->view -= 10;
 			draw_gun(wolf, 7);
+		}
 		else if (wolf->a.gun < 250)
 			draw_gun(wolf, 9);
 		else if (wolf->a.gun < 500)
@@ -96,6 +102,8 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 	}
 	else
 		draw_gun(wolf, 5);
+	if(wolf->view < -H / 2)
+		wolf->view = -H / 2;
 }
 
 void	draw_hud(t_wolf *wolf, uint32 deltaframe)

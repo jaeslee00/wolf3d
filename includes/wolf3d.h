@@ -23,9 +23,7 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-// # define W	(2560)
-// # define H	(1080)
-# define W	(2560)
+# define W	(1920)
 # define H	(1080)
 
 # define TEXTURE_0	0

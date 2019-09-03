@@ -14,12 +14,12 @@
 
 void	ft_put_addr(void *mem)
 {
-	unsigned long	nb;
+	unsigned long long	nb;
 	unsigned char	addr[13];
 	char			*hex;
 	int				i;
 
-	nb = (unsigned long)mem;
+	nb = (unsigned long long)mem;
 	hex = "0123456789abcdef";
 	i = 0;
 	while (i < 12)

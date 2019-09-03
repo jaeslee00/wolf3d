@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-#include <string.h>
 
 void	load_textures(t_wolf *wolf)
 {
@@ -47,7 +46,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->flag = 0;
 	wolf->dist = perp_dist(wolf);
 	wolf->player.health = 75;
-	wolf->a.size = round(W / (2560 / 4));
+	wolf->a.size = round(W / (1920 / 4));
 	wolf->map_width = wolf->obj.len;
 	wolf->map_height = wolf->obj.size / wolf->obj.len;
 	wolf->player.minimap_width = wolf->map_width + 1;
@@ -147,7 +146,7 @@ int	main(int ac, char **av)
 		i = 1;
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
-		SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		//SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN);
 		while (1)
 		{
 			while (SDL_PollEvent(&wolf.sdl.event))

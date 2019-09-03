@@ -18,19 +18,16 @@ sint32 print_map(sint8 **map, t_obj obj, t_player *player, t_door *doors, t_wolf
 	sint32	lines;
 	sint32	i;
 	sint32	j;
-	sint32 k;
+	sint32	k;
 
 	lines = (obj.size / obj.len);
 	i = 0;
 	k = 0;
-	//printf("\n \t0  1  2  3  4  5  6  7  8  9  10 11\n\n");
 	while (i < lines)
 	{
 		j = 0;
 		while (j < obj.len)
 		{
-			//if (j == 0)
-				//printf("%d\t", i);
 			if (map[i][j] == 9)
 			{
 				map[i][j] = 0;
