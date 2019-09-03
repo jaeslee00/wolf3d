@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:42:47 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/31 14:12:02 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/03 20:22:32 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 void	interaction_door(t_door *doors, sint8 **map, sint32 i)
 {
 	if (doors[i].flag & 1UL)
-		{
-			doors[i].flag &= ~(1UL);
-			map[doors[i].pos.x][doors[i].pos.y] = 0;
-		}
-		else
-		{
-			doors[i].flag |= 1UL;
-		if (doors[i].flag & 1UL << 1)
-			map[doors[i].pos.x][doors[i].pos.y] = 3;
-else
-			map[doors[i].pos.x][doors[i].pos.y] = 5;
-		}
+	{
+		doors[i].flag &= ~(1UL);
+		map[doors[i].pos.y][doors[i].pos.x] = 0;
 	}
+	else
+	{
+		doors[i].flag |= 1UL;
+		if (doors[i].flag & 1UL << 1)
+			map[doors[i].pos.y][doors[i].pos.x] = 3;
+		else
+			map[doors[i].pos.y][doors[i].pos.x] = 5;
+	}
+}
 
 void	event_handler(t_wolf *wolf, sint8 **map, t_door *doors)
 {
@@ -66,17 +66,17 @@ sint32		direction_movement(t_wolf *wolf, sint8 **map, sint32 framedelta)
 	if (wolf->flag & 1UL || wolf->flag & 1UL << 1)
 	{
 		neg = (wolf->flag & 1UL) ? 1 : -1;
-		if (map[(sint32)(p->pos.x + neg * (p->direction.x * (time + 0.2f)))][(sint32)(p->pos.y)] == 0)
+		if (map[(sint32)(p->pos.y)][(sint32)(p->pos.x + neg * (p->direction.x * (time + 0.2f)))] == 0)
 			p->pos.x += neg * p->direction.x * time;
-		if (map[(sint32)(p->pos.x)][(sint32)(p->pos.y + neg * (p->direction.y * (time + 0.2f)))] == 0)
+		if (map[(sint32)(p->pos.y + neg * (p->direction.y * (time + 0.2f)))][(sint32)(p->pos.x)] == 0)
 			p->pos.y += neg * p->direction.y * time;
 	}
 	if (wolf->flag & 1UL << 3 || wolf->flag & 1UL << 2)
 	{
 		neg = (wolf->flag & 1UL << 3) ? 1 : -1;
-		if (map[(sint32)(p->pos.x + neg * (p->plane.x * (time + 0.2f)))][(sint32)(p->pos.y)] == 0)
+		if (map[(sint32)(p->pos.y)][(sint32)(p->pos.x + neg * (p->plane.x * (time + 0.2f)))] == 0)
 			p->pos.x += neg * (p->plane.x * time);
-		if (map[(sint32)(p->pos.x)][(sint32)(p->pos.y + neg * (p->plane.y * (time + 0.2f)))] == 0)
+		if (map[(sint32)(p->pos.y + neg * (p->plane.y * (time + 0.2f)))] [(sint32)(p->pos.x)]== 0)
 			p->pos.y += neg * (p->plane.y * time);
 	}
 	return (1);

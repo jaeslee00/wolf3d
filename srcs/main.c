@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/01 12:32:43 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/03 20:28:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int	main(int ac, char **av)
 	t_wolf	wolf;
 	sint32	fd;
 	sint32	frames[61];
-	
+
 	mem_init(&wolf);
 	if (ac == 2)
 		fd = open(av[1], O_RDONLY);
@@ -146,7 +146,7 @@ int	main(int ac, char **av)
 		i = 1;
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
-		//SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN);
+		//SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
 		while (1)
 		{
 			while (SDL_PollEvent(&wolf.sdl.event))

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 04:27:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/08/31 06:09:30 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/03 20:05:32 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,9 +248,9 @@ void	uniform_translation(sint32 transform[2], sint32 width, sint32 height, t_wol
 
 	zoom = wolf->player.minimap_zoom;
 	transform[0] = W / 2 - zoom * width / 2 -
-		(sint32)((f32)zoom * (wolf->player.pos.y * 2.0f - (f32)width) / 2.0f);
+		(sint32)((f32)zoom * (wolf->player.pos.x * 2.0f - (f32)width) / 2.0f);
 	transform[1] = H / 2 - zoom * height / 2 -
-		(sint32)((f32)zoom * (wolf->player.pos.x * 2.0f - (f32)height) / 2.0f);
+		(sint32)((f32)zoom * (wolf->player.pos.y * 2.0f - (f32)height) / 2.0f);
 }
 
 void	minimap_transform(t_minimap *m, t_wolf *wolf, sint32 x, sint32 y)

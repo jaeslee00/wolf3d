@@ -31,16 +31,16 @@ sint32 print_map(sint8 **map, t_obj obj, t_player *player, t_door *doors, t_wolf
 			if (map[i][j] == 9)
 			{
 				map[i][j] = 0;
-				player->pos.x = i;
-				player->pos.y = j;
+				player->pos.x = j;
+				player->pos.y = i;
 			}
 			else if (map[i][j] == 3 || map[i][j] == 5)
 			{
 				if (map[i][j] == 3)
 					doors[k].flag |= 1UL << 1;
 				doors[k].flag |= 1UL;
-				doors[k].pos.x = i;
-				doors[k].pos.y = j;
+				doors[k].pos.x = j;
+				doors[k].pos.y = i;
 				k++;
 				wolf->nbr_of_doors = k;
 			}
