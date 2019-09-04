@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 11:49:58 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 11:53:29 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ void	raycast_collision(sint8 **map, t_raycaster *ray, int *hit)
 		*hit = 1;
 	else if (map[ray->map.y][ray->map.x] == 3)
 	{
-		if (ray->side_dist.x > ray->side_dist.y + 0.5f)
-			(void)hit;
-		else
+		if (ray->side_dist.x < ray->side_dist.y + 0.5f)
 		{
 			*hit = 1;
 			ray->side = 3;
@@ -28,9 +26,7 @@ void	raycast_collision(sint8 **map, t_raycaster *ray, int *hit)
 	}
 	else if (map[ray->map.y][ray->map.x] == 5)
 	{
-		if (ray->side_dist.y > ray->side_dist.x + 0.5f)
-			(void)hit;
-		else
+		if (ray->side_dist.y < ray->side_dist.x + 0.5f)
 		{
 			*hit = 1;
 			ray->side = 2;
