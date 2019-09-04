@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/03 20:27:29 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 06:03:29 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,15 @@
 # include <SDL2/SDL.h>
 // # define W	(2560)
 // # define H	(1080)
-# define W	(1280)
-# define H	(720)
+# define W	(1920)
+# define H	(1280)
 
 # define TEXTURE_0	0
 # define TEXTURE_1	1
 # define TEXTURE_2	2
 # define TEXTURE_3	3
 # define TEXTURE_4	4
-
+# define ENEMY_BLANK 0x980088
 # ifndef INT_MAX
 #  define INT_MAX 2147483647
 # endif
@@ -147,14 +147,23 @@ typedef struct	s_raycaster
 	t_2d	side_dist;
 	t_2d	delta_dist;
 	t_2d	plane;
-	f64		perp_dist;
+	f32		perp_dist;
 	//id_t	tex_flag;
 	sint32	hit;
 	sint32	side;
-	f64	light;
 }				t_raycaster;
 
 typedef f32 (*funct)(t_raycaster * ray, t_player player);
+
+//TODO (jae) : need to have multiple textures for status of NPC
+typedef struct	s_npc
+{
+	sint32		id;
+	t_2d		pos;
+	sint32		status;
+	sint32		hp;
+	t_texture	*tex;
+}				t_npc;
 
 typedef struct	s_wolf
 {
@@ -171,11 +180,13 @@ typedef struct	s_wolf
 	sint32		nbr_of_doors;
 	t_texture	*tex;
 	uint32		flag;
-uint8		res;
+	uint8		res;
 	f32			sine;
 	f32			cosine;
 	t_animation	a;
 	sint32		view;
+	//TODO (jae) : probably allocate memory for this ?
+	t_npc		enemy[10];
 }				t_wolf;
 
 void				*test(void *b, int c, size_t len);
@@ -222,6 +233,8 @@ void			mouse_movement(t_wolf *wolf, SDL_Event event);
 void			draw_gun(t_wolf *wolf, uint32 tex_id);
 void			draw_machinegun(t_wolf *wolf, uint32 deltaframe);
 void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
-sint32			lighting(sint32 color, t_raycaster *ray);
+sint32			lighting(sint32 color, f32 distance);
 t_texture		read_bmp(const sint8 *filename, t_wolf *wolf);
+
+void			move_npc(t_npc *enemy);
 #endif

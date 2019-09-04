@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/03 20:28:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 05:37:02 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	load_textures(t_wolf *wolf)
 	wolf->tex[9] = read_bmp("./texture/shotgun4.bmp", wolf);
 	wolf->tex[10] = read_bmp("./texture/gun0.bmp", wolf);
 	wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf);
-	}
+	wolf->enemy[0].tex[0] = read_bmp("./texture/guard/guard00.bmp", wolf);
+}
 
 void	ft_wolf_init(t_wolf *wolf)
 {
@@ -41,6 +42,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.plane.x = 0;
 	wolf->player.plane.y = 1;
 	is_alloc(wolf->tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
+	is_alloc(wolf->enemy[0].tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
 	load_textures(wolf);
 	wolf->player.speed = 0;
 	wolf->flag = 0;
@@ -54,6 +56,8 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.minimap_zoom = 20;
 	wolf->view = 0;
 	wolf->a.frame = 100;
+	wolf->enemy[0].pos.x = 1.5f;
+	wolf->enemy[0].pos.y = 1.5f;
 	is_alloc(wolf->doors = ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
 	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, (wolf->obj.size / wolf->obj.len) * (wolf->obj.len) * sizeof(t_minimap)), wolf, -1);
 }
@@ -122,7 +126,7 @@ void	ceiling(uint32 *img, t_wolf *wolf)
 	}
 }
 
-int	main(int ac, char **av)
+int		main(int ac, char **av)
 {
 	sint32	i;
 	t_wolf	wolf;
@@ -146,7 +150,7 @@ int	main(int ac, char **av)
 		i = 1;
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
-		//SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
 		while (1)
 		{
 			while (SDL_PollEvent(&wolf.sdl.event))
@@ -166,6 +170,7 @@ int	main(int ac, char **av)
 			frames[i] = SDL_GetTicks();
 			ceiling(wolf.img, &wolf);
 			raycast(&wolf);
+			move_npc(&wolf.enemy[0]);
 			if (i == 0)
 				draw_hud(&wolf, 16);
 			else
