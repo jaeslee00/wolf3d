@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 11:14:29 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 11:49:58 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,18 +108,18 @@ void	draw_npc(t_wolf *wf)
 	// 		.......
 	//		npc_idx++;
 	// }
-	t_2d	relative_enemy_pos;
-	f32		distance;
+	t_2d	relative_npc_pos;
+	//TODO (jae) : Store these info in npc_structure to use it for rendering
+	relative_npc_pos.x = wf->npc[0].pos.x - pl.pos.x;
+	relative_npc_pos.y = wf->npc[0].pos.y - pl.pos.y;
 
-	relative_enemy_pos.x = wf->npc[0].pos.x - pl.pos.x;
-	relative_enemy_pos.y = wf->npc[0].pos.y - pl.pos.y;
-	distance = sqrt(relative_enemy_pos.x * relative_enemy_pos.x + relative_enemy_pos.y * relative_enemy_pos.y);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	f32		inverse_determinant = 1.0f / (pl.plane.x * pl.direction.y - pl.plane.y * pl.direction.x);
 	t_2d	transformed_sprite_pos;
 
-	transformed_sprite_pos.x = inverse_determinant * (pl.direction.y * relative_enemy_pos.x - pl.direction.x * relative_enemy_pos.y);
-	transformed_sprite_pos.y = inverse_determinant * (-pl.plane.y * relative_enemy_pos.x + pl.plane.x * relative_enemy_pos.y);
+	transformed_sprite_pos.x = inverse_determinant * (pl.direction.y * relative_npc_pos.x - pl.direction.x * relative_npc_pos.y);
+	transformed_sprite_pos.y = inverse_determinant * (-pl.plane.y * relative_npc_pos.x + pl.plane.x * relative_npc_pos.y);
 
 	sint32	sprite_height = abs((sint32)((f32)H / transformed_sprite_pos.y));
 	sint32	sprite_width = sprite_height;
@@ -164,12 +164,12 @@ void	draw_npc(t_wolf *wf)
 			tex_height_scale = (y + wf->view) * 2 - H + sprite_height;
 			tex_coord.y =
 				((tex_height_scale * wf->npc[0].tex->height) / sprite_height) / 2;
-			if (transformed_sprite_pos.y > 0 && (distance < wf->perp_dist[x]))
+			if (transformed_sprite_pos.y > 0 && (transformed_sprite_pos.y < wf->perp_dist[x]))
 			{
-				if (wf->npc[0].tex->data[tex_coord.x + tex_coord.y * wf->npc[0].tex->width] != npc_BLANK)
+				if (wf->npc[0].tex->data[tex_coord.x + tex_coord.y * wf->npc[0].tex->width] != NPC_BLANK)
 				{
 					color = wf->npc[0].tex->data[tex_coord.x + tex_coord.y * wf->npc[0].tex->width];
-					wf->img[x + y * W] = lighting(color, distance);
+					wf->img[x + y * W] = lighting(color, transformed_sprite_pos.y);
 				}
 			}
 			y++;

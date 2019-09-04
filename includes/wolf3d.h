@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 11:10:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 11:46:30 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define TEXTURE_2	2
 # define TEXTURE_3	3
 # define TEXTURE_4	4
-# define ENEMY_BLANK 0x980088
+# define NPC_BLANK 0x980088
 # ifndef INT_MAX
 #  define INT_MAX 2147483647
 # endif
@@ -187,7 +187,7 @@ typedef struct	s_wolf
 	sint32		view;
 	//TODO (jae) : probably allocate memory for this ?
 	t_npc		npc[10];
-	f32			perp_dist[1280];
+	f32			perp_dist[W];
 }				t_wolf;
 
 void				*test(void *b, int c, size_t len);
