@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 11:53:29 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 12:12:19 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,11 @@ void	draw_npc(t_wolf *wf)
 	//		npc_idx++;
 	// }
 	t_2d	relative_npc_pos;
+	for (int i=0; i < 5; i++)
+	{
 	//TODO (jae) : Store these info in npc_structure to use it for rendering
-	relative_npc_pos.x = wf->npc[0].pos.x - pl.pos.x;
-	relative_npc_pos.y = wf->npc[0].pos.y - pl.pos.y;
+	relative_npc_pos.x = wf->npc[i].pos.x - pl.pos.x;
+	relative_npc_pos.y = wf->npc[i].pos.y - pl.pos.y;
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -153,24 +155,25 @@ void	draw_npc(t_wolf *wf)
 	while (x < draw_end.x)
 	{
 		tex_width_scale = x - draw_start.x - x_offset;
-		tex_coord.x = tex_width_scale * wf->npc[0].tex->width / sprite_width;
+		tex_coord.x = tex_width_scale * wf->npc[i].tex->width / sprite_width;
 		y = draw_start.y;
 		while (y < draw_end.y)
 		{
 			tex_height_scale = (y + wf->view) * 2 - H + sprite_height;
 			tex_coord.y =
-				((tex_height_scale * wf->npc[0].tex->height) / sprite_height) / 2;
+				((tex_height_scale * wf->npc[i].tex->height) / sprite_height) / 2;
 			if (transformed_sprite_pos.y > 0 && (transformed_sprite_pos.y < wf->perp_dist[x]))
 			{
-				if (wf->npc[0].tex->data[tex_coord.x + tex_coord.y * wf->npc[0].tex->width] != NPC_BLANK)
+				if (wf->npc[i].tex->data[tex_coord.x + tex_coord.y * wf->npc[i].tex->width] != NPC_BLANK)
 				{
-					color = wf->npc[0].tex->data[tex_coord.x + tex_coord.y * wf->npc[0].tex->width];
+					color = wf->npc[i].tex->data[tex_coord.x + tex_coord.y * wf->npc[i].tex->width];
 					wf->img[x + y * W] = lighting(color, transformed_sprite_pos.y);
 				}
 			}
 			y++;
 		}
 		x++;
+	}
 	}
 }
 
