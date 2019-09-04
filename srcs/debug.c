@@ -61,15 +61,15 @@ void ft_frametimes(sint32 *frames, sint32 *count)
 		j = 0;
 		while (*count <= 59)
 		{
-		//ft_putnbr(frames[*count] - frames[j]);
-		//	ft_putstr(" ms ");
+			ft_putnbr(frames[*count] - frames[j]);
+			ft_putstr(" ms ");
 			*count += 1;
 			if (*count % 12 == 0)
-		//	ft_putchar('\n');
+			ft_putchar('\n');
 			j++;
 		}
 		test(frames, 0, sizeof(sint32) * 61);
-	//	ft_putchar('\n');
+		ft_putchar('\n');
 		*count = -1;
 	}
 }

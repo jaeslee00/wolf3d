@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 08:02:13 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 10:45:52 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,11 +137,12 @@ void	draw_npc(t_wolf *wf)
 	if (draw_end.x >= W)
 		draw_end.x = W - 1;
 
-	sint32 x;
-	sint32 y;
-	t_2d_p tex_coord;
-	sint32 tex_width_scale;
-	sint32 tex_height_scale;
+	sint32	x;
+	sint32	y;
+	t_2d_p	tex_coord;
+	sint32	tex_width_scale;
+	sint32	tex_height_scale;
+	sint32	color;
 
 	x = draw_start.x;
 	while (x < draw_end.x)
@@ -154,10 +155,13 @@ void	draw_npc(t_wolf *wf)
 			tex_height_scale = (y + wf->view) * 2 - H + sprite_height;
 			tex_coord.y =
 				((tex_height_scale * wf->enemy[0].tex->height) / sprite_height) / 2;
-			if (transformed_sprite_pos.y > 0)
+			if (transformed_sprite_pos.y > 0 && (distance < wf->perp_dist[x]))
 			{
 				if (wf->enemy[0].tex->data[tex_coord.x + tex_coord.y * wf->enemy[0].tex->width] != ENEMY_BLANK)
-					wf->img[x + y * W] = lighting(wf->enemy[0].tex->data[tex_coord.x + tex_coord.y * wf->enemy[0].tex->width], distance);
+				{
+					color = wf->enemy[0].tex->data[tex_coord.x + tex_coord.y * wf->enemy[0].tex->width];
+					wf->img[x + y * W] = lighting(color, distance);
+				}
 			}
 			y++;
 		}
@@ -183,6 +187,7 @@ void	raycast(t_wolf *wf)
 		dda_init(&ray, wf->player);
 		dda_raycast(wf, &ray);
 		ray.perp_dist = wf->dist[ray.side](&ray, wf->player);
+		wf->perp_dist[x] = ray.perp_dist;
 		line_height = (sint32)((f32)H / ray.perp_dist);
 		if (line_height > 1)
 			draw_wall(wf, line_height, x, &ray);
