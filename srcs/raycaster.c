@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 07:57:10 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 08:02:13 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	draw_npc(t_wolf *wf)
 
 	sint32	sprite_height = abs((sint32)((f32)H / transformed_sprite_pos.y));
 	sint32	sprite_width = sprite_height;
-	sint32	sprite_pos_screen = (sint32)(((f32)W / 2.0f) * (1.0f + transformed_sprite_pos.x / transformed_sprite_pos.y));
+	sint32	sprite_pos_screen = (sint32)(((f32)W) * (1.0f + transformed_sprite_pos.x / transformed_sprite_pos.y));
 
 	t_2d_p	draw_start;
 	t_2d_p	draw_end;
@@ -126,8 +126,8 @@ void	draw_npc(t_wolf *wf)
 	if (draw_end.y >= H)
 		draw_end.y = H - 1;
 
-	draw_start.x = -sprite_width / 2 + sprite_pos_screen;
-	draw_end.x = sprite_width / 2 + sprite_pos_screen;
+	draw_start.x = -sprite_width / 2 + sprite_pos_screen / 2;
+	draw_end.x = sprite_width / 2 + sprite_pos_screen / 2;
 	sint32	x_offset = 0;
 	if (draw_start.x < 0)
 	{
