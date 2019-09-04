@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 07:18:37 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 07:57:10 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ void	dda_init(t_raycaster *ray, t_player p)
 //TODO (jae) : need a y-depth buffer to sort order of rendering npc, objects and walls
 //TODO (jae) : sorting-algorithm needed.. depth_buffer[0 ... nbr_of_npc] = npc_id;
 //TODO (jae) : need a condition to call draw_enemy() for only those are within the player's view for optimization
-//TODO (jae) : left-end of npc sprite is not working properly
 
 void	draw_npc(t_wolf *wf)
 {
@@ -104,7 +103,7 @@ void	draw_npc(t_wolf *wf)
 	f32		distance;
 
 	relative_enemy_pos.x = wf->enemy[0].pos.x - pl.pos.x;
-	relative_enemy_pos.y = wf->enemy[0].pos.y - wf->player.pos.y;
+	relative_enemy_pos.y = wf->enemy[0].pos.y - pl.pos.y;
 	distance = sqrt(relative_enemy_pos.x * relative_enemy_pos.x + relative_enemy_pos.y * relative_enemy_pos.y);
 
 	f32		inverse_determinant = 1.0f / (pl.plane.x * pl.direction.y - pl.plane.y * pl.direction.x);
@@ -113,25 +112,29 @@ void	draw_npc(t_wolf *wf)
 	transformed_sprite_pos.x = inverse_determinant * (pl.direction.y * relative_enemy_pos.x - pl.direction.x * relative_enemy_pos.y);
 	transformed_sprite_pos.y = inverse_determinant * (-pl.plane.y * relative_enemy_pos.x + pl.plane.x * relative_enemy_pos.y);
 
-	sint32 sprite_height = abs((sint32)((f32)H / transformed_sprite_pos.y));
+	sint32	sprite_height = abs((sint32)((f32)H / transformed_sprite_pos.y));
 	sint32	sprite_width = sprite_height;
-	sint32 sprite_pos_screen = (W / 2) * (1.0f + transformed_sprite_pos.x / transformed_sprite_pos.y);
+	sint32	sprite_pos_screen = (sint32)(((f32)W / 2.0f) * (1.0f + transformed_sprite_pos.x / transformed_sprite_pos.y));
 
-	t_2d_p draw_start;
-	t_2d_p draw_end;
+	t_2d_p	draw_start;
+	t_2d_p	draw_end;
 
 	draw_start.y = -sprite_height / 2 + H / 2 - wf->view;
 	draw_end.y = sprite_height / 2 + H / 2 - wf->view;
 	if (draw_start.y < 0)
 		draw_start.y = 0;
-	if (draw_end.y > H)
+	if (draw_end.y >= H)
 		draw_end.y = H - 1;
 
 	draw_start.x = -sprite_width / 2 + sprite_pos_screen;
 	draw_end.x = sprite_width / 2 + sprite_pos_screen;
+	sint32	x_offset = 0;
 	if (draw_start.x < 0)
+	{
+		x_offset = draw_start.x;
 		draw_start.x = 0;
-	if (draw_end.x > W)
+	}
+	if (draw_end.x >= W)
 		draw_end.x = W - 1;
 
 	sint32 x;
@@ -143,8 +146,8 @@ void	draw_npc(t_wolf *wf)
 	x = draw_start.x;
 	while (x < draw_end.x)
 	{
-		tex_width_scale = x - draw_start.x;
-		tex_coord.x = (tex_width_scale * wf->enemy[0].tex->width) / sprite_width;
+		tex_width_scale = x - draw_start.x - x_offset;
+		tex_coord.x = tex_width_scale * wf->enemy[0].tex->width / sprite_width;
 		y = draw_start.y;
 		while (y < draw_end.y)
 		{
