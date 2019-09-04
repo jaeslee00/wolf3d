@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 12:18:06 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 23:03:23 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ void	load_textures(t_wolf *wolf)
 	wolf->tex[9] = read_bmp("./texture/shotgun4.bmp", wolf);
 	wolf->tex[10] = read_bmp("./texture/gun0.bmp", wolf);
 	wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf);
-	wolf->npc[0].tex[0] = read_bmp("./texture/guard/guard00.bmp", wolf);
-	wolf->npc[1].tex[0] = read_bmp("./texture/guard/guard00.bmp", wolf);
-	wolf->npc[2].tex[0] = read_bmp("./texture/guard/guard00.bmp", wolf);
-	wolf->npc[3].tex[0] = read_bmp("./texture/guard/guard00.bmp", wolf);
-	wolf->npc[4].tex[0] = read_bmp("./texture/guard/guard00.bmp", wolf);
+	wolf->tex[12] = read_bmp("./texture/guard/guard00.bmp", wolf);
+	wolf->tex[13] = read_bmp("./texture/guard/guard00.bmp", wolf);
+	wolf->tex[14] = read_bmp("./texture/guard/guard00.bmp", wolf);
+	wolf->tex[15] = read_bmp("./texture/guard/guard00.bmp", wolf);
+	wolf->tex[16] = read_bmp("./texture/guard/guard00.bmp", wolf);
 }
 
 void	ft_wolf_init(t_wolf *wolf)
@@ -46,11 +46,6 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.plane.x = 0;
 	wolf->player.plane.y = 1;
 	is_alloc(wolf->tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
-	is_alloc(wolf->npc[0].tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
-	is_alloc(wolf->npc[1].tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
-	is_alloc(wolf->npc[2].tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
-	is_alloc(wolf->npc[3].tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
-	is_alloc(wolf->npc[4].tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
 	load_textures(wolf);
 	wolf->player.speed = 0;
 	wolf->flag = 0;
@@ -64,16 +59,16 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.minimap_zoom = 20;
 	wolf->view = 0;
 	wolf->a.frame = 100;
-	wolf->npc[0].pos.x = 8.0f;
-	wolf->npc[0].pos.y = 3.0f;
-	wolf->npc[1].pos.x = 6.0f;
-	wolf->npc[1].pos.y = 1.5f;
-	wolf->npc[2].pos.x = 13.0f;
-	wolf->npc[2].pos.y = 7.0f;
-	wolf->npc[3].pos.x = 6.5f;
-	wolf->npc[3].pos.y = 8.5f;
-	wolf->npc[4].pos.x = 9.5f;
-	wolf->npc[4].pos.y = 2.5f;
+	wolf->entity[0].pos.x = 8.0f;
+	wolf->entity[0].pos.y = 3.0f;
+	wolf->entity[1].pos.x = 6.0f;
+	wolf->entity[1].pos.y = 1.5f;
+	wolf->entity[2].pos.x = 13.0f;
+	wolf->entity[2].pos.y = 7.0f;
+	wolf->entity[3].pos.x = 6.5f;
+	wolf->entity[3].pos.y = 8.5f;
+	wolf->entity[4].pos.x = 9.5f;
+	wolf->entity[4].pos.y = 2.5f;
 	is_alloc(wolf->doors = ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
 	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, (wolf->obj.size / wolf->obj.len) * (wolf->obj.len) * sizeof(t_minimap)), wolf, -1);
 }
@@ -186,7 +181,7 @@ int		main(int ac, char **av)
 			frames[i] = SDL_GetTicks();
 			ceiling(wolf.img, &wolf);
 			raycast(&wolf);
-			move_npc(&wolf.npc[0]);
+			update_entity(&wolf);
 			if (i == 0)
 				draw_hud(&wolf, 16);
 			else

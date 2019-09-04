@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 12:18:21 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 23:02:14 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,14 +156,14 @@ typedef struct	s_raycaster
 typedef f32 (*funct)(t_raycaster * ray, t_player player);
 
 //TODO (jae) : need to have multiple textures for status of NPC
-typedef struct	s_npc
+typedef struct	s_entity
 {
 	sint32		id;
 	t_2d		pos;
 	sint32		status;
 	sint32		hp;
 	t_texture	*tex;
-}				t_npc;
+}				t_entity;
 
 typedef struct	s_wolf
 {
@@ -186,7 +186,7 @@ typedef struct	s_wolf
 	t_animation	a;
 	sint32		view;
 	//TODO (jae) : probably allocate memory for this ?
-	t_npc		npc[10];
+	t_entity	entity[10];
 	f32			perp_dist[W];
 }				t_wolf;
 
@@ -237,5 +237,5 @@ void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
 sint32			lighting(sint32 color, f32 distance);
 t_texture		read_bmp(const sint8 *filename, t_wolf *wolf);
 
-void			move_npc(t_npc *enemy);
+void			update_entity(t_wolf *wf);
 #endif
