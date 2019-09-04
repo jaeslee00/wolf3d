@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 10:41:12 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 11:10:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ typedef struct	s_wolf
 	t_animation	a;
 	sint32		view;
 	//TODO (jae) : probably allocate memory for this ?
-	t_npc		enemy[10];
+	t_npc		npc[10];
 	f32			perp_dist[1280];
 }				t_wolf;
 

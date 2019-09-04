@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 10:45:52 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 11:14:29 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	dda_init(t_raycaster *ray, t_player p)
 	}
 }
 
-//TODO (jae) : need a y-depth buffer to sort order of rendering npc, objects and walls
+//TODO (jae) : need a y-depth buffer to sort order of rendering npc, objects
 //TODO (jae) : sorting-algorithm needed.. depth_buffer[0 ... nbr_of_npc] = npc_id;
 //TODO (jae) : need a condition to call draw_enemy() for only those are within the player's view for optimization
 
@@ -98,12 +98,21 @@ void	draw_npc(t_wolf *wf)
 {
 	t_player pl;
 	pl = wf->player;
-
+	// sint32	npc_array[100]; // variable inside the array is npc_id;
+	// sint32	npc_idx = 0;
+	// depth_sort(npc_array, wf->npc);
+	// while (npc_idx < nbr_of_npc)
+	// {
+	// 		relative_enemy_pos.x = wf->npc[npc_array[npx_idx]].pos.x - pl.pos.x;
+	// 		relative_enemy_pos.y = wf->npc[npc_array[npx_idx]].pos.y - pl.pos.y;
+	// 		.......
+	//		npc_idx++;
+	// }
 	t_2d	relative_enemy_pos;
 	f32		distance;
 
-	relative_enemy_pos.x = wf->enemy[0].pos.x - pl.pos.x;
-	relative_enemy_pos.y = wf->enemy[0].pos.y - pl.pos.y;
+	relative_enemy_pos.x = wf->npc[0].pos.x - pl.pos.x;
+	relative_enemy_pos.y = wf->npc[0].pos.y - pl.pos.y;
 	distance = sqrt(relative_enemy_pos.x * relative_enemy_pos.x + relative_enemy_pos.y * relative_enemy_pos.y);
 
 	f32		inverse_determinant = 1.0f / (pl.plane.x * pl.direction.y - pl.plane.y * pl.direction.x);
@@ -148,18 +157,18 @@ void	draw_npc(t_wolf *wf)
 	while (x < draw_end.x)
 	{
 		tex_width_scale = x - draw_start.x - x_offset;
-		tex_coord.x = tex_width_scale * wf->enemy[0].tex->width / sprite_width;
+		tex_coord.x = tex_width_scale * wf->npc[0].tex->width / sprite_width;
 		y = draw_start.y;
 		while (y < draw_end.y)
 		{
 			tex_height_scale = (y + wf->view) * 2 - H + sprite_height;
 			tex_coord.y =
-				((tex_height_scale * wf->enemy[0].tex->height) / sprite_height) / 2;
+				((tex_height_scale * wf->npc[0].tex->height) / sprite_height) / 2;
 			if (transformed_sprite_pos.y > 0 && (distance < wf->perp_dist[x]))
 			{
-				if (wf->enemy[0].tex->data[tex_coord.x + tex_coord.y * wf->enemy[0].tex->width] != ENEMY_BLANK)
+				if (wf->npc[0].tex->data[tex_coord.x + tex_coord.y * wf->npc[0].tex->width] != npc_BLANK)
 				{
-					color = wf->enemy[0].tex->data[tex_coord.x + tex_coord.y * wf->enemy[0].tex->width];
+					color = wf->npc[0].tex->data[tex_coord.x + tex_coord.y * wf->npc[0].tex->width];
 					wf->img[x + y * W] = lighting(color, distance);
 				}
 			}
