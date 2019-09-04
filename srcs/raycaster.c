@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 12:12:19 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 12:13:16 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,73 +107,73 @@ void	draw_npc(t_wolf *wf)
 	t_2d	relative_npc_pos;
 	for (int i=0; i < 5; i++)
 	{
-	//TODO (jae) : Store these info in npc_structure to use it for rendering
-	relative_npc_pos.x = wf->npc[i].pos.x - pl.pos.x;
-	relative_npc_pos.y = wf->npc[i].pos.y - pl.pos.y;
+		//TODO (jae) : Store these info in npc_structure to use it for rendering
+		relative_npc_pos.x = wf->npc[i].pos.x - pl.pos.x;
+		relative_npc_pos.y = wf->npc[i].pos.y - pl.pos.y;
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	f32		inverse_determinant = 1.0f / (pl.plane.x * pl.direction.y - pl.plane.y * pl.direction.x);
-	t_2d	transformed_sprite_pos;
+		f32		inverse_determinant = 1.0f / (pl.plane.x * pl.direction.y - pl.plane.y * pl.direction.x);
+		t_2d	transformed_sprite_pos;
 
-	transformed_sprite_pos.x = inverse_determinant * (pl.direction.y * relative_npc_pos.x - pl.direction.x * relative_npc_pos.y);
-	transformed_sprite_pos.y = inverse_determinant * (-pl.plane.y * relative_npc_pos.x + pl.plane.x * relative_npc_pos.y);
+		transformed_sprite_pos.x = inverse_determinant * (pl.direction.y * relative_npc_pos.x - pl.direction.x * relative_npc_pos.y);
+		transformed_sprite_pos.y = inverse_determinant * (-pl.plane.y * relative_npc_pos.x + pl.plane.x * relative_npc_pos.y);
 
-	sint32	sprite_height = abs((sint32)((f32)H / transformed_sprite_pos.y));
-	sint32	sprite_width = sprite_height;
-	sint32	sprite_pos_screen = (sint32)(((f32)W) * (1.0f + transformed_sprite_pos.x / transformed_sprite_pos.y));
+		sint32	sprite_height = abs((sint32)((f32)H / transformed_sprite_pos.y));
+		sint32	sprite_width = sprite_height;
+		sint32	sprite_pos_screen = (sint32)(((f32)W) * (1.0f + transformed_sprite_pos.x / transformed_sprite_pos.y));
 
-	t_2d_p	draw_start;
-	t_2d_p	draw_end;
+		t_2d_p	draw_start;
+		t_2d_p	draw_end;
 
-	draw_start.y = -sprite_height / 2 + H / 2 - wf->view;
-	draw_end.y = sprite_height / 2 + H / 2 - wf->view;
-	if (draw_start.y < 0)
-		draw_start.y = 0;
-	if (draw_end.y >= H)
-		draw_end.y = H - 1;
+		draw_start.y = -sprite_height / 2 + H / 2 - wf->view;
+		draw_end.y = sprite_height / 2 + H / 2 - wf->view;
+		if (draw_start.y < 0)
+			draw_start.y = 0;
+		if (draw_end.y >= H)
+			draw_end.y = H - 1;
 
-	draw_start.x = -sprite_width / 2 + sprite_pos_screen / 2;
-	draw_end.x = sprite_width / 2 + sprite_pos_screen / 2;
-	sint32	x_offset = 0;
-	if (draw_start.x < 0)
-	{
-		x_offset = draw_start.x;
-		draw_start.x = 0;
-	}
-	if (draw_end.x >= W)
-		draw_end.x = W - 1;
-
-	sint32	x;
-	sint32	y;
-	t_2d_p	tex_coord;
-	sint32	tex_width_scale;
-	sint32	tex_height_scale;
-	sint32	color;
-
-	x = draw_start.x;
-	while (x < draw_end.x)
-	{
-		tex_width_scale = x - draw_start.x - x_offset;
-		tex_coord.x = tex_width_scale * wf->npc[i].tex->width / sprite_width;
-		y = draw_start.y;
-		while (y < draw_end.y)
+		draw_start.x = -sprite_width / 2 + sprite_pos_screen / 2;
+		draw_end.x = sprite_width / 2 + sprite_pos_screen / 2;
+		sint32	x_offset = 0;
+		if (draw_start.x < 0)
 		{
-			tex_height_scale = (y + wf->view) * 2 - H + sprite_height;
-			tex_coord.y =
-				((tex_height_scale * wf->npc[i].tex->height) / sprite_height) / 2;
-			if (transformed_sprite_pos.y > 0 && (transformed_sprite_pos.y < wf->perp_dist[x]))
-			{
-				if (wf->npc[i].tex->data[tex_coord.x + tex_coord.y * wf->npc[i].tex->width] != NPC_BLANK)
-				{
-					color = wf->npc[i].tex->data[tex_coord.x + tex_coord.y * wf->npc[i].tex->width];
-					wf->img[x + y * W] = lighting(color, transformed_sprite_pos.y);
-				}
-			}
-			y++;
+			x_offset = draw_start.x;
+			draw_start.x = 0;
 		}
-		x++;
-	}
+		if (draw_end.x >= W)
+			draw_end.x = W - 1;
+
+		sint32	x;
+		sint32	y;
+		t_2d_p	tex_coord;
+		sint32	tex_width_scale;
+		sint32	tex_height_scale;
+		sint32	color;
+
+		x = draw_start.x;
+		while (x < draw_end.x)
+		{
+			tex_width_scale = x - draw_start.x - x_offset;
+			tex_coord.x = tex_width_scale * wf->npc[i].tex->width / sprite_width;
+			y = draw_start.y;
+			while (y < draw_end.y)
+			{
+				tex_height_scale = (y + wf->view) * 2 - H + sprite_height;
+				tex_coord.y =
+					((tex_height_scale * wf->npc[i].tex->height) / sprite_height) / 2;
+				if (transformed_sprite_pos.y > 0 && (transformed_sprite_pos.y < wf->perp_dist[x]))
+				{
+					if (wf->npc[i].tex->data[tex_coord.x + tex_coord.y * wf->npc[i].tex->width] != NPC_BLANK)
+					{
+						color = wf->npc[i].tex->data[tex_coord.x + tex_coord.y * wf->npc[i].tex->width];
+						wf->img[x + y * W] = lighting(color, transformed_sprite_pos.y);
+					}
+				}
+				y++;
+			}
+			x++;
+		}
 	}
 }
 

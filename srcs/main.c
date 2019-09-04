@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 12:11:43 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 12:18:06 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ int		main(int ac, char **av)
 		i = 1;
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
-		SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		//SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
 		while (1)
 		{
 			while (SDL_PollEvent(&wolf.sdl.event))

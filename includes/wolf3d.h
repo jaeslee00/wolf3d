@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 11:46:30 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 12:18:21 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # include <SDL2/SDL.h>
 // # define W	(2560)
 // # define H	(1080)
-# define W	(1280)
-# define H	(720)
+# define W	(1920)
+# define H	(1280)
 
 # define TEXTURE_0	0
 # define TEXTURE_1	1
