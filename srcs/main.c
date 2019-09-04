@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 05:37:02 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 07:02:20 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.minimap_zoom = 20;
 	wolf->view = 0;
 	wolf->a.frame = 100;
-	wolf->enemy[0].pos.x = 1.5f;
-	wolf->enemy[0].pos.y = 1.5f;
+	wolf->enemy[0].pos.x = 8.0f;
+	wolf->enemy[0].pos.y = 3.0f;
 	is_alloc(wolf->doors = ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
 	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, (wolf->obj.size / wolf->obj.len) * (wolf->obj.len) * sizeof(t_minimap)), wolf, -1);
 }

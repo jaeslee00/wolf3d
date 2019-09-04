@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 05:32:54 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/04 06:50:59 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/04 07:03:15 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,8 @@
 
 void move_npc(t_npc *enemy)
 {
-	f32		movement;
-
-	movement = 10.0f - enemy->pos.x;
-	if (enemy->pos.x < 10.0f)
+	if (enemy->pos.x < 11.5f)
 		enemy->pos.x += 0.05f;
-	if (enemy->pos.y < 10.0f)
+	else if (enemy->pos.y < 10.5f)
 		enemy->pos.y += 0.05f;
 }
