@@ -6,13 +6,13 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/05 01:40:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/05 02:07:04 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 02:11:12 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void swap_integer(sint32 *a, sint32 *b)
+void	swap_integer(sint32 *a, sint32 *b)
 {
 	sint32 tmp;
 
@@ -21,7 +21,7 @@ void swap_integer(sint32 *a, sint32 *b)
 	*b = tmp;
 }
 
-void swap_float(f32 *a, f32 *b)
+void	swap_float(f32 *a, f32 *b)
 {
 	f32 tmp;
 
@@ -30,7 +30,7 @@ void swap_float(f32 *a, f32 *b)
 	*b = tmp;
 }
 
-int partition(sint32 *depth_buffer, f32 *depth, sint32 low, sint32 high)
+sint32	partition(sint32 *depth_buffer, f32 *depth, sint32 low, sint32 high)
 {
 	f32		pivot;
 	sint32	i;
@@ -54,7 +54,7 @@ int partition(sint32 *depth_buffer, f32 *depth, sint32 low, sint32 high)
 	return (i + 1);
 }
 
-void quick_sort(sint32 *depth_buffer, f32 *depth, sint32 low, sint32 high)
+void	quick_sort(sint32 *depth_buffer, f32 *depth, sint32 low, sint32 high)
 {
 	sint32 pivot_idx;
 
@@ -66,7 +66,7 @@ void quick_sort(sint32 *depth_buffer, f32 *depth, sint32 low, sint32 high)
 	}
 }
 
-void sort_depth_buffer(t_wolf *wf, sint32 *depth_buffer, f32 *depth)
+void	sort_depth_buffer(t_wolf *wf, sint32 *depth_buffer, f32 *depth)
 {
 	sint32	index;
 	t_2d	relative_entity_pos;

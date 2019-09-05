@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/05 02:09:11 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 02:10:38 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void	update_entity(t_wolf *wf) //NOTE (jae) : Victor's function
 	f32			depth[NBR_OF_ENTITIES];
 	sint32		index;
 
-	index = 0;
 	sort_depth_buffer(wf, depth_buffer, depth);
 	index = 0;
 	while (index < NBR_OF_ENTITIES)
