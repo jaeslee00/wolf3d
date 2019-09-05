@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 23:02:14 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 02:08:45 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,18 @@
 # include <SDL2/SDL.h>
 // # define W	(2560)
 // # define H	(1080)
-# define W	(1920)
-# define H	(1280)
+# define W	(1280)
+# define H	(720)
 
 # define TEXTURE_0	0
 # define TEXTURE_1	1
 # define TEXTURE_2	2
 # define TEXTURE_3	3
 # define TEXTURE_4	4
-# define NPC_BLANK 0x980088
+# define OBJ_VURNERABLE 1UL
+# define ENEMY_SIZE 40
+# define NBR_OF_ENTITIES 10
+# define TEXTURE_BLANK 0x980088
 # ifndef INT_MAX
 #  define INT_MAX 2147483647
 # endif
@@ -138,7 +141,7 @@ typedef struct	s_animation
 	sint32	gun;
 	uint32	frame;
 	uint32	size;
-	}				t_animation;
+}				t_animation;
 
 typedef struct	s_raycaster
 {
@@ -160,7 +163,8 @@ typedef struct	s_entity
 {
 	sint32		id;
 	t_2d		pos;
-	sint32		status;
+	t_2d		transformed_sprite_pos;
+	sint32		flag;
 	sint32		hp;
 	t_texture	*tex;
 }				t_entity;
@@ -186,7 +190,7 @@ typedef struct	s_wolf
 	t_animation	a;
 	sint32		view;
 	//TODO (jae) : probably allocate memory for this ?
-	t_entity	entity[10];
+	t_entity	entity[NBR_OF_ENTITIES];
 	f32			perp_dist[W];
 }				t_wolf;
 
@@ -238,4 +242,6 @@ sint32			lighting(sint32 color, f32 distance);
 t_texture		read_bmp(const sint8 *filename, t_wolf *wolf);
 
 void			update_entity(t_wolf *wf);
+void 			sort_depth_buffer(t_wolf *wf, sint32 *depth_buffer, f32 *depth);
+void 			draw_entity(t_wolf *wf, t_entity *entity, t_texture *tex);
 #endif
