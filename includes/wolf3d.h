@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/05 03:04:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 20:08:10 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,16 @@ typedef struct	s_2d_p
 	sint32	x;
 	sint32	y;
 }				t_2d_p;
+
+typedef struct	s_audio
+{
+	SDL_AudioSpec	wav_spec;
+	uint8	*wav_buffer;
+	uint32	wav_length;
+	uint8	*audio_pos;
+	uint32	audio_len;
+
+}				t_audio;
 
 typedef struct	s_texture
 {
@@ -194,6 +204,7 @@ typedef struct	s_wolf
 	f32			perp_dist[W];
 }				t_wolf;
 
+void				load_music(char *path, t_audio *audio);
 void				*test(void *b, int c, size_t len);
 void				draw_hud(t_wolf *wolf, uint32 deltaframe);
 t_2d_p			init_2d(sint32 x, sint32 y);

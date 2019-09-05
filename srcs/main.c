@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/05 02:22:58 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 20:09:42 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ void	ceiling(uint32 *img, t_wolf *wolf)
 
 int		main(int ac, char **av)
 {
+	t_audio audio;
 	sint32	i;
 	t_wolf	wolf;
 	sint32	fd;
@@ -150,8 +151,15 @@ int		main(int ac, char **av)
 	else
 		fd = open("wolf3d.map", O_RDONLY);
 	//printf("size of wolf = %ld texture %ld door %ld\n", sizeof(wolf), sizeof(t_texture) , sizeof(t_door));
+	load_music("./music/hallo.wav", &audio);
+	SDL_PauseAudio(0);
 	if (fd > 0)
 	{
+		if (audio.audio_len == 0)
+		{
+			audio.audio_pos = audio.wav_buffer;
+			audio.audio_len = audio.wav_length;
+		}
 		tkneizer(fd, &wolf);
 		ft_wolf_init(&wolf);
 		print_map(wolf.map, wolf.obj, &wolf.player, wolf.doors, &wolf);
