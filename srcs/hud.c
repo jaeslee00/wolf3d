@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 17:19:22 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/05 02:09:05 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 02:45:28 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,12 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 	{
 		wolf->a.gun += deltaframe;
 		if (wolf->a.gun < 100)
+		{
+			for (int i=0; i < NBR_OF_ENTITIES; i++)
+				if (wolf->entity[i].flag == 0b1)
+					wolf->entity[i].flag |= 0b10;
 			draw_gun(wolf, 6);
+		}
 		else if(wolf->a.gun < 145)
 		{
 			wolf->view -= 10;

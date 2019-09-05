@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/05 02:10:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 03:02:12 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,15 @@
 
 //TODO (jae) : need a condition to call draw_enemy() for only those are within the player's view for optimization
 
-void draw_entity(t_wolf *wf, t_entity *entity, t_texture *tex)
+sint32	entity_update_status(t_entity *entity)
+{
+	if (entity->flag == 0b11)
+		return (13);
+	else
+		return (12);
+}
+
+void entity_draw(t_wolf *wf, t_entity *entity, t_texture *tex)
 {
 	sint32 sprite_height = abs((sint32)((f32)H / entity->transformed_sprite_pos.y));
 	sint32 sprite_width = sprite_height;
@@ -36,6 +44,8 @@ void draw_entity(t_wolf *wf, t_entity *entity, t_texture *tex)
 	if ((draw_start.x + draw_end.x) / 2 < W / 2 + ENEMY_SIZE
 		&& (draw_start.x + draw_end.x) / 2 > W / 2 - ENEMY_SIZE)
 		entity->flag |= OBJ_VURNERABLE;
+	else
+		entity->flag = 0;
 	sint32 x_offset = 0;
 	if (draw_start.x < 0)
 	{
@@ -51,23 +61,25 @@ void draw_entity(t_wolf *wf, t_entity *entity, t_texture *tex)
 	sint32 tex_width_scale;
 	sint32 tex_height_scale;
 	sint32 color;
+	sint32	tex_id;
 
+	tex_id = entity_update_status(entity);
 	x = draw_start.x;
 	while (x < draw_end.x)
 	{
 		tex_width_scale = x - draw_start.x - x_offset;
-		tex_coord.x = tex_width_scale * tex->width / sprite_width;
+		tex_coord.x = tex_width_scale * tex[tex_id].width / sprite_width;
 		y = draw_start.y;
 		while (y < draw_end.y)
 		{
 			tex_height_scale = (y + wf->view) * 2 - H + sprite_height;
 			tex_coord.y =
-				((tex_height_scale * tex->height) / sprite_height) / 2;
+				((tex_height_scale * tex[tex_id].height) / sprite_height) / 2;
 			if (entity->transformed_sprite_pos.y > 0 && (entity->transformed_sprite_pos.y < wf->perp_dist[x]))
 			{
-				if (tex->data[tex_coord.x + tex_coord.y * tex->width] != TEXTURE_BLANK)
+				if (tex[tex_id].data[tex_coord.x + tex_coord.y * tex[tex_id].width] != TEXTURE_BLANK)
 				{
-					color = tex->data[tex_coord.x + tex_coord.y * tex->width];
+					color = tex[tex_id].data[tex_coord.x + tex_coord.y * tex[tex_id].width];
 					wf->img[x + y * W] = lighting(color, entity->transformed_sprite_pos.y);
 				}
 			}
@@ -77,9 +89,8 @@ void draw_entity(t_wolf *wf, t_entity *entity, t_texture *tex)
 	}
 }
 
-void	update_entity(t_wolf *wf) //NOTE (jae) : Victor's function
+void	entity_update(t_wolf *wf) //NOTE (jae) : Victor's function
 {
-	sint32		tex_id = 12;
 	sint32		depth_buffer[NBR_OF_ENTITIES];
 	f32			depth[NBR_OF_ENTITIES];
 	sint32		index;
@@ -88,7 +99,7 @@ void	update_entity(t_wolf *wf) //NOTE (jae) : Victor's function
 	index = 0;
 	while (index < NBR_OF_ENTITIES)
 	{
-		draw_entity(wf, &wf->entity[depth_buffer[index]], &wf->tex[tex_id]);
+		entity_draw(wf, &wf->entity[depth_buffer[index]], wf->tex);
 		index++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/05 02:08:45 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 03:04:38 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@
 # include <SDL2/SDL.h>
 // # define W	(2560)
 // # define H	(1080)
-# define W	(1280)
-# define H	(720)
+# define W	(1920)
+# define H	(1280)
 
 # define TEXTURE_0	0
 # define TEXTURE_1	1
 # define TEXTURE_2	2
 # define TEXTURE_3	3
 # define TEXTURE_4	4
-# define OBJ_VURNERABLE 1UL
-# define ENEMY_SIZE 40
+# define OBJ_VURNERABLE 0b1
+# define ENEMY_SIZE 50
 # define NBR_OF_ENTITIES 10
 # define TEXTURE_BLANK 0x980088
 # ifndef INT_MAX
@@ -241,7 +241,7 @@ void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
 sint32			lighting(sint32 color, f32 distance);
 t_texture		read_bmp(const sint8 *filename, t_wolf *wolf);
 
-void			update_entity(t_wolf *wf);
+void			entity_update(t_wolf *wf);
 void 			sort_depth_buffer(t_wolf *wf, sint32 *depth_buffer, f32 *depth);
-void 			draw_entity(t_wolf *wf, t_entity *entity, t_texture *tex);
+void 			entity_draw(t_wolf *wf, t_entity *entity, t_texture *tex);
 #endif

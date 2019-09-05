@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/05 02:05:35 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 02:22:58 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	load_textures(t_wolf *wolf)
 	wolf->tex[10] = read_bmp("./texture/gun0.bmp", wolf);
 	wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf);
 	wolf->tex[12] = read_bmp("./texture/guard/guard00.bmp", wolf);
-	wolf->tex[13] = read_bmp("./texture/guard/guard00.bmp", wolf);
+	wolf->tex[13] = read_bmp("./texture/guard/guard01.bmp", wolf);
 	wolf->tex[14] = read_bmp("./texture/guard/guard00.bmp", wolf);
 	wolf->tex[15] = read_bmp("./texture/guard/guard00.bmp", wolf);
 	wolf->tex[16] = read_bmp("./texture/guard/guard00.bmp", wolf);
@@ -181,7 +181,7 @@ int		main(int ac, char **av)
 			frames[i] = SDL_GetTicks();
 			ceiling(wolf.img, &wolf);
 			raycast(&wolf);
-			update_entity(&wolf);
+			entity_update(&wolf);
 			if (i == 0)
 				draw_hud(&wolf, 16);
 			else
