@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/05 03:02:12 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 03:14:37 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ void entity_draw(t_wolf *wf, t_entity *entity, t_texture *tex)
 
 	draw_start.x = -sprite_width / 2 + sprite_pos_screen / 2;
 	draw_end.x = sprite_width / 2 + sprite_pos_screen / 2;
-	//TODO (jae) : ENEMY_SIZE probably depends on resolution!
+	//TODO (jae) : ENEMY_SIZE probably depends on resolution and DISTANCE from player!!!
+	//TODO (jae) : After shooting, status of entity has to be independent i think..
 	if ((draw_start.x + draw_end.x) / 2 < W / 2 + ENEMY_SIZE
 		&& (draw_start.x + draw_end.x) / 2 > W / 2 - ENEMY_SIZE)
 		entity->flag |= OBJ_VURNERABLE;
