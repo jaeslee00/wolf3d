@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/05 02:22:58 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 23:11:40 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,10 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player.minimap_zoom = 20;
 	wolf->view = 0;
 	wolf->a.frame = 100;
-	wolf->entity[0].pos.x = 8.0f;
-	wolf->entity[0].pos.y = 3.0f;
-	wolf->entity[1].pos.x = 6.0f;
-	wolf->entity[1].pos.y = 1.5f;
-	wolf->entity[2].pos.x = 13.0f;
-	wolf->entity[2].pos.y = 7.0f;
-	wolf->entity[3].pos.x = 6.5f;
-	wolf->entity[3].pos.y = 8.5f;
-	wolf->entity[4].pos.x = 9.5f;
-	wolf->entity[4].pos.y = 2.5f;
 	is_alloc(wolf->doors = ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
-	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, (wolf->obj.size / wolf->obj.len) * (wolf->obj.len) * sizeof(t_minimap)), wolf, -1);
+	is_alloc(wolf->player.m = (t_minimap *)ft_mem(&wolf->mem, wolf->obj.size * sizeof(t_minimap)), wolf, -1);
+	is_alloc(wolf->perp_dist = (f32*)ft_mem(&wolf->mem, sizeof(f32) * W), wolf, -1);
+	is_alloc(wolf->entity = (t_entity *)ft_mem(&wolf->mem, sizeof(t_entity) * NBR_OF_ENTITIES), wolf, -1);
 }
 
 void	*test(void *b, int c, size_t len)

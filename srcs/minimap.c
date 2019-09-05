@@ -6,35 +6,11 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 04:27:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/03 20:05:32 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 22:48:41 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-void	draw_player(uint32 *img, sint32 player_size)
-{
-	sint32	x;
-	sint32	y;
-	sint32	i;
-	sint32	j;
-
-	y = 0;
-	j = H / 2 - 4;
-	while (y < player_size)
-	{
-		x = 0;
-		i = W / 2 - 4;
-		while (x < player_size)
-		{
-			img[i + j * W] = 0x00FF00;
-			x++;
-			i++;
-		}
-		j++;
-		y++;
-	}
-}
 
 sint32	get_color_horiz(t_minimap *p1, t_minimap *p2)
 {
@@ -151,7 +127,6 @@ void	minimap_render(t_wolf *wolf, sint32 minimap_width, sint32 minimap_height)
 		}
 		y++;
 	}
-	draw_player(wolf->img, 9);
 }
 
 void	minimap_set_edge_color(t_minimap *m, sint32 minimap_width, sint32 minimap_height)
@@ -182,12 +157,12 @@ void	minimap_set_edge_color(t_minimap *m, sint32 minimap_width, sint32 minimap_h
 void	minimap_obj_color_vertical(t_wolf *wolf, sint32 x, sint32 y, sint32 *y_key)
 {
 	sint32	minimap_width;
-	//sint32	minimap_height;
 
 	minimap_width = wolf->player.minimap_width;
-	//minimap_height = wolf->player.minimap_height;
-	if (wolf->obj.nb[x + y * wolf->map_width] > 2
-		|| wolf->obj.nb[x - 1 + y * wolf->map_width] > 2)
+	if (wolf->obj.nb[x + y * wolf->map_width] == 3
+		|| wolf->obj.nb[x - 1 + y * wolf->map_width] == 3
+		|| wolf->obj.nb[x + y * wolf->map_width] == 5
+		|| wolf->obj.nb[x - 1 + y * wolf->map_width] == 5)
 	{
 		wolf->player.m[x + y * minimap_width].v_color_head = -1;
 		wolf->player.m[x + (y + 1) * minimap_width].v_color_tail = -1;
@@ -203,12 +178,12 @@ void	minimap_obj_color_vertical(t_wolf *wolf, sint32 x, sint32 y, sint32 *y_key)
 void	minimap_obj_color_horiz(t_wolf *wolf, sint32 x, sint32 y, sint32 *x_key)
 {
 	sint32	minimap_width;
-	//sint32	minimap_height;
 
 	minimap_width = wolf->player.minimap_width;
-	//minimap_height = wolf->player.minimap_height;
-	if (wolf->obj.nb[x + y * wolf->map_width] > 2
-		|| wolf->obj.nb[x + (y - 1 ) * wolf->map_width] > 2)
+	if (wolf->obj.nb[x + y * wolf->map_width] == 3
+		|| wolf->obj.nb[x + (y - 1) * wolf->map_width] == 3
+		|| wolf->obj.nb[x + y * wolf->map_width] == 5
+		|| wolf->obj.nb[x + (y - 1) * wolf->map_width] == 5)
 	{
 		wolf->player.m[x + y * minimap_width].h_color_head = -1;
 		wolf->player.m[x + 1 + y * minimap_width].h_color_tail = -1;

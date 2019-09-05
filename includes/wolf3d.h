@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/05 03:04:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/05 23:11:56 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 // # define W	(2560)
 // # define H	(1080)
 # define W	(1920)
-# define H	(1280)
+# define H	(1080)
 
 # define TEXTURE_0	0
 # define TEXTURE_1	1
@@ -178,20 +178,18 @@ typedef struct	s_wolf
 	uint32		*img;
 	t_mem		mem;
 	sint8		**map;
-	sint32		map_width;
-	sint32		map_height;
+	sint32		map_width; //TODO remove it from here
+	sint32		map_height; //TODO remove it from here
 	t_door		*doors;
 	sint32		nbr_of_doors;
 	t_texture	*tex;
 	uint32		flag;
 	uint8		res;
-	f32			sine;
-	f32			cosine;
 	t_animation	a;
 	sint32		view;
 	//TODO (jae) : probably allocate memory for this ?
-	t_entity	entity[NBR_OF_ENTITIES];
-	f32			perp_dist[W];
+	t_entity	*entity;
+	f32			*perp_dist;
 }				t_wolf;
 
 void				*test(void *b, int c, size_t len);
@@ -243,5 +241,5 @@ t_texture		read_bmp(const sint8 *filename, t_wolf *wolf);
 
 void			entity_update(t_wolf *wf);
 void 			sort_depth_buffer(t_wolf *wf, sint32 *depth_buffer, f32 *depth);
-void 			entity_draw(t_wolf *wf, t_entity *entity, t_texture *tex);
+void 			entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist);
 #endif
