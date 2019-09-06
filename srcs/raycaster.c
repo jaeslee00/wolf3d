@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 22:55:56 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/06 03:11:48 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,31 +58,31 @@ sint32	dda_raycast(t_wolf *wf, t_raycaster *ray)
 	return (ray->side);
 }
 
-void	dda_init(t_raycaster *ray, t_player p)
+void	dda_init(t_raycaster *ray, t_player *p)
 {
-	ray->delta_dist.x = fabs(1.0f / p.ray.x);
-	ray->delta_dist.y = fabs(1.0f / p.ray.y);
-	ray->map.x = (sint32)p.pos.x;
-	ray->map.y = (sint32)p.pos.y;
-	if (p.ray.x < 0)
+	ray->delta_dist.x = fabs(1.0f / p->ray.x);
+	ray->delta_dist.y = fabs(1.0f / p->ray.y);
+	ray->map.x = (sint32)p->pos.x;
+	ray->map.y = (sint32)p->pos.y;
+	if (p->ray.x < 0)
 	{
 		ray->step.x = -1;
-		ray->side_dist.x = (p.pos.x - ray->map.x) * ray->delta_dist.x;
+		ray->side_dist.x = (p->pos.x - ray->map.x) * ray->delta_dist.x;
 	}
 	else
 	{
 		ray->step.x = 1;
-		ray->side_dist.x = (1.0f + ray->map.x - p.pos.x) * ray->delta_dist.x;
+		ray->side_dist.x = (1.0f + ray->map.x - p->pos.x) * ray->delta_dist.x;
 	}
-	if (p.ray.y < 0)
+	if (p->ray.y < 0)
 	{
 		ray->step.y = -1;
-		ray->side_dist.y = (p.pos.y - ray->map.y) * ray->delta_dist.y;
+		ray->side_dist.y = (p->pos.y - ray->map.y) * ray->delta_dist.y;
 	}
 	else
 	{
 		ray->step.y = 1;
-		ray->side_dist.y = (1.0f + ray->map.y - p.pos.y) * ray->delta_dist.y;
+		ray->side_dist.y = (1.0f + ray->map.y - p->pos.y) * ray->delta_dist.y;
 	}
 }
 
@@ -97,10 +97,10 @@ void	raycast(t_wolf *wf)
 	x = 0;
 	while (x < W)
 	{
-		wf->player.ray.y = wf->player.direction.y +
-			wf->player.plane.y * (x * scale - 1.0f); // cam_width to be -1 to 1
-		wf->player.ray.x = wf->player.direction.x +
-			wf->player.plane.x * (x * scale - 1.0f);
+		wf->player->ray.y = wf->player->direction.y +
+			wf->player->plane.y * (x * scale - 1.0f); // cam_width to be -1 to 1
+		wf->player->ray.x = wf->player->direction.x +
+			wf->player->plane.x * (x * scale - 1.0f);
 		dda_init(&ray, wf->player);
 		dda_raycast(wf, &ray);
 		ray.perp_dist = wf->dist[ray.side](&ray, wf->player);

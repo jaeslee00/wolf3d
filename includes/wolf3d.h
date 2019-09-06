@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/05 23:25:49 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/06 03:10:06 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ typedef struct	s_raycaster
 	sint32	side;
 }				t_raycaster;
 
-typedef f32 (*funct)(t_raycaster * ray, t_player player);
+typedef f32 (*funct)(t_raycaster * ray, t_player *player);
 
 //TODO (jae) : need to have multiple textures for status of NPC
 typedef struct	s_entity
@@ -182,7 +182,7 @@ typedef struct	s_entity
 typedef struct	s_wolf
 {
 	funct		*dist;
-	t_player	player;
+	t_player	*player;
 	t_sdl		sdl;
 	t_obj		obj;
 	uint32		*img;
@@ -197,7 +197,6 @@ typedef struct	s_wolf
 	uint8		res;
 	t_animation	a;
 	sint32		view;
-	//TODO (jae) : probably allocate memory for this ?
 	t_entity	*entity;
 	f32			*perp_dist;
 }				t_wolf;
@@ -208,10 +207,10 @@ void				draw_hud(t_wolf *wolf, uint32 deltaframe);
 t_2d_p			init_2d(sint32 x, sint32 y);
 void				draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, uint32 size);
 funct			*perp_dist(t_wolf *wolf);
-f32				perp_distance_ew(t_raycaster *ray, t_player player);
-f32				perp_distance_sn(t_raycaster *ray, t_player player);
-f32				perp_distance_ew_door(t_raycaster *ray, t_player player);
-f32				perp_distance_sn_door(t_raycaster *ray, t_player player);
+f32				perp_distance_ew(t_raycaster *ray, t_player *player);
+f32				perp_distance_sn(t_raycaster *ray, t_player *player);
+f32				perp_distance_ew_door(t_raycaster *ray, t_player *player);
+f32				perp_distance_sn_door(t_raycaster *ray, t_player *player);
 f32				my_sin(f32 angle);
 f32				my_cos(f32 angle);
 f32				my_asin(f32 angle);

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/05 01:40:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/05 22:15:27 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/06 03:09:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,16 +75,16 @@ void	sort_depth_buffer(t_wolf *wf, sint32 *depth_buffer, f32 *depth)
 	index = 0;
 	while (index < NBR_OF_ENTITIES)
 	{
-		relative_entity_pos.x = wf->entity[index].pos.x - wf->player.pos.x;
-		relative_entity_pos.y = wf->entity[index].pos.y - wf->player.pos.y;
-		inv_det = 1.0f / (wf->player.plane.x * wf->player.direction.y -
-			wf->player.plane.y * wf->player.direction.x);
+		relative_entity_pos.x = wf->entity[index].pos.x - wf->player->pos.x;
+		relative_entity_pos.y = wf->entity[index].pos.y - wf->player->pos.y;
+		inv_det = 1.0f / (wf->player->plane.x * wf->player->direction.y -
+			wf->player->plane.y * wf->player->direction.x);
 		wf->entity[index].transformed_sprite_pos.x = inv_det *
-			(wf->player.direction.y * relative_entity_pos.x -
-				wf->player.direction.x * relative_entity_pos.y);
+			(wf->player->direction.y * relative_entity_pos.x -
+				wf->player->direction.x * relative_entity_pos.y);
 		wf->entity[index].transformed_sprite_pos.y = inv_det *
-			(-wf->player.plane.y * relative_entity_pos.x +
-				wf->player.plane.x * relative_entity_pos.y);
+			(-wf->player->plane.y * relative_entity_pos.x +
+				wf->player->plane.x * relative_entity_pos.y);
 		depth_buffer[index] = index;
 		depth[index] = wf->entity[index].transformed_sprite_pos.y;
 		index++;

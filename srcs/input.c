@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:02:53 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/05 21:35:18 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/06 03:12:20 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	check_flag(t_wolf *wolf, sint8 **map, sint32 framedelta)
 	f32	fov;
 	t_player	*p;
 
-	p = &wolf->player;
+	p = wolf->player;
 	fov = fov_calculator(wolf);
 	direction_movement(wolf, map, framedelta);
 	if (wolf->flag & 1UL << 4 && fov < 120.0f)
@@ -70,9 +70,9 @@ void	check_flag(t_wolf *wolf, sint8 **map, sint32 framedelta)
 		printf("fov = %f\n", fov);
 	}
 	if (wolf->flag & 1UL << 6)
-		wolf->player.speed = 1.5f;
+		wolf->player->speed = 1.5f;
 	else
-		wolf->player.speed = 1;
+		wolf->player->speed = 1;
 }
 
 void	mouse_movement(t_wolf *wolf, SDL_Event event)
@@ -83,7 +83,7 @@ void	mouse_movement(t_wolf *wolf, SDL_Event event)
 	f32		sine;
 	t_player	*p;
 
-	p = &wolf->player;
+	p = wolf->player;
 	if (event.type == SDL_MOUSEMOTION)
 	{
 		motion = -(f64)(event.motion.xrel * 0.001f);

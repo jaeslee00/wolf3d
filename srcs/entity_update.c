@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/05 23:21:54 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/06 03:04:41 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ sint32	entity_update_status(t_entity *entity)
 		return (12);
 }
 
-void entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist)
+void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist)
 {
 	sint32 sprite_height = abs((sint32)((f32)H / entity->transformed_sprite_pos.y));
 	sint32 sprite_width = sprite_height;
@@ -33,8 +33,7 @@ void entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 
 	draw_start.x = -sprite_width / 2 + sprite_pos_screen / 2;
 	draw_end.x = sprite_width / 2 + sprite_pos_screen / 2;
-	//TODO (jae) : ENEMY_SIZE probably depends on resolution and DISTANCE from player!!!
-	//TODO (jae) : After shooting, status of entity has to be independent i think..
+
 	if ((draw_start.x + draw_end.x) / 2 < W / 2 + ENEMY_SIZE
 		&& (draw_start.x + draw_end.x) / 2 > W / 2 - ENEMY_SIZE)
 		entity->flag |= OBJ_VURNERABLE;
@@ -68,15 +67,13 @@ void entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 	sint32 color;
 	sint32	tex_id;
 	sint32	taxi;
-	if (entity->transformed_sprite_pos.y < 0)
-		return ;
 
 	tex_id = entity_update_status(entity);
 	x = draw_start.x;
-	printf("%d %d\n", draw_start.x, draw_end.x);
+	x_offset += draw_start.x;
 	while (x < draw_end.x)
 	{
-		tex_width_scale = x - draw_start.x - x_offset;
+		tex_width_scale = x - x_offset;
 		tex_coord.x = tex_width_scale * tex[tex_id].width / sprite_width;
 		y = draw_start.y;
 		while (y < draw_end.y)
@@ -85,18 +82,12 @@ void entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 			tex_coord.y =
 				((tex_height_scale * tex[tex_id].height) / sprite_height) / 2;
 			taxi = tex_coord.x + tex_coord.y * tex[tex_id].width;
-			if ((entity->transformed_sprite_pos.y < perp_dist[x]))
-			{
-				if (tex[tex_id].data[taxi] != TEXTURE_BLANK)
-				{
-					color = tex[tex_id].data[taxi];
-					img[x + y * W] = lighting(color, entity->transformed_sprite_pos.y);
-				}
-			}
+			if ((entity->transformed_sprite_pos.y < perp_dist[x]) && (color = tex[tex_id].data[taxi]) != TEXTURE_BLANK)
+				img[x + y * W] = lighting(color, entity->transformed_sprite_pos.y);
 			y++;
 		}
 		x++;
-	}
+	}	
 }
 
 void	entity_update(t_wolf *wf) //NOTE (jae) : Victor's function
@@ -109,7 +100,8 @@ void	entity_update(t_wolf *wf) //NOTE (jae) : Victor's function
 	index = 0;
 	while (index < NBR_OF_ENTITIES)
 	{
-		entity_draw(&wf->entity[depth_buffer[index]], wf->tex, wf->view, wf->img, wf->perp_dist);
+		if (wf->entity[depth_buffer[index]].transformed_sprite_pos.y > 0)
+			entity_draw(&wf->entity[depth_buffer[index]], wf->tex, wf->view, wf->img, wf->perp_dist);
 		index++;
 	}
 }

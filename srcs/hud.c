@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 17:19:22 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/05 02:45:28 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/06 03:09:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,8 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 void	draw_hud(t_wolf *wolf, uint32 deltaframe)
 {
 	if (wolf->flag & 1UL << 8)
-		minimap(wolf, wolf->player.minimap_width, wolf->player.minimap_height);
-	draw_bar(wolf, wolf->player.health);
+		minimap(wolf, wolf->player->minimap_width, wolf->player->minimap_height);
+	draw_bar(wolf, wolf->player->health);
 	if (wolf->flag & 1UL << 10)
 		draw_shotgun(wolf, deltaframe);
 	else

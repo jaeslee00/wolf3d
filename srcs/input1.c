@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:42:47 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/04 11:20:09 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/06 03:12:20 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	event_handler(t_wolf *wolf, sint8 **map, t_door *doors)
 	sint32		i;
 
 	i = 0;
-	p = &wolf->player;
+	p = wolf->player;
 	if (wolf->flag & 1UL << 7)
 	{
 		while (i < wolf->nbr_of_doors)
@@ -61,7 +61,7 @@ sint32		direction_movement(t_wolf *wolf, sint8 **map, sint32 framedelta)
 	t_player	*p;
 	sint32	neg;
 
-	p = &wolf->player;
+	p = wolf->player;
 	time = (f32)(framedelta / 200.f) * p->speed;
 	if (wolf->flag & 1UL || wolf->flag & 1UL << 1)
 	{

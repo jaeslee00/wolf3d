@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/04 05:24:17 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/06 03:09:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ void	draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray)
 	if (tex_map.end >= H)
 		tex_map.end = H - 1;
 	if (ray->side == 0 || ray->side == 3)
-		tex_width_scale = wf->player.pos.y + ray->perp_dist * wf->player.ray.y;
+		tex_width_scale = wf->player->pos.y + ray->perp_dist * wf->player->ray.y;
 	else
-		tex_width_scale = wf->player.pos.x + ray->perp_dist * wf->player.ray.x;
+		tex_width_scale = wf->player->pos.x + ray->perp_dist * wf->player->ray.x;
 	tex_width_scale -= floor(tex_width_scale);
 	tex_map.coord.x = (sint32)(tex_width_scale * (f32)wf->tex[(sint32)texture_pick(ray)].width);
 	texture_map(wf, tex_map, x, ray);
