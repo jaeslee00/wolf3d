@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/06 03:11:48 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/07 22:44:10 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,17 @@ void	raycast(t_wolf *wf)
 	f32			line_height;
 	sint32		x;
 	f32			scale;
+	f32			cam_scale;
 
 	scale = 2.0f / (f32)W;
 	x = 0;
 	while (x < W)
 	{
+		cam_scale = (x * scale - 1.0f);
 		wf->player->ray.y = wf->player->direction.y +
-			wf->player->plane.y * (x * scale - 1.0f); // cam_width to be -1 to 1
+			wf->player->plane.y * cam_scale;
 		wf->player->ray.x = wf->player->direction.x +
-			wf->player->plane.x * (x * scale - 1.0f);
+			wf->player->plane.x * cam_scale;
 		dda_init(&ray, wf->player);
 		dda_raycast(wf, &ray);
 		ray.perp_dist = wf->dist[ray.side](&ray, wf->player);

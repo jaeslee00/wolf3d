@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/06 03:09:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/07 22:49:31 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,15 @@ void	texture_map(t_wolf *wf, t_texture_map tex_map, sint32 x,
 	sint32	tex_id;
 	sint32	tex_height_scale;
 	sint32	color;
+	sint32	y_offset;
 
 	tex_id = texture_pick(ray);
+	y_offset = tex_map.column_height - H;
 	while (tex_map.start < tex_map.end)
 	{
-		tex_height_scale = (tex_map.start + wf->view) * 2 - H + tex_map.column_height;
+		tex_height_scale = ((tex_map.start + wf->view) << 1) + y_offset;
 		tex_map.coord.y =
-			((tex_height_scale * wf->tex[tex_id].height) / tex_map.column_height) / 2;
+			((tex_height_scale * wf->tex[tex_id].height) / tex_map.column_height) >> 1;
 		color =
 			wf->tex[tex_id].data[wf->tex[tex_id].width * tex_map.coord.y + tex_map.coord.x];
 		wf->img[x + tex_map.start * W] = lighting(color, ray->perp_dist);

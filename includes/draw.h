@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:46:12 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 06:26:16 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/07 15:51:53 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ typedef struct	s_m4x4
 
 typedef struct	s_2d
 {
-			double	x;
-			double	y;
+			float	x;
+			float	y;
 }				t_2d;
 
 typedef union	u_3d

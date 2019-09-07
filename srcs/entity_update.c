@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/07 15:43:22 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/07 18:53:54 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,67 @@ sint32	entity_update_status(t_entity *entity)
 		return (12);
 }
 
+void	image_fill(uint32 *img, f32 *perp_dist, t_texture *tex, t_entity *entity,
+			t_2d_p draw_start, t_2d_p draw_end, sint32 view, sint32 sprite_height,
+				sint32 sprite_width, sint32 x_offset)
+{
+	sint32	x;
+	sint32	y;
+	t_2d_p	tex_coord;
+	sint32	tex_x[4];
+	sint32	tex_y;
+	sint32	tex_width_scale[4];
+	sint32	tex_height_scale;
+	sint32	color[4];
+	sint32	taxi[4];
+
+	x_offset += draw_start.x;
+	sint32	precalc_x;
+	
+	sint32	img_y;
+	
+	y = draw_start.y;
+	sint32 y_cam_pos = sprite_height - H;
+	while (y < draw_end.y)
+	{
+		tex_height_scale = ((y + view) << 1) + y_cam_pos;
+		tex_coord.y =
+			((tex_height_scale * tex->height) / sprite_height) >> 1;
+		tex_y = tex_coord.y * tex->width;
+		x = draw_start.x;
+		img_y = y * W;
+		while (x < draw_end.x)
+		{
+			precalc_x = x - x_offset;
+			tex_width_scale[0] = precalc_x;
+			tex_width_scale[1] = precalc_x + 1;
+			tex_width_scale[2] = precalc_x + 2;
+			tex_width_scale[3] = precalc_x + 3;
+			tex_x[0] = tex_width_scale[0] * tex->width / sprite_width;
+			tex_x[1] = tex_width_scale[1] * tex->width / sprite_width;
+			tex_x[2] = tex_width_scale[2] * tex->width / sprite_width;
+			tex_x[3] = tex_width_scale[3] * tex->width / sprite_width;
+			taxi[0] = tex_x[0] + tex_y;
+			taxi[1] = tex_x[1] + tex_y;
+			taxi[2] = tex_x[2] + tex_y;
+			taxi[3] = tex_x[3] + tex_y;
+			if (entity->transformed_sprite_pos.y < perp_dist[x]) 
+			{
+				if ((color[0] = tex->data[taxi[0]]) != TEXTURE_BLANK)
+					img[x + img_y] = lighting(color[0], entity->transformed_sprite_pos.y);
+				if ((color[1] = tex->data[taxi[1]]) != TEXTURE_BLANK)
+					img[x+1 + img_y] = lighting(color[1], entity->transformed_sprite_pos.y);
+				if ((color[2] = tex->data[taxi[2]]) != TEXTURE_BLANK)
+					img[x+2 + img_y] = lighting(color[2], entity->transformed_sprite_pos.y);
+				if ((color[3] = tex->data[taxi[3]]) != TEXTURE_BLANK)
+					img[x+3 + img_y] = lighting(color[3], entity->transformed_sprite_pos.y);
+			}
+			x += 4;
+		}
+		y++;
+	}
+}
+
 void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist)
 {
 	sint32 sprite_height = abs((sint32)((f32)H / entity->transformed_sprite_pos.y));
@@ -31,7 +92,8 @@ void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 
 	t_2d_p draw_start;
 	t_2d_p draw_end;
-
+	sint32	tex_id;
+	
 	draw_start.x = -sprite_width / 2 + sprite_pos_screen / 2;
 	draw_end.x = sprite_width / 2 + sprite_pos_screen / 2;
 
@@ -60,36 +122,8 @@ void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 		entity->flag |= OBJ_ON_TARGET;
 	else
 		entity->flag = 0;
-
-	sint32	x;
-	sint32	y;
-	t_2d_p	tex_coord;
-	sint32	tex_width_scale;
-	sint32	tex_height_scale;
-	sint32	color;
-	sint32	tex_id;
-	sint32	taxi;
-	
 	tex_id = entity_update_status(entity);
-	y = draw_start.y;
-	x_offset += draw_start.x;
-	while (y < draw_end.y)
-	{
-		tex_height_scale = (y + view) * 2 - H + sprite_height;
-		tex_coord.y =
-			((tex_height_scale * tex[tex_id].height) / sprite_height) / 2;
-		x = draw_start.x;
-		while (x < draw_end.x)
-		{
-			tex_width_scale = x - x_offset;
-			tex_coord.x = tex_width_scale * tex[tex_id].width / sprite_width;	
-			taxi = tex_coord.x + tex_coord.y * tex[tex_id].width;
-			if ((entity->transformed_sprite_pos.y < perp_dist[x]) && (color = tex[tex_id].data[taxi]) != TEXTURE_BLANK)
-				img[x + y * W] = lighting(color, entity->transformed_sprite_pos.y);
-			x++;
-		}
-		y++;
-	}	
+	image_fill(img, perp_dist, &tex[tex_id], entity, draw_start, draw_end, view, sprite_height, sprite_width, x_offset);
 }
 
 void	entity_update(t_wolf *wf) //NOTE (jae) : Victor's function
@@ -102,7 +136,7 @@ void	entity_update(t_wolf *wf) //NOTE (jae) : Victor's function
 	index = 0;
 	while (index < NBR_OF_ENTITIES)
 	{
-		if (wf->entity[depth_buffer[index]].transformed_sprite_pos.y > 0)
+		if (wf->entity[depth_buffer[index]].transformed_sprite_pos.y > 0.0f)
 			entity_draw(&wf->entity[depth_buffer[index]], wf->tex, wf->view, wf->img, wf->perp_dist);
 		index++;
 	}
