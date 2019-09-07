@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/08 00:18:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/08 01:43:39 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,12 @@ void	image_fill(uint32 *img, f32 *perp_dist, t_texture *tex, t_entity *entity,
 	sint32	img_y;
 	sint32	precalc_x;
 	sint32 y_cam_pos;
-
+	sint32	x_max = draw_end.x - 4;
+	sint32 tex_sprite_scale_x = (tex->width << 8) / sprite_width;
+	
 	x_offset += draw_start.x;
 	y = draw_start.y;
 	y_cam_pos = sprite_height - H;
-	sint32 tex_sprite_scale = (tex->width << 8) / sprite_width;
 	while (y < draw_end.y)
 	{
 		tex_height_scale = ((y + view) << 1) + y_cam_pos;
@@ -52,7 +53,6 @@ void	image_fill(uint32 *img, f32 *perp_dist, t_texture *tex, t_entity *entity,
 		tex_y = tex_coord.y * tex->width;
 		x = draw_start.x;
 		img_y = y * W;
-		sint32	x_max = draw_end.x - 4;
 		while (x < x_max)
 		{
 			precalc_x = x - x_offset;
@@ -60,10 +60,10 @@ void	image_fill(uint32 *img, f32 *perp_dist, t_texture *tex, t_entity *entity,
 			tex_width_scale[1] = precalc_x + 1;
 			tex_width_scale[2] = precalc_x + 2;
 			tex_width_scale[3] = precalc_x + 3;
-			tex_x[0] = (tex_width_scale[0] * tex_sprite_scale) >> 8;
-			tex_x[1] = (tex_width_scale[1] * tex_sprite_scale) >> 8;
-			tex_x[2] = (tex_width_scale[2] * tex_sprite_scale) >> 8;
-			tex_x[3] = (tex_width_scale[3] * tex_sprite_scale) >> 8;
+			tex_x[0] = (tex_width_scale[0] * tex_sprite_scale_x) >> 8;
+			tex_x[1] = (tex_width_scale[1] * tex_sprite_scale_x) >> 8;
+			tex_x[2] = (tex_width_scale[2] * tex_sprite_scale_x) >> 8;
+			tex_x[3] = (tex_width_scale[3] * tex_sprite_scale_x) >> 8;
 			taxi[0] = tex_x[0] + tex_y;
 			taxi[1] = tex_x[1] + tex_y;
 			taxi[2] = tex_x[2] + tex_y;

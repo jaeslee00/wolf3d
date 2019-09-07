@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/06 03:10:06 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/08 01:44:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define TEXTURE_2	2
 # define TEXTURE_3	3
 # define TEXTURE_4	4
-# define OBJ_VURNERABLE 0b1
+# define OBJ_ON_TARGET 0b1
 # define ENEMY_SIZE 50
 # define NBR_OF_ENTITIES 10
 # define TEXTURE_BLANK 0x980088
