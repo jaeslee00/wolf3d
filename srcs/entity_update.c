@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/07 18:53:54 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/08 00:18:38 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ void	image_fill(uint32 *img, f32 *perp_dist, t_texture *tex, t_entity *entity,
 	sint32	tex_height_scale;
 	sint32	color[4];
 	sint32	taxi[4];
+	sint32	img_y;
+	sint32	precalc_x;
+	sint32 y_cam_pos;
 
 	x_offset += draw_start.x;
-	sint32	precalc_x;
-	
-	sint32	img_y;
-	
 	y = draw_start.y;
-	sint32 y_cam_pos = sprite_height - H;
+	y_cam_pos = sprite_height - H;
+	sint32 tex_sprite_scale = (tex->width << 8) / sprite_width;
 	while (y < draw_end.y)
 	{
 		tex_height_scale = ((y + view) << 1) + y_cam_pos;
@@ -52,17 +52,18 @@ void	image_fill(uint32 *img, f32 *perp_dist, t_texture *tex, t_entity *entity,
 		tex_y = tex_coord.y * tex->width;
 		x = draw_start.x;
 		img_y = y * W;
-		while (x < draw_end.x)
+		sint32	x_max = draw_end.x - 4;
+		while (x < x_max)
 		{
 			precalc_x = x - x_offset;
 			tex_width_scale[0] = precalc_x;
 			tex_width_scale[1] = precalc_x + 1;
 			tex_width_scale[2] = precalc_x + 2;
 			tex_width_scale[3] = precalc_x + 3;
-			tex_x[0] = tex_width_scale[0] * tex->width / sprite_width;
-			tex_x[1] = tex_width_scale[1] * tex->width / sprite_width;
-			tex_x[2] = tex_width_scale[2] * tex->width / sprite_width;
-			tex_x[3] = tex_width_scale[3] * tex->width / sprite_width;
+			tex_x[0] = (tex_width_scale[0] * tex_sprite_scale) >> 8;
+			tex_x[1] = (tex_width_scale[1] * tex_sprite_scale) >> 8;
+			tex_x[2] = (tex_width_scale[2] * tex_sprite_scale) >> 8;
+			tex_x[3] = (tex_width_scale[3] * tex_sprite_scale) >> 8;
 			taxi[0] = tex_x[0] + tex_y;
 			taxi[1] = tex_x[1] + tex_y;
 			taxi[2] = tex_x[2] + tex_y;
@@ -94,8 +95,8 @@ void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 	t_2d_p draw_end;
 	sint32	tex_id;
 	
-	draw_start.x = -sprite_width / 2 + sprite_pos_screen / 2;
-	draw_end.x = sprite_width / 2 + sprite_pos_screen / 2;
+	draw_start.x = (-sprite_width + sprite_pos_screen) >> 1;
+	draw_end.x = (sprite_width + sprite_pos_screen) >> 1;
 
 	sint32 x_offset = 0;
 	if (draw_start.x < 0)
@@ -103,20 +104,19 @@ void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 		x_offset = draw_start.x;
 		draw_start.x = 0;
 	}
-	else if (draw_start.x >= W)
-		return ;
 	if (draw_end.x >= W)
 		draw_end.x = W - 1;
-	else if (draw_end.x < 0)
+	if (draw_start.x >= W || draw_end.x < 0)
 		return ;
 
-	draw_start.y = -sprite_height / 2 + H / 2 - view;
-	draw_end.y = sprite_height / 2 + H / 2 - view;
+	draw_start.y = ((-sprite_height + H) >> 1) - view;
+	draw_end.y = ((sprite_height + H) >> 1) - view;
 	if (draw_start.y < 0)
 		draw_start.y = 0;
 	if (draw_end.y >= H)
 		draw_end.y = H - 1;
-
+	if (draw_start.x >= W || draw_end.x < 0)
+		return ;
 	if ((draw_start.x + draw_end.x) / 2 < W / 2 + ENEMY_SIZE
 		&& (draw_start.x + draw_end.x) / 2 > W / 2 - ENEMY_SIZE)
 		entity->flag |= OBJ_ON_TARGET;
