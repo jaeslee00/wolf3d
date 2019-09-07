@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/06 03:15:32 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/06 03:46:40 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ void	load_textures(t_wolf *wolf)
 	wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf);
 	wolf->tex[12] = read_bmp("./texture/guard/guard00.bmp", wolf);
 	wolf->tex[13] = read_bmp("./texture/guard/guard01.bmp", wolf);
-	wolf->tex[14] = read_bmp("./texture/guard/guard00.bmp", wolf);
-	wolf->tex[15] = read_bmp("./texture/guard/guard00.bmp", wolf);
-	wolf->tex[16] = read_bmp("./texture/guard/guard00.bmp", wolf);
 }
 
 void	ft_wolf_init(t_wolf *wolf)

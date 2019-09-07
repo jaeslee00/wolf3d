@@ -6,11 +6,12 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/06 03:04:41 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/07 15:43:22 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include <pthread.h>
 
 //TODO (jae) : need a condition to call draw_enemy() for only those are within the player's view for optimization
 
@@ -34,11 +35,6 @@ void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 	draw_start.x = -sprite_width / 2 + sprite_pos_screen / 2;
 	draw_end.x = sprite_width / 2 + sprite_pos_screen / 2;
 
-	if ((draw_start.x + draw_end.x) / 2 < W / 2 + ENEMY_SIZE
-		&& (draw_start.x + draw_end.x) / 2 > W / 2 - ENEMY_SIZE)
-		entity->flag |= OBJ_VURNERABLE;
-	else
-		entity->flag = 0;
 	sint32 x_offset = 0;
 	if (draw_start.x < 0)
 	{
@@ -59,34 +55,40 @@ void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 	if (draw_end.y >= H)
 		draw_end.y = H - 1;
 
-	sint32 x;
-	sint32 y;
-	t_2d_p tex_coord;
-	sint32 tex_width_scale;
-	sint32 tex_height_scale;
-	sint32 color;
+	if ((draw_start.x + draw_end.x) / 2 < W / 2 + ENEMY_SIZE
+		&& (draw_start.x + draw_end.x) / 2 > W / 2 - ENEMY_SIZE)
+		entity->flag |= OBJ_ON_TARGET;
+	else
+		entity->flag = 0;
+
+	sint32	x;
+	sint32	y;
+	t_2d_p	tex_coord;
+	sint32	tex_width_scale;
+	sint32	tex_height_scale;
+	sint32	color;
 	sint32	tex_id;
 	sint32	taxi;
-
+	
 	tex_id = entity_update_status(entity);
-	x = draw_start.x;
+	y = draw_start.y;
 	x_offset += draw_start.x;
-	while (x < draw_end.x)
+	while (y < draw_end.y)
 	{
-		tex_width_scale = x - x_offset;
-		tex_coord.x = tex_width_scale * tex[tex_id].width / sprite_width;
-		y = draw_start.y;
-		while (y < draw_end.y)
+		tex_height_scale = (y + view) * 2 - H + sprite_height;
+		tex_coord.y =
+			((tex_height_scale * tex[tex_id].height) / sprite_height) / 2;
+		x = draw_start.x;
+		while (x < draw_end.x)
 		{
-			tex_height_scale = (y + view) * 2 - H + sprite_height;
-			tex_coord.y =
-				((tex_height_scale * tex[tex_id].height) / sprite_height) / 2;
+			tex_width_scale = x - x_offset;
+			tex_coord.x = tex_width_scale * tex[tex_id].width / sprite_width;	
 			taxi = tex_coord.x + tex_coord.y * tex[tex_id].width;
 			if ((entity->transformed_sprite_pos.y < perp_dist[x]) && (color = tex[tex_id].data[taxi]) != TEXTURE_BLANK)
 				img[x + y * W] = lighting(color, entity->transformed_sprite_pos.y);
-			y++;
+			x++;
 		}
-		x++;
+		y++;
 	}	
 }
 
