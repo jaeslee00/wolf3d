@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:02:53 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/01 12:19:26 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/06 03:12:20 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	check_flag(t_wolf *wolf, sint8 **map, sint32 framedelta)
 	f32	fov;
 	t_player	*p;
 
-	p = &wolf->player;
+	p = wolf->player;
 	fov = fov_calculator(wolf);
 	direction_movement(wolf, map, framedelta);
 	if (wolf->flag & 1UL << 4 && fov < 120.0f)
@@ -70,19 +70,20 @@ void	check_flag(t_wolf *wolf, sint8 **map, sint32 framedelta)
 		printf("fov = %f\n", fov);
 	}
 	if (wolf->flag & 1UL << 6)
-		wolf->player.speed = 1.5f;
+		wolf->player->speed = 1.5f;
 	else
-		wolf->player.speed = 1;
+		wolf->player->speed = 1;
 }
 
 void	mouse_movement(t_wolf *wolf, SDL_Event event)
 {
-	t_2d		old;
-	f64	motion;
-
+	t_2d	old;
+	f64		motion;
+	f32		cosine;
+	f32		sine;
 	t_player	*p;
 
-	p = &wolf->player;
+	p = wolf->player;
 	if (event.type == SDL_MOUSEMOTION)
 	{
 		motion = -(f64)(event.motion.xrel * 0.001f);
@@ -91,13 +92,13 @@ void	mouse_movement(t_wolf *wolf, SDL_Event event)
 			wolf->view = H/2;
 		else if (wolf->view < -H/2)
 			wolf->view = -H/2;
-		wolf->cosine = cos(motion);
-		wolf->sine = sin(motion);
+		cosine = cos(motion);
+		sine = sin(motion);
 		old.x = p->direction.x;
-		p->direction.x = p->direction.x * wolf->cosine - p->direction.y * wolf->sine;
-		p->direction.y = old.x * wolf->sine + p->direction.y * wolf->cosine;
+		p->direction.x = p->direction.x * cosine - p->direction.y * sine;
+		p->direction.y = old.x * sine + p->direction.y * cosine;
 		old.y = p->plane.x;
-		p->plane.x = p->plane.x * wolf->cosine - p->plane.y * wolf->sine;
-		p->plane.y = old.y * wolf->sine + p->plane.y * wolf->cosine;
+		p->plane.x = p->plane.x * cosine - p->plane.y * sine;
+		p->plane.y = old.y * sine + p->plane.y * cosine;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/06 03:46:40 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/07 23:50:06 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	load_textures(t_wolf *wolf)
 {
-	t_palette pal;
+t_palette pal;
 
 	pal.size = 0;
 	pal.palete = ft_memalloc(1024);
@@ -141,8 +141,8 @@ int		main(int ac, char **av)
 	sint32	fd;
 	sint32	frames[61];
 
-	ft_bzero(&audio, sizeof(audio));
-	mem_init(&wolf);
+ft_bzero(&audio, sizeof(audio));
+mem_init(&wolf);
 	if (ac == 2)
 		fd = open(av[1], O_RDONLY);
 	else
@@ -152,6 +152,11 @@ int		main(int ac, char **av)
 	//SDL_PauseAudio(0);
 	if (fd > 0)
 	{
+		if (audio.audio_len == 0)
+		{
+			audio.audio_pos = audio.wav_buffer;
+			audio.audio_len = audio.wav_length;
+		}
 		tkneizer(fd, &wolf);
 		ft_wolf_init(&wolf);
 		print_map(wolf.map, wolf.obj, wolf.player, wolf.doors, &wolf);

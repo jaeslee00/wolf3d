@@ -83,6 +83,7 @@ t_bitmap_header bitmap;
 	sint32 j;
 
 
+	(void)pal;
 	//printf("size of = %d\n", pal->size);
 	offset = 0;
 	ft_bzero(data, sizeof(data));
@@ -108,7 +109,7 @@ t_bitmap_header bitmap;
 			offset++;
 		}
 	}
-	palette(tex.data, pal, (bitmap.height * bitmap.width) - 1);
+	//palette(tex.data, pal, (bitmap.height * bitmap.width) - 1);
 	//ft_print_memory(pal->palete, pal->size);
 return (tex);
 }

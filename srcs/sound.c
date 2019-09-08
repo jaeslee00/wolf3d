@@ -19,8 +19,8 @@ void	my_audio_callback(void *userdata, Uint8 *stream, int len)
 	a = (t_audio *)userdata;
 	if (a->audio_len == 0)
 		return;
-	len = (len > (int)a->audio_len ? (int)a->audio_len : len);
-	ft_memcpy(stream, a->audio_pos, len);
+len = (len > (int)a->audio_len ? (int)a->audio_len : len);
+ft_memcpy(stream, a->audio_pos, len);
 	a->audio_pos += len;
 	a->audio_len -= len;
 }

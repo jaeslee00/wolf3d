@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/01 12:32:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/08 01:44:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,20 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-
 // # define W	(2560)
 // # define H	(1080)
-# define W	(640)
-# define H	(480)
+# define W	(1920)
+# define H	(1080)
 
 # define TEXTURE_0	0
 # define TEXTURE_1	1
 # define TEXTURE_2	2
 # define TEXTURE_3	3
 # define TEXTURE_4	4
-
+# define OBJ_ON_TARGET 0b1
+# define ENEMY_SIZE 50
+# define NBR_OF_ENTITIES 10
+# define TEXTURE_BLANK 0x980088
 # ifndef INT_MAX
 #  define INT_MAX 2147483647
 # endif
@@ -69,6 +71,16 @@ typedef struct	s_2d_p
 	sint32	x;
 	sint32	y;
 }				t_2d_p;
+
+typedef struct	s_audio
+{
+	SDL_AudioSpec	wav_spec;
+	uint8	*wav_buffer;
+	uint32	wav_length;
+	uint8	*audio_pos;
+	uint32	audio_len;
+
+}				t_audio;
 
 typedef struct	s_texture
 {
@@ -145,7 +157,7 @@ typedef struct	s_animation
 	sint32	gun;
 	uint32	frame;
 	uint32	size;
-	}				t_animation;
+}				t_animation;
 
 typedef struct	s_raycaster
 {
@@ -154,37 +166,46 @@ typedef struct	s_raycaster
 	t_2d	side_dist;
 	t_2d	delta_dist;
 	t_2d	plane;
-	f64		perp_dist;
+	f32		perp_dist;
 	//id_t	tex_flag;
 	sint32	hit;
 	sint32	side;
-	f64	light;
 }				t_raycaster;
 
-typedef f32 (*funct)(t_raycaster * ray, t_player player);
+typedef f32 (*funct)(t_raycaster * ray, t_player *player);
+
+//TODO (jae) : need to have multiple textures for status of NPC
+typedef struct	s_entity
+{
+	sint32		id;
+	t_2d		pos;
+	t_2d		transformed_sprite_pos;
+	sint32		flag;
+	sint32		hp;
+	t_texture	*tex;
+}				t_entity;
 
 typedef struct	s_wolf
 {
 	funct		*dist;
-	t_player	player;
+	t_player	*player;
 	t_sdl		sdl;
 	t_obj		obj;
 	uint32		*img;
 	t_mem		mem;
 	sint8		**map;
-	sint32		map_width;
-	sint32		map_height;
+	sint32		map_width; //TODO remove it from here
+	sint32		map_height; //TODO remove it from here
 	t_door		*doors;
 	sint32		nbr_of_doors;
 	t_texture	*tex;
 	uint32		flag;
-uint8		res;
-	f32			sine;
-	f32			cosine;
+	uint8		res;
 	t_animation	a;
 	sint32		view;
+	t_entity	*entity;
+	f32			*perp_dist;
 }				t_wolf;
-
 
 void				load_music(char *path, t_audio *audio);
 void				*test(void *b, int c, size_t len);
@@ -192,10 +213,10 @@ void				draw_hud(t_wolf *wolf, uint32 deltaframe);
 t_2d_p			init_2d(sint32 x, sint32 y);
 void				draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, uint32 size);
 funct			*perp_dist(t_wolf *wolf);
-f32				perp_distance_ew(t_raycaster *ray, t_player player);
-f32				perp_distance_sn(t_raycaster *ray, t_player player);
-f32				perp_distance_ew_door(t_raycaster *ray, t_player player);
-f32				perp_distance_sn_door(t_raycaster *ray, t_player player);
+f32				perp_distance_ew(t_raycaster *ray, t_player *player);
+f32				perp_distance_sn(t_raycaster *ray, t_player *player);
+f32				perp_distance_ew_door(t_raycaster *ray, t_player *player);
+f32				perp_distance_sn_door(t_raycaster *ray, t_player *player);
 f32				my_sin(f32 angle);
 f32				my_cos(f32 angle);
 f32				my_asin(f32 angle);
