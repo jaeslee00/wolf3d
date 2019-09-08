@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/08 02:23:11 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/08 05:33:54 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,25 @@ sint8	texture_pick(t_raycaster *ray)
 		return (TEXTURE_4);
 }
 
-void	texture_map(t_wolf *wf, t_texture_map tex_map, sint32 x,
+void	texture_map(t_wolf *wf, t_texture_map *tex_map, sint32 x,
 				t_raycaster *ray, t_texture *tex)
 {
-	sint32	tex_id;
 	sint32	tex_height_scale;
 	sint32	color;
 	sint32	tex_y;
 	sint32	y_offset;
 	sint32	y;
-
-	tex_id = texture_pick(ray);
-	y_offset = ((tex_map.column_height - H) >> 1) + wf->view;
-	y = tex_map.start;
-	while (y < tex_map.end)
+(void)ray;
+	y_offset = ((tex_map->column_height - H) >> 1) + wf->view;
+	y = tex_map->start;
+	while (y < tex_map->end)
 	{
 		tex_height_scale = y + y_offset;
 		//TODO (jae) : "tex->height) / tex_map.column_height" might be pulled out from the loop
-		tex_y = ((tex_height_scale * tex->height) / tex_map.column_height);
-		color = tex->data[tex->width * tex_y + tex_map.coord.x];
-		wf->img[x + y * W] = lighting(color, ray->perp_dist);
+		tex_y = (tex_height_scale * tex->height) / tex_map->column_height;
+		color = tex->data[tex->width * tex_y + tex_map->coord.x];
+		//NOTE (jae) : lighting in ray_casting seems quite expensive. Needs to check!!
+		wf->img[x + y * W] = color; //lighting(color, ray->perp_dist);
 		y += 1;
 	}
 }
@@ -81,5 +80,5 @@ void	draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray)
 		tex_width_scale = wf->player->pos.x + ray->perp_dist * wf->player->ray.x;
 	tex_width_scale -= floor(tex_width_scale);
 	tex_map.coord.x = (sint32)(tex_width_scale * (f32)wf->tex[(sint32)texture_pick(ray)].width);
-	texture_map(wf, tex_map, x, ray, &wf->tex[tex_id]);
+	texture_map(wf, &tex_map, x, ray, &wf->tex[tex_id]);
 }
