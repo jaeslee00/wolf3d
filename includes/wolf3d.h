@@ -26,8 +26,8 @@
 
 // # define W	(2560)
 // # define H	(1080)
-# define W	(1920)
-# define H	(1080)
+# define W	(640)
+# define H	(480)
 
 # define TEXTURE_0	0
 # define TEXTURE_1	1
@@ -184,6 +184,7 @@ uint8		res;
 	t_animation	a;
 	sint32		view;
 }				t_wolf;
+
 
 void				load_music(char *path, t_audio *audio);
 void				*test(void *b, int c, size_t len);

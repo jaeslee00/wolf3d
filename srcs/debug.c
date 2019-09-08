@@ -19,10 +19,12 @@ sint32 print_map(sint8 **map, t_obj obj, t_player *player, t_door *doors, t_wolf
 	sint32	i;
 	sint32	j;
 	sint32	k;
+	sint32	w;
 
 	lines = (obj.size / obj.len);
 	i = 0;
 	k = 0;
+	w = 0;
 	while (i < lines)
 	{
 		j = 0;
@@ -31,16 +33,22 @@ sint32 print_map(sint8 **map, t_obj obj, t_player *player, t_door *doors, t_wolf
 			if (map[i][j] == 9)
 			{
 				map[i][j] = 0;
-				player->pos.x = i;
-				player->pos.y = j;
+				player->pos.x = j;
+				player->pos.y = i;
+			}
+			else if (map[i][j] == 4)
+			{
+				wolf->entity[w].pos.x = (f32)j + 0.5f;
+				wolf->entity[w].pos.y = (f32)i + 0.5f;
+				w++;
 			}
 			else if (map[i][j] == 3 || map[i][j] == 5)
 			{
 				if (map[i][j] == 3)
 					doors[k].flag |= 1UL << 1;
 				doors[k].flag |= 1UL;
-				doors[k].pos.x = i;
-				doors[k].pos.y = j;
+				doors[k].pos.x = j;
+				doors[k].pos.y = i;
 				k++;
 				wolf->nbr_of_doors = k;
 			}
@@ -61,12 +69,12 @@ void ft_frametimes(sint32 *frames, sint32 *count)
 		j = 0;
 		while (*count <= 59)
 		{
-			ft_putnbr(frames[*count] - frames[j]);
-			ft_putstr(" ms ");
+			//ft_putnbr(frames[*count] - frames[j]);
+			//ft_putstr(" ms ");
 			*count += 1;
 			if (*count % 12 == 0)
-ft_putchar('\n');
-j++;
+				//ft_putchar('\n');
+			j++;
 		}
 		test(frames, 0, sizeof(sint32) * 61);
 		ft_putchar('\n');
