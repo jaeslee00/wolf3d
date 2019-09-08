@@ -6,13 +6,13 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/08 17:37:13 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/08 17:41:18 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-sint32	lighting(sint32 color, f32	distance)
+inline sint32	lighting(sint32 color, f32	distance)
 {
 	f32		light;
 
@@ -47,13 +47,13 @@ void	texture_map(t_wolf *wf, t_texture_map *tex_map, sint32 x,
 	sint32	y;
 	sint32 precalc;
 	
-	precalc = (tex->height << 16) / tex_map->column_height;
+	precalc = (tex->height << 24) / tex_map->column_height;
 	y_offset = ((tex_map->column_height - H) >> 1) + wf->view;
 	y = tex_map->start + 1;
 	while (y < tex_map->end)
 	{
 		tex_height_scale = y + y_offset;
-		tex_y = (tex_height_scale * precalc) >> 16;
+		tex_y = (tex_height_scale * precalc) >> 24;
 		color = tex->data[tex->width * tex_y + tex_map->coord.x];
 		//NOTE (jae) : lighting in ray_casting seems quite expensive. Needs to check!!
 		wf->img[x + y * W] = lighting(color, perp_dist);
