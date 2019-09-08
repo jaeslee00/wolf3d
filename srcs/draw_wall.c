@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/08 01:45:10 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/08 02:23:11 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,35 +41,23 @@ void	texture_map(t_wolf *wf, t_texture_map tex_map, sint32 x,
 				t_raycaster *ray, t_texture *tex)
 {
 	sint32	tex_id;
-	sint32	tex_height_scale[4];
-	sint32	color[4];
-	sint32	tex_y[4];
+	sint32	tex_height_scale;
+	sint32	color;
+	sint32	tex_y;
 	sint32	y_offset;
 	sint32	y;
 
 	tex_id = texture_pick(ray);
 	y_offset = ((tex_map.column_height - H) >> 1) + wf->view;
 	y = tex_map.start;
-	while (y < tex_map.end - 4)
+	while (y < tex_map.end)
 	{
-		tex_height_scale[0] = y + y_offset;
-		tex_height_scale[1] = y+1 + y_offset;
-		tex_height_scale[2] = y+2 + y_offset;
-		tex_height_scale[3] = y+3 + y_offset;
+		tex_height_scale = y + y_offset;
 		//TODO (jae) : "tex->height) / tex_map.column_height" might be pulled out from the loop
-		tex_y[0] = ((tex_height_scale[0] * tex->height) / tex_map.column_height);
-		tex_y[1] = ((tex_height_scale[1] * tex->height) / tex_map.column_height);
-		tex_y[2] = ((tex_height_scale[2] * tex->height) / tex_map.column_height);
-		tex_y[3] = ((tex_height_scale[3] * tex->height) / tex_map.column_height);
-		color[0] = tex->data[tex->width * tex_y[0] + tex_map.coord.x];
-		color[1] = tex->data[tex->width * tex_y[1] + tex_map.coord.x];
-		color[2] = tex->data[tex->width * tex_y[2] + tex_map.coord.x];
-		color[3] = tex->data[tex->width * tex_y[3] + tex_map.coord.x];
-		wf->img[x + y * W] = lighting(color[0], ray->perp_dist);
-		wf->img[x + (y+1) * W] = lighting(color[1], ray->perp_dist);
-		wf->img[x + (y+2) * W] = lighting(color[2], ray->perp_dist);
-		wf->img[x + (y+3) * W] = lighting(color[3], ray->perp_dist);
-		y += 4;
+		tex_y = ((tex_height_scale * tex->height) / tex_map.column_height);
+		color = tex->data[tex->width * tex_y + tex_map.coord.x];
+		wf->img[x + y * W] = lighting(color, ray->perp_dist);
+		y += 1;
 	}
 }
 

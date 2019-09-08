@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/08 01:43:39 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/08 01:48:48 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,18 +115,18 @@ void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 		draw_start.y = 0;
 	if (draw_end.y >= H)
 		draw_end.y = H - 1;
-	if (draw_start.x >= W || draw_end.x < 0)
-		return ;
+
 	if ((draw_start.x + draw_end.x) / 2 < W / 2 + ENEMY_SIZE
 		&& (draw_start.x + draw_end.x) / 2 > W / 2 - ENEMY_SIZE)
 		entity->flag |= OBJ_ON_TARGET;
 	else
 		entity->flag = 0;
+
 	tex_id = entity_update_status(entity);
 	image_fill(img, perp_dist, &tex[tex_id], entity, draw_start, draw_end, view, sprite_height, sprite_width, x_offset);
 }
 
-void	entity_update(t_wolf *wf) //NOTE (jae) : Victor's function
+void	entity_update(t_wolf *wf)
 {
 	sint32		depth_buffer[NBR_OF_ENTITIES];
 	f32			depth[NBR_OF_ENTITIES];
