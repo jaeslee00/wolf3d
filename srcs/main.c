@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/07 23:50:06 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/08 15:59:15 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	load_textures(t_wolf *wolf)
 t_palette pal;
 
 	pal.size = 0;
-	pal.palete = ft_memalloc(1024);
+	pal.palete = ft_memalloc(2948);
 	wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp", wolf, &pal);
 	wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp", wolf, &pal);
 	wolf->tex[2] = read_bmp("./texture/BrownbrickD.bmp", wolf, &pal);
@@ -32,7 +32,7 @@ t_palette pal;
 	wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf, &pal);
 	wolf->tex[12] = read_bmp("./texture/guard/guard00.bmp", wolf, &pal);
 	wolf->tex[13] = read_bmp("./texture/guard/guard01.bmp", wolf, &pal);
-	//printf("pal size = %d, \n", pal.size);
+	printf("pal size = %ld, \n", pal.size * sizeof(int));
 }
 
 void	ft_wolf_init(t_wolf *wolf)
@@ -152,11 +152,6 @@ mem_init(&wolf);
 	//SDL_PauseAudio(0);
 	if (fd > 0)
 	{
-		if (audio.audio_len == 0)
-		{
-			audio.audio_pos = audio.wav_buffer;
-			audio.audio_len = audio.wav_length;
-		}
 		tkneizer(fd, &wolf);
 		ft_wolf_init(&wolf);
 		print_map(wolf.map, wolf.obj, wolf.player, wolf.doors, &wolf);
@@ -169,7 +164,7 @@ mem_init(&wolf);
 		//SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
 		while (1)
 		{
-			if (audio.audio_len == 0)
+if (audio.audio_len == 0)
 			{
 				audio.audio_pos = audio.wav_buffer;
 				audio.audio_len = audio.wav_length;
@@ -183,7 +178,6 @@ mem_init(&wolf);
 				set_flag(&wolf, wolf.sdl.event);
 				mouse_movement(&wolf, wolf.sdl.event);
 			}
-			//ft_memset(img, 0, W * H * 4);
 			if (i != 0)
 				check_flag(&wolf, wolf.map,
 					SDL_GetTicks() - frames[i - 1]);

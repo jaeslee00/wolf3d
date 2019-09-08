@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:43:55 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/30 15:04:39 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/08 15:57:43 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_bitmap_header get_header(uint8 *mem)
 	uint32 j;
 
 	j = 0;
-		while (j < size)
+	while (j < size)
 	{
 		i = 0;
 		while (i < p->size)
@@ -85,10 +85,9 @@ t_bitmap_header bitmap;
 
 	(void)pal;
 	//printf("size of = %d\n", pal->size);
-	offset = 0;
 	ft_bzero(data, sizeof(data));
 	fd = open(filename, O_RDONLY);
-	read(fd, header, 54);
+	 offset = read(fd, header, 54);
 	bitmap = get_header(header);
 	tex.width = bitmap.width;
 	tex.height = bitmap.height;
@@ -97,6 +96,7 @@ t_bitmap_header bitmap;
 	read_all(fd, data, tex.size);
 	i = (bitmap.height * bitmap.width) - 1;
 	j = 0;
+	offset = 0;
 	while (i >= 0 + offset)
 	{
 		tex.data[i] = data[j] | data[j + 1] << 8 | data[j + 2] << 16;
@@ -109,7 +109,7 @@ t_bitmap_header bitmap;
 			offset++;
 		}
 	}
-	//palette(tex.data, pal, (bitmap.height * bitmap.width) - 1);
+	palette(tex.data, pal, (bitmap.height * bitmap.width) - 1);
 	//ft_print_memory(pal->palete, pal->size);
 return (tex);
 }
