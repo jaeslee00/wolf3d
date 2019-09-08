@@ -21,7 +21,7 @@ sint32		read_all(sint32 fd, uint8 *data, sint32 size)
 	read_bytes = 0;
 	while (((ret = read(fd, data + read_bytes, size - read_bytes)) > 0))
 		read_bytes = read_bytes + ret;
-	printf("read_bytes = %d\n", read_bytes);
+	//printf("read_bytes = %d\n", read_bytes);
 	if (ret <= 0)
 		return (ret);
 	return (read_bytes + ret);
@@ -40,30 +40,52 @@ t_bitmap_header get_header(uint8 *mem)
 	ft_memcpy(&header.width, &mem[18], sizeof(sint32));
 	ft_memcpy(&header.height, &mem[22], sizeof(sint32));
 	ft_memcpy(&header.size_of_bitmap, &mem[34], sizeof(sint32));
-	printf("file size = %d, height = %d, width - %d header size %d offset %d\n", header.file_size, header.height, header.width, header.size, header.bitmap_offset);
+	//printf("file size = %d, height = %d, width - %d header size %d offset %d\n", header.file_size, header.height, header.width, header.size, header.bitmap_offset);
 	return (header);
 }
 
-t_texture	read_bmp(const sint8 *filename, t_wolf *wolf)
+ void	palette(uint32 *img, t_palette *p, uint32 size)
+{
+	uint32 i;
+	uint32 j;
+
+	j = 0;
+		while (j < size)
+	{
+		i = 0;
+		while (i < p->size)
+		{
+			if (img[j] == p->palete[i])
+				{
+				j++;
+				break;
+			}
+			i++;
+		}
+		if (i == p->size)
+		{
+			p->palete[i] = img[j];
+			p->size++;
+		}
+		j++;
+	}
+	}
+
+t_texture	read_bmp(const sint8 *filename, t_wolf *wolf, t_palette *pal)
 {
 	sint32	offset;
-//	uint32	temp;
-	t_bitmap_header bitmap;
+t_bitmap_header bitmap;
 	uint8		data[3 * 120 * 120];
 	sint32		fd;
 	uint8		header[54];
 	t_texture	tex;
 	sint32 i;
 	sint32 j;
-//	sint32 k;
 
+
+	//printf("size of = %d\n", pal->size);
 	offset = 0;
 	ft_bzero(data, sizeof(data));
-	/*
- TODO(viccarau): Everything will be read at once, then the reading of the image is going to start
- at the begining of bitmap.offset, I need to reverse the uint8 data, and then read the image from
- the end;
- */
 	fd = open(filename, O_RDONLY);
 	read(fd, header, 54);
 	bitmap = get_header(header);
@@ -80,27 +102,13 @@ t_texture	read_bmp(const sint8 *filename, t_wolf *wolf)
 		i--;
 		j += 3;
 		if (bitmap.width % 4 != 0)
-			if (i % bitmap.width == 0)
+			 if (i % bitmap.width == 0)
 		{
 			j++;
 			offset++;
 		}
 	}
-/*	i = 0;
-	while (i < bitmap.height)
-	{
-		j = 0;
-		k = bitmap.width;
-		while (j < (bitmap.width / 2))
-		{
-			//printf("i %d, j %d, k %d\n", i, j, k);
-			temp = tex.data[j + i * bitmap.height];
-			tex.data[j + i * bitmap.height] = tex.data[k + i * bitmap.height];
-			tex.data[k + i * bitmap.height] = temp;
-			j++;
-			k--;
-		}
-		i++;
-	}*/
-	return (tex);
+	palette(tex.data, pal, (bitmap.height * bitmap.width) - 1);
+	//ft_print_memory(pal->palete, pal->size);
+return (tex);
 }

@@ -14,19 +14,26 @@
 
 void	load_textures(t_wolf *wolf)
 {
-	wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp", wolf);
-	wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp", wolf);
-	wolf->tex[2] = read_bmp("./texture/BrownbrickD.bmp", wolf);
-	wolf->tex[3] = read_bmp("./texture/WoodbrickD.bmp", wolf);
-	wolf->tex[4] = read_bmp("./texture/Wooddoor.bmp", wolf);
-	wolf->tex[5] = read_bmp("./texture/shotgun0.bmp", wolf);
-	wolf->tex[6] = read_bmp("./texture/shotgun1.bmp", wolf);
-	wolf->tex[7] = read_bmp("./texture/shotgun2.bmp", wolf);
-	wolf->tex[8] = read_bmp("./texture/shotgun3.bmp", wolf);
-	wolf->tex[9] = read_bmp("./texture/shotgun4.bmp", wolf);
-	wolf->tex[10] = read_bmp("./texture/gun0.bmp", wolf);
-	wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf);
-	}
+t_palette pal;
+
+	pal.size = 0;
+	pal.palete = ft_memalloc(1024);
+	wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp", wolf, &pal);
+	wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp", wolf, &pal);
+	wolf->tex[2] = read_bmp("./texture/BrownbrickD.bmp", wolf, &pal);
+	wolf->tex[3] = read_bmp("./texture/WoodbrickD.bmp", wolf, &pal);
+	wolf->tex[4] = read_bmp("./texture/Wooddoor.bmp", wolf, &pal);
+	wolf->tex[5] = read_bmp("./texture/shotgun0.bmp", wolf, &pal);
+	wolf->tex[6] = read_bmp("./texture/shotgun1.bmp", wolf, &pal);
+	wolf->tex[7] = read_bmp("./texture/shotgun2.bmp", wolf, &pal);
+	wolf->tex[8] = read_bmp("./texture/shotgun3.bmp", wolf, &pal);
+	wolf->tex[9] = read_bmp("./texture/shotgun4.bmp", wolf, &pal);
+	wolf->tex[10] = read_bmp("./texture/gun0.bmp", wolf, &pal);
+	wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf, &pal);
+	wolf->tex[12] = read_bmp("./texture/guard/guard00.bmp", wolf, &pal);
+	wolf->tex[13] = read_bmp("./texture/guard/guard01.bmp", wolf, &pal);
+	//printf("pal size = %d, \n", pal.size);
+}
 
 void	ft_wolf_init(t_wolf *wolf)
 {
@@ -128,8 +135,9 @@ int	main(int ac, char **av)
 	t_wolf	wolf;
 	sint32	fd;
 	sint32	frames[61];
-	
-	mem_init(&wolf);
+
+ft_bzero(&audio, sizeof(audio));
+mem_init(&wolf);
 	if (ac == 2)
 		fd = open(av[1], O_RDONLY);
 	else
@@ -149,6 +157,11 @@ int	main(int ac, char **av)
 		//SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN);
 		while (1)
 		{
+			if (audio.audio_len == 0)
+			{
+				audio.audio_pos = audio.wav_buffer;
+				audio.audio_len = audio.wav_length;
+			}
 			while (SDL_PollEvent(&wolf.sdl.event))
 			{
 				if (wolf.sdl.event.type == SDL_QUIT)

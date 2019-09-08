@@ -23,6 +23,9 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
+
+// # define W	(2560)
+// # define H	(1080)
 # define W	(1920)
 # define H	(1080)
 
@@ -115,6 +118,12 @@ typedef struct	s_sdl
 	SDL_Texture		*texture;
 }				t_sdl;
 
+typedef struct	s_palette
+{
+	uint32	*palete;
+	uint32		size;
+	}				t_palette;
+
 typedef struct	s_player
 {
 	t_2d		ray;
@@ -176,6 +185,7 @@ uint8		res;
 	sint32		view;
 }				t_wolf;
 
+void				load_music(char *path, t_audio *audio);
 void				*test(void *b, int c, size_t len);
 void				draw_hud(t_wolf *wolf, uint32 deltaframe);
 t_2d_p			init_2d(sint32 x, sint32 y);
@@ -220,6 +230,10 @@ void			mouse_movement(t_wolf *wolf, SDL_Event event);
 void			draw_gun(t_wolf *wolf, uint32 tex_id);
 void			draw_machinegun(t_wolf *wolf, uint32 deltaframe);
 void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
-sint32			lighting(sint32 color, t_raycaster *ray);
-t_texture		read_bmp(const sint8 *filename, t_wolf *wolf);
+sint32			lighting(sint32 color, f32 distance);
+t_texture		read_bmp(const sint8 *filename, t_wolf *wolf, t_palette *pal);
+void			entity_update(t_wolf *wf);
+void 			sort_depth_buffer(t_wolf *wf, sint32 *depth_buffer, f32 *depth);
+void 			entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist);
+
 #endif

@@ -12,26 +12,27 @@
 
 NAME = wolf3d
 SDL2 = ./SDL2.framework
-
-SRC_DIR = ./srcs/
+CC = gcc
+SRC_DIR = D:/Work/wolf3d/srcs/
 
 INC = includes/camera.h includes/wolf3d.h includes/draw.h
-SRC = $(SRC_DIR)checks.c $(SRC_DIR)main.c $(SRC_DIR)keycode.c $(SRC_DIR)math.c \
-	$(SRC_DIR)parsing.c $(SRC_DIR)raycaster.c $(SRC_DIR)debug.c \
-	$(SRC_DIR)input1.c $(SRC_DIR)minimap.c $(SRC_DIR)perp_distance.c \
+SRC = $(SRC_DIR)main.c $(SRC_DIR)input1.c   $(SRC_DIR)parsing.c \
+	$(SRC_DIR)raycaster.c $(SRC_DIR)debug.c $(SRC_DIR)checks.c  \
+	$(SRC_DIR)math.c $(SRC_DIR)keycode.c $(SRC_DIR)perp_distance.c $(SRC_DIR)minimap.c \
 	$(SRC_DIR)draw_wall.c $(SRC_DIR)input.c $(SRC_DIR)bmp_reader.c \
-	$(SRC_DIR)draw_sprite.c $(SRC_DIR)hud.c
-OBJ = $(SRC:$(SRC_DIR)%.c=%.o)
+	$(SRC_DIR)draw_sprite.c $(SRC_DIR)hud.c  $(SRC_DIR)hud1.c $(SRC_DIR)sound.c $(SRC_DIR)entity_update.c $(SRC_DIR)sort_depth_buffer.c
+OBJ = $(SRC:$(SRC_DIR)%.c=$(SRC_DIR)%.o)
 
-LIB_INC = -Iincludes -Ilibft/includes -I ./SDL2.framework/Headers
-#-I$(LIB)
-FLAGS += -Llibft -lft -lm -framework SDL2
 
-CFLAGS += $(LIB_INC) -F. -Wall -Wextra -Werror #-fsanitize=address -g
+LIB_INC = -Iincludes -Ilibft/includes -Imingw
+
+FLAGS += -pg -O -O2 -O3 -Llibft -lft -lm -lmingw32 -lSDL2 -lSDL2main
+
+CFLAGS += -pg -O -O2 -O3 -lmingw32 -lSDL2 -lSDL2main $(LIB_INC) -Wall -Wextra -Werror #-fsanitize=address -g
 
 all: $(NAME)
 
-$(NAME):	$(OBJ) $(SDL2)
+$(NAME):	$(OBJ) $(INC)
 	make -C libft
 	gcc -o $(NAME) $(OBJ) $(FLAGS) $(CFLAGS)
 
@@ -42,15 +43,14 @@ $(SDL2):
 	cp -r /Volumes/SDL2/SDL2.framework . ; \
 	hdiutil detach /Volumes/SDL2 ; fi; \
 
-$(OBJ) : $(SRC) $(INC) $(SDL2)
-	gcc -c $(SRC) $(CFLAGS)
+$(OBJ): $(INC)
 
 clean:
 	rm -f $(OBJ)
-	make -C libft clean
+#	make -C libft clean
 
 fclean:	clean
 	rm -f $(NAME)
-	make -C libft fclean
+#	make -C libft fclean
 
 re: fclean all
