@@ -6,13 +6,13 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/08 17:41:18 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 11:07:16 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-inline sint32	lighting(sint32 color, f32	distance)
+sint32	lighting(sint32 color, f32	distance)
 {
 	f32		light;
 
@@ -37,8 +37,8 @@ sint8	texture_pick(t_raycaster *ray)
 		return (TEXTURE_4);
 }
 
-void	texture_map(t_wolf *wf, t_texture_map *tex_map, sint32 x,
-				f32 perp_dist, t_texture *tex)
+void	texture_map(t_wolf *wf, t_texture_map *tex_map, sint32 x, f32 perp_dist,
+			t_texture *tex)
 {
 	sint32	tex_height_scale;
 	sint32	color;
@@ -46,6 +46,7 @@ void	texture_map(t_wolf *wf, t_texture_map *tex_map, sint32 x,
 	sint32	y_offset;
 	sint32	y;
 	sint32 precalc;
+	uint32	*img = wf->img;
 	
 	precalc = (tex->height << 24) / tex_map->column_height;
 	y_offset = ((tex_map->column_height - H) >> 1) + wf->view;
@@ -53,10 +54,10 @@ void	texture_map(t_wolf *wf, t_texture_map *tex_map, sint32 x,
 	while (y < tex_map->end)
 	{
 		tex_height_scale = y + y_offset;
-		tex_y = (tex_height_scale * precalc) >> 24;
-		color = tex->data[tex->width * tex_y + tex_map->coord.x];
+		tex_y = ((tex_height_scale * precalc) >> 24) * tex->width;
+		color = tex->data[tex_y + tex_map->coord.x];
 		//NOTE (jae) : lighting in ray_casting seems quite expensive. Needs to check!!
-		wf->img[x + y * W] = lighting(color, perp_dist);
+		img[x + y * W] = lighting(color, perp_dist);
 		y++;
 	}
 }

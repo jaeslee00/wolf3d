@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/07 23:50:06 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 11:56:00 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	is_alloc(wolf->player->m = (t_minimap *)ft_mem(&wolf->mem, wolf->obj.size * sizeof(t_minimap)), wolf, -1);
 	is_alloc(wolf->perp_dist = (f32*)ft_mem(&wolf->mem, sizeof(f32) * W), wolf, -1);
 	is_alloc(wolf->entity = (t_entity *)ft_mem(&wolf->mem, sizeof(t_entity) * NBR_OF_ENTITIES), wolf, -1);
-
+	is_alloc(wolf->entity_order = (sint32*)ft_mem(&wolf->mem, sizeof(sint32) * NBR_OF_ENTITIES), wolf, -1);
 	wolf->player->direction.x = -1;
 	wolf->player->direction.y = 0;
 	wolf->player->plane.x = 0;
@@ -177,10 +177,12 @@ int		main(int ac, char **av)
 				check_flag(&wolf, wolf.map,
 					SDL_GetTicks() - frames[i - 1]);
 			event_handler(&wolf, wolf.map, wolf.doors);
+			//TODO (jae) : need a good condition to execute re-order
+			//sort_entity_order(wolf.entity, wolf.entity_order, wolf.player);
 			frames[i] = SDL_GetTicks();
 			ceiling(wolf.img, &wolf);
 			raycast(&wolf);
-			entity_update(&wolf);
+			entity_update(&wolf, wolf.entity);
 			if (i == 0)
 				draw_hud(&wolf, 16);
 			else

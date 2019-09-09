@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/08 01:44:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 11:49:48 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,13 @@
 # define TEXTURE_2	2
 # define TEXTURE_3	3
 # define TEXTURE_4	4
-# define OBJ_ON_TARGET 0b1
+
+# define OBJ_ON_TARGET 1UL
+# define OBJ_DAMAGED 1UL << 1
+# define OBJ_DEAD 1UL << 2
+
 # define ENEMY_SIZE 50
-# define NBR_OF_ENTITIES 10
+# define NBR_OF_ENTITIES 9
 # define TEXTURE_BLANK 0x980088
 # ifndef INT_MAX
 #  define INT_MAX 2147483647
@@ -199,6 +203,7 @@ typedef struct	s_wolf
 	sint32		view;
 	t_entity	*entity;
 	f32			*perp_dist;
+	sint32		*entity_order;
 }				t_wolf;
 
 void				load_music(char *path, t_audio *audio);
@@ -249,7 +254,7 @@ void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
 sint32			lighting(sint32 color, f32 distance);
 t_texture		read_bmp(const sint8 *filename, t_wolf *wolf);
 
-void			entity_update(t_wolf *wf);
-void 			sort_depth_buffer(t_wolf *wf, sint32 *depth_buffer, f32 *depth);
-void 			entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist);
+void			entity_update(t_wolf *wf, t_entity *entity);
+void			sort_depth_buffer(t_wolf *wf, sint32 *depth_buffer, f32 *depth);
+
 #endif

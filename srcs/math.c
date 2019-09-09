@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:24:28 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/06 03:09:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/08 17:09:18 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ sint32	lerp(f64 a, f32 t, f64 b)
 {
 	sint32	result;
 
-	result = (1.0f - t) * a + t * b;
+	result = (1.0f - t) * a + (t * b);
 	return (result);
 }
 
@@ -56,8 +56,8 @@ sint32	rgb_lerp(sint32 color1, f32 t, sint32 color2)
 	sint32	g;
 	sint32	b;
 
-	r = lerp(color1 / 0x10000, t, color2 / 0x10000);
-	g = lerp(((color1 / 0x100) % 0x100), t, ((color2 / 0x100) % 0x100));
+	r = lerp((color1 >> 16), t, (color2 >> 16));
+	g = lerp(((color1 >> 8) & 0xFF), t, ((color2 >> 8) & 0xFF));
 	b = lerp(color1 % 0x100, t, color2 % 0x100);
 	return ((r << 16) + (g << 8) + b);
 }

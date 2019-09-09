@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/08 05:22:46 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 11:58:09 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 sint32	entity_update_status(t_entity *entity)
 {
-	if (entity->flag == 0b11)
+	if (entity->flag & 1UL)
 		return (13);
 	else
 		return (12);
@@ -93,12 +93,14 @@ void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 
 	t_2d_p draw_start;
 	t_2d_p draw_end;
-	sint32	tex_id;
 	
 	draw_start.x = (-sprite_width + sprite_pos_screen) >> 1;
 	draw_end.x = (sprite_width + sprite_pos_screen) >> 1;
+	draw_start.y = ((-sprite_height + H) >> 1) - view;
+	draw_end.y = ((sprite_height + H) >> 1) - view;
 
 	sint32 x_offset = 0;
+
 	if (draw_start.x < 0)
 	{
 		x_offset = draw_start.x;
@@ -106,38 +108,42 @@ void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 	}
 	if (draw_end.x >= W)
 		draw_end.x = W - 1;
-	if (draw_start.x >= W || draw_end.x < 0)
-		return ;
 
-	draw_start.y = ((-sprite_height + H) >> 1) - view;
-	draw_end.y = ((sprite_height + H) >> 1) - view;
 	if (draw_start.y < 0)
 		draw_start.y = 0;
 	if (draw_end.y >= H)
 		draw_end.y = H - 1;
-
 	if ((draw_start.x + draw_end.x) / 2 < W / 2 + ENEMY_SIZE
 		&& (draw_start.x + draw_end.x) / 2 > W / 2 - ENEMY_SIZE)
-		entity->flag |= OBJ_ON_TARGET;
+		entity->flag |= 1UL;
 	else
-		entity->flag = 0;
+		entity->flag &= ~1UL;
 
-	tex_id = entity_update_status(entity);
-	image_fill(img, perp_dist, &tex[tex_id], entity, draw_start, draw_end, view, sprite_height, sprite_width, x_offset);
+	if (draw_start.x >= W || draw_end.x < 0 || draw_start.y >= H || draw_end.y < 0)
+		return ;
+	image_fill(img, perp_dist, tex, entity, draw_start, draw_end, view, sprite_height, sprite_width, x_offset);
 }
 
-void	entity_update(t_wolf *wf)
+void	entity_update(t_wolf *wf, t_entity *entity)
 {
 	sint32		depth_buffer[NBR_OF_ENTITIES];
 	f32			depth[NBR_OF_ENTITIES];
 	sint32		index;
+	sint32		tex_id;
 
 	sort_depth_buffer(wf, depth_buffer, depth);
 	index = 0;
 	while (index < NBR_OF_ENTITIES)
 	{
+		//TODO : this part has to stay independent and depth_buffer must be called outside as well
+		//TODO : set entity[index].tex => right texture from wolf->tex
+		if (wf->entity[depth_buffer[index]].flag & 1UL << 1)
+			tex_id = 13;
+		else
+			tex_id = 12;
+////////////////////////////////////////////////////////////////////////////////////////////////			
 		if (wf->entity[depth_buffer[index]].transformed_sprite_pos.y > 0.0f)
-			entity_draw(&wf->entity[depth_buffer[index]], wf->tex, wf->view, wf->img, wf->perp_dist);
+			entity_draw(&entity[depth_buffer[index]], &wf->tex[tex_id], wf->view, wf->img, wf->perp_dist);
 		index++;
 	}
 }
