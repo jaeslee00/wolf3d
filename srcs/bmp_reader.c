@@ -71,45 +71,53 @@ t_bitmap_header get_header(uint8 *mem)
 	}
 	}
 
+void		data_to_img(t_bitmap_header b, uint8 *d, t_texture *tex, sint32 o)
+{
+	sint32 i;
+	sint32 j;
+	sint32 k;
+	sint32 l;
+	
+	l = b.height - 1;
+	j = 0;
+	while (j < b.height)
+	{
+		i = 0;
+		k = o;
+		while (i < b.width + o)
+		{
+			tex->data[i + j * b.width] = d[k + (l * b.width * 3)] |
+				d[(k + 1) + (l * b.width * 3)] << 8 | d[(k + 2) +
+				(l * b.width * 3)] << 16;
+			if (tex->data[i + j * b.width] == 0)
+				tex->data[i + j * b.width] = 1;
+			i++;
+			k += 3;
+		}
+		o -= b.width % 4;
+		l--;
+		j++;
+	}
+}
+
 t_texture	read_bmp(const sint8 *filename, t_wolf *wolf, t_palette *pal)
 {
-	sint32	offset;
-t_bitmap_header bitmap;
+	t_bitmap_header bitmap;
 	uint8		data[3 * 120 * 120];
 	sint32		fd;
 	uint8		header[54];
 	t_texture	tex;
-	sint32 i;
-	sint32 j;
 
-
-	(void)pal;
-	//printf("size of = %d\n", pal->size);
 	ft_bzero(data, sizeof(data));
 	fd = open(filename, O_RDONLY);
-	 offset = read(fd, header, 54);
+	read(fd, header, 54);
 	bitmap = get_header(header);
 	tex.width = bitmap.width;
 	tex.height = bitmap.height;
 	tex.size = 3 * tex.width * tex.height;
 	is_alloc(tex.data = (uint32*)ft_mem(&wolf->mem, tex.width * tex.height * sizeof(uint32)), wolf, -1);
 	read_all(fd, data, tex.size);
-	i = (bitmap.height * bitmap.width) - 1;
-	j = 0;
-	offset = 0;
-	while (i >= 0 + offset)
-	{
-		tex.data[i] = data[j] | data[j + 1] << 8 | data[j + 2] << 16;
-		i--;
-		j += 3;
-		if (bitmap.width % 4 != 0)
-			 if (i % bitmap.width == 0)
-		{
-			j++;
-			offset++;
-		}
-	}
+	data_to_img(bitmap, &data[0], &tex, (bitmap.height - 1) * (bitmap.width % 4));
 	palette(tex.data, pal, (bitmap.height * bitmap.width) - 1);
-	//ft_print_memory(pal->palete, pal->size);
-return (tex);
+	return (tex);
 }

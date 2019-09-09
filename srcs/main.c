@@ -32,7 +32,7 @@ t_palette pal;
 	wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf, &pal);
 	wolf->tex[12] = read_bmp("./texture/guard/guard00.bmp", wolf, &pal);
 	wolf->tex[13] = read_bmp("./texture/guard/guard01.bmp", wolf, &pal);
-	printf("pal size = %ld, \n", pal.size * sizeof(int));
+	printf("pal size = %I64d, \n", pal.size * sizeof(int));
 }
 
 void	ft_wolf_init(t_wolf *wolf)
