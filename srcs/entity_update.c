@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/09 11:58:09 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 17:48:49 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,7 @@
 
 //TODO (jae) : need a condition to call draw_enemy() for only those are within the player's view for optimization
 
-sint32	entity_update_status(t_entity *entity)
-{
-	if (entity->flag & 1UL)
-		return (13);
-	else
-		return (12);
-}
-
-void	image_fill(uint32 *img, f32 *perp_dist, t_texture *tex, t_entity *entity,
+void	image_fill(uint32 *img, f32 *perp_dist, t_texture *tex, t_items *item,
 			t_2d_p draw_start, t_2d_p draw_end, sint32 view, sint32 sprite_height,
 				sint32 sprite_width, sint32 x_offset)
 {
@@ -68,16 +60,16 @@ void	image_fill(uint32 *img, f32 *perp_dist, t_texture *tex, t_entity *entity,
 			taxi[1] = tex_x[1] + tex_y;
 			taxi[2] = tex_x[2] + tex_y;
 			taxi[3] = tex_x[3] + tex_y;
-			if (entity->transformed_sprite_pos.y < perp_dist[x]) 
+			if (item->transformed_sprite_pos.y < perp_dist[x]) 
 			{
 				if ((color[0] = tex->data[taxi[0]]) != TEXTURE_BLANK)
-					img[x + img_y] = lighting(color[0], entity->transformed_sprite_pos.y);
+					img[x + img_y] = lighting(color[0], item->transformed_sprite_pos.y);
 				if ((color[1] = tex->data[taxi[1]]) != TEXTURE_BLANK)
-					img[x+1 + img_y] = lighting(color[1], entity->transformed_sprite_pos.y);
+					img[x+1 + img_y] = lighting(color[1], item->transformed_sprite_pos.y);
 				if ((color[2] = tex->data[taxi[2]]) != TEXTURE_BLANK)
-					img[x+2 + img_y] = lighting(color[2], entity->transformed_sprite_pos.y);
+					img[x+2 + img_y] = lighting(color[2], item->transformed_sprite_pos.y);
 				if ((color[3] = tex->data[taxi[3]]) != TEXTURE_BLANK)
-					img[x+3 + img_y] = lighting(color[3], entity->transformed_sprite_pos.y);
+					img[x+3 + img_y] = lighting(color[3], item->transformed_sprite_pos.y);
 			}
 			x += 4;
 		}
@@ -85,11 +77,11 @@ void	image_fill(uint32 *img, f32 *perp_dist, t_texture *tex, t_entity *entity,
 	}
 }
 
-void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist)
+void	entity_draw(t_items *item, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist)
 {
-	sint32 sprite_height = abs((sint32)((f32)H / entity->transformed_sprite_pos.y));
+	sint32 sprite_height = abs((sint32)((f32)H / item->transformed_sprite_pos.y));
 	sint32 sprite_width = sprite_height;
-	sint32 sprite_pos_screen = (sint32)(((f32)W) * (1.0f + entity->transformed_sprite_pos.x / entity->transformed_sprite_pos.y));
+	sint32 sprite_pos_screen = (sint32)(((f32)W) * (1.0f + item->transformed_sprite_pos.x / item->transformed_sprite_pos.y));
 
 	t_2d_p draw_start;
 	t_2d_p draw_end;
@@ -115,35 +107,25 @@ void	entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32
 		draw_end.y = H - 1;
 	if ((draw_start.x + draw_end.x) / 2 < W / 2 + ENEMY_SIZE
 		&& (draw_start.x + draw_end.x) / 2 > W / 2 - ENEMY_SIZE)
-		entity->flag |= 1UL;
+		item->flag |= 1UL;
 	else
-		entity->flag &= ~1UL;
+		item->flag &= ~1UL;
 
 	if (draw_start.x >= W || draw_end.x < 0 || draw_start.y >= H || draw_end.y < 0)
 		return ;
-	image_fill(img, perp_dist, tex, entity, draw_start, draw_end, view, sprite_height, sprite_width, x_offset);
+	image_fill(img, perp_dist, tex, item, draw_start, draw_end, view, sprite_height, sprite_width, x_offset);
 }
 
-void	entity_update(t_wolf *wf, t_entity *entity)
+void	entity_draw_loop(t_wolf *wf, t_entity *entity, t_items *item, sint32 *order)
 {
-	sint32		depth_buffer[NBR_OF_ENTITIES];
-	f32			depth[NBR_OF_ENTITIES];
 	sint32		index;
-	sint32		tex_id;
 
-	sort_depth_buffer(wf, depth_buffer, depth);
 	index = 0;
-	while (index < NBR_OF_ENTITIES)
-	{
-		//TODO : this part has to stay independent and depth_buffer must be called outside as well
-		//TODO : set entity[index].tex => right texture from wolf->tex
-		if (wf->entity[depth_buffer[index]].flag & 1UL << 1)
-			tex_id = 13;
-		else
-			tex_id = 12;
-////////////////////////////////////////////////////////////////////////////////////////////////			
-		if (wf->entity[depth_buffer[index]].transformed_sprite_pos.y > 0.0f)
-			entity_draw(&entity[depth_buffer[index]], &wf->tex[tex_id], wf->view, wf->img, wf->perp_dist);
+	while (index < entity->nbr_of_entities)
+	{	
+		if (item[order[index]].transformed_sprite_pos.y > 0.0f)
+			entity_draw(&item[order[index]], item[order[index]].tex,
+				wf->view, wf->img, wf->perp_dist);
 		index++;
 	}
 }

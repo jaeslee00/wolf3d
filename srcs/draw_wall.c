@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/09 11:07:16 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 18:13:15 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,6 @@ void	draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray)
 		tex_width_scale = wf->player->pos.x + ray->perp_dist * wf->player->ray.x;
 	tex_width_scale -= floor(tex_width_scale);
 	tex_map.coord.x = (sint32)(tex_width_scale * (f32)wf->tex[(sint32)texture_pick(ray)].width);
+	//TODO (jae) : reverse texture when looking left
 	texture_map(wf, &tex_map, x, ray->perp_dist, &wf->tex[tex_id]);
 }

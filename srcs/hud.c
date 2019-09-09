@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 17:19:22 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/08 20:53:45 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 17:42:49 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,9 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 		wolf->a.gun += deltaframe;
 		if (wolf->a.gun < 100)
 		{
-			for (int i=0; i < NBR_OF_ENTITIES; i++)
-				if (wolf->entity[i].flag & 1UL)
-					wolf->entity[i].flag |= 1UL << 1;
+			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
+				if (wolf->entity->item[i].flag & 1UL)
+					wolf->entity->item[i].flag |= 1UL << 1;
 			draw_gun(wolf, 6);
 		}
 		else if(wolf->a.gun < 145)
@@ -101,9 +101,9 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 			draw_gun(wolf, 9);
 		if (wolf->a.gun >= 600)
 		{
-			for (int i=0; i < NBR_OF_ENTITIES; i++)
-				if (wolf->entity[i].flag & 1UL << 1)
-					wolf->entity[i].flag &= ~(1UL << 1);	
+			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
+				if (wolf->entity->item[i].flag & 1UL << 1)
+					wolf->entity->item[i].flag &= ~(1UL << 1);	
 			wolf->flag &= ~(1UL << 9);
 			wolf->a.gun = 0;
 		}

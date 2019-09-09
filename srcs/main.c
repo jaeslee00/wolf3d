@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/09 11:56:00 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 18:20:52 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,20 @@ void	load_textures(t_wolf *wolf)
 	wolf->tex[13] = read_bmp("./texture/guard/guard01.bmp", wolf);
 }
 
+void	init_entities(t_entity *entity, t_wolf *wolf)
+{
+	sint32	index;
+	is_alloc(entity->item = (t_items*)ft_mem(&wolf->mem, sizeof(t_items) * entity->nbr_of_entities), wolf, -1);
+	is_alloc(entity->order = (sint32*)ft_mem(&wolf->mem, sizeof(sint32) * entity->nbr_of_entities), wolf, -1);
+	is_alloc(entity->depth = (f32*)ft_mem(&wolf->mem, sizeof(f32) * entity->nbr_of_entities), wolf, -1);
+	index = 0;
+	while (index < entity->nbr_of_entities)
+	{
+		entity->item[index].tex = &wolf->tex[12];
+		index++;
+	}
+}
+
 void	ft_wolf_init(t_wolf *wolf)
 {
 	wolf->map = int_to_tab(wolf);
@@ -51,8 +65,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	is_alloc(wolf->player = (t_player*)ft_mem(&wolf->mem, sizeof(t_player)), wolf, -1);
 	is_alloc(wolf->player->m = (t_minimap *)ft_mem(&wolf->mem, wolf->obj.size * sizeof(t_minimap)), wolf, -1);
 	is_alloc(wolf->perp_dist = (f32*)ft_mem(&wolf->mem, sizeof(f32) * W), wolf, -1);
-	is_alloc(wolf->entity = (t_entity *)ft_mem(&wolf->mem, sizeof(t_entity) * NBR_OF_ENTITIES), wolf, -1);
-	is_alloc(wolf->entity_order = (sint32*)ft_mem(&wolf->mem, sizeof(sint32) * NBR_OF_ENTITIES), wolf, -1);
+	is_alloc(wolf->entity = (t_entity*)ft_mem(&wolf->mem, sizeof(t_entity)), wolf, -1);
 	wolf->player->direction.x = -1;
 	wolf->player->direction.y = 0;
 	wolf->player->plane.x = 0;
@@ -153,6 +166,8 @@ int		main(int ac, char **av)
 		}
 		tkneizer(fd, &wolf);
 		ft_wolf_init(&wolf);
+		count_entities(wolf.map, wolf.obj, wolf.entity);
+		init_entities(wolf.entity, &wolf);
 		print_map(wolf.map, wolf.obj, wolf.player, wolf.doors, &wolf);
 		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
@@ -178,11 +193,11 @@ int		main(int ac, char **av)
 					SDL_GetTicks() - frames[i - 1]);
 			event_handler(&wolf, wolf.map, wolf.doors);
 			//TODO (jae) : need a good condition to execute re-order
-			//sort_entity_order(wolf.entity, wolf.entity_order, wolf.player);
+			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);
 			frames[i] = SDL_GetTicks();
 			ceiling(wolf.img, &wolf);
 			raycast(&wolf);
-			entity_update(&wolf, wolf.entity);
+			entity_draw_loop(&wolf, wolf.entity, wolf.entity->item, wolf.entity->order);
 			if (i == 0)
 				draw_hud(&wolf, 16);
 			else
