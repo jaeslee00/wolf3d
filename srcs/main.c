@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/08 15:59:15 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/09 20:29:24 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_palette pal;
 	wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf, &pal);
 	wolf->tex[12] = read_bmp("./texture/guard/guard00.bmp", wolf, &pal);
 	wolf->tex[13] = read_bmp("./texture/guard/guard01.bmp", wolf, &pal);
-	printf("pal size = %I64d, \n", pal.size * sizeof(int));
+	//printf("pal size = %I64d, \n", pal.size * sizeof(int));
 }
 
 void	ft_wolf_init(t_wolf *wolf)
@@ -86,14 +86,51 @@ void	*test(void *b, int c, size_t len)
 	return (b);
 }
 
-void	ceiling(uint32 *img, t_wolf *wolf)
+void back(uint32 *img, t_palette *cel)
 {
+	sint32	x;
+	sint32	y;
+	sint32	y1;
+	sint32	i;
+
+	i = 0;
+	y = 0;
+	y1 = H - 1;
+	while (y < (H / 2))
+	{
+		x = 0;
+		while (x < W - 1)
+		{
+			if (i < (int)cel->size)
+{
+				img[x + y * W] = cel->palete[i];
+				img[x + y1 * W] = cel->palete[i];
+			}
+else
+			{
+				img[x + y * W] = 0;
+				img[x + y1 * W] = 0;
+			}
+			x++;
+		}
+		if (y % 20 == 0)
+			i++;
+		y++;
+		y1--;
+	}
+}
+
+	t_palette ceiling(uint32 *img, t_wolf *wolf)
+{
+	t_palette p;
 	sint32	x;
 	sint32	y;
 	sint32	y1;
 	sint32	color;
 	f32		per;
 
+	ft_bzero(&p, sizeof(p));
+	p.palete = ft_memalloc(sizeof(sint32) * 20000);
 	color = 1;
 	x = 0;
 	y = 0;
@@ -131,17 +168,21 @@ void	ceiling(uint32 *img, t_wolf *wolf)
 		y++;
 		y1--;
 	}
+	palette(img, &p, W * H * 2);
+	//printf("sizeof(pal) = %d\n", p.size);
+	return (p);
 }
 
 int		main(int ac, char **av)
 {
+	t_palette cel;
 	t_audio audio;
 	sint32	i;
 	t_wolf	wolf;
 	sint32	fd;
 	sint32	frames[61];
-
-ft_bzero(&audio, sizeof(audio));
+	
+	ft_bzero(&audio, sizeof(audio));
 mem_init(&wolf);
 	if (ac == 2)
 		fd = open(av[1], O_RDONLY);
@@ -149,11 +190,13 @@ mem_init(&wolf);
 		fd = open("wolf3d.map", O_RDONLY);
 	//printf("size of wolf = %ld texture %ld door %ld\n", sizeof(wolf), sizeof(t_texture) , sizeof(t_door));
 	//load_music("./music/hallo.wav", &audio);
-	//SDL_PauseAudio(0);
+	load_music("./music/steps.wav", &audio);
+	SDL_PauseAudio(0);
 	if (fd > 0)
 	{
 		tkneizer(fd, &wolf);
 		ft_wolf_init(&wolf);
+		cel = ceiling(wolf.img, &wolf);
 		print_map(wolf.map, wolf.obj, wolf.player, wolf.doors, &wolf);
 		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
@@ -161,7 +204,8 @@ mem_init(&wolf);
 		i = 1;
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
-		//SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		//printf("tsize = %zu, usize %zu\n", wolf.mem.tsize, wolf.mem.usize);
 		while (1)
 		{
 if (audio.audio_len == 0)
@@ -183,7 +227,8 @@ if (audio.audio_len == 0)
 					SDL_GetTicks() - frames[i - 1]);
 			event_handler(&wolf, wolf.map, wolf.doors);
 			frames[i] = SDL_GetTicks();
-			ceiling(wolf.img, &wolf);
+			back(wolf.img, &cel);
+			//ceiling(wolf.img, &wolf);
 			raycast(&wolf);
 			entity_update(&wolf);
 			if (i == 0)

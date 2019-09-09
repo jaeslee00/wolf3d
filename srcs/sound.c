@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:51:29 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/05 20:05:13 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/09 20:28:55 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ void	load_music(char *path, t_audio *audio)
 	audio->wav_spec.userdata = audio;
 	audio->audio_pos = audio->wav_buffer;
 	audio->audio_len = audio->wav_length;
-	if (SDL_OpenAudio(&audio->wav_spec, NULL) < 0)
-	exit(-1);
+	SDL_OpenAudio(&audio->wav_spec, NULL);
+	//exit(-1);
 	}

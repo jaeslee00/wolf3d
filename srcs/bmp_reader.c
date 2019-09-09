@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:43:55 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/08 15:57:43 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/09 17:12:03 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_bitmap_header get_header(uint8 *mem)
 	return (header);
 }
 
- void	palette(uint32 *img, t_palette *p, uint32 size)
+void	palette(uint32 *img, t_palette *p, uint32 size)
 {
 	uint32 i;
 	uint32 j;
@@ -56,7 +56,7 @@ t_bitmap_header get_header(uint8 *mem)
 		while (i < p->size)
 		{
 			if (img[j] == p->palete[i])
-				{
+			{
 				j++;
 				break;
 			}
@@ -69,7 +69,7 @@ t_bitmap_header get_header(uint8 *mem)
 		}
 		j++;
 	}
-	}
+}
 
 void		data_to_img(t_bitmap_header b, uint8 *d, t_texture *tex, sint32 o)
 {

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/08 01:44:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 18:13:40 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # include <SDL2/SDL.h>
 // # define W	(2560)
 // # define H	(1080)
-# define W	(1920)
-# define H	(1080)
+# define W	(3840)
+# define H	(2160)
 
 # define TEXTURE_0	0
 # define TEXTURE_1	1
@@ -234,6 +234,7 @@ sint32			lerp(f64 a, f32 t, f64 b);
 sint32			rgb_lerp(sint32 color1, f32 t, sint32 color2);
 sint32			direction_movement(t_wolf *wolf, sint8 **map, sint32 framedelta);
 sint32			print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
+void			palette(uint32 *img, t_palette *p, uint32 size);
 void			check_flag(t_wolf *wolf, sint8 **map, sint32 framedelta);
 void			set_flag(t_wolf *wolf, SDL_Event event);
 void			ft_frametimes(sint32 *frames, sint32 *count);
