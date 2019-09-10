@@ -66,6 +66,7 @@ typedef double				f64;
 ** E[ROW][COLUMN]
 ** ROW Major
 */
+
 typedef struct	s_2d_p
 {
 	sint32	x;
@@ -208,7 +209,6 @@ typedef struct	s_wolf
 }				t_wolf;
 
 void				load_music(char *path, t_audio *audio);
-void				*test(void *b, int c, size_t len);
 void				draw_hud(t_wolf *wolf, uint32 deltaframe);
 t_2d_p			init_2d(sint32 x, sint32 y);
 void				draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, uint32 size);

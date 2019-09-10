@@ -17,7 +17,7 @@ void	load_textures(t_wolf *wolf)
 t_palette pal;
 
 	pal.size = 0;
-	pal.palete = ft_memalloc(2948);
+	is_alloc(pal.palete = ft_mem(&wolf->mem, 2948), wolf, -1);
 	wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp", wolf, &pal);
 	wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp", wolf, &pal);
 	wolf->tex[2] = read_bmp("./texture/BrownbrickD.bmp", wolf, &pal);
@@ -57,8 +57,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	is_alloc(wolf->player->m = (t_minimap *)ft_mem(&wolf->mem, wolf->obj.size * sizeof(t_minimap)), wolf, -1);
 	is_alloc(wolf->perp_dist = (f32*)ft_mem(&wolf->mem, sizeof(f32) * W), wolf, -1);
 	is_alloc(wolf->entity = (t_entity *)ft_mem(&wolf->mem, sizeof(t_entity) * NBR_OF_ENTITIES), wolf, -1);
-
-	wolf->player->direction.x = -1;
+wolf->player->direction.x = -1;
 	wolf->player->direction.y = 0;
 	wolf->player->plane.x = 0;
 	wolf->player->plane.y = 1;
@@ -67,23 +66,6 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player->minimap_width = wolf->map_width + 1;
 	wolf->player->minimap_height = wolf->map_height + 1;
 	wolf->player->minimap_zoom = 20;
-}
-
-void	*test(void *b, int c, size_t len)
-{
-	uint32	*a1;
-	uint8		*a2;
-
-	a1 = (uint32 *)b;
-	while (len - 4 > 0)
-	{
-		*a1++ = c;
-		len -= 4;
-	}
-	a2 = (uint8 *)b;
-	while (len--)
-		*a2++ = c;
-	return (b);
 }
 
 void back(uint32 *img, t_palette *cel)
@@ -189,9 +171,9 @@ mem_init(&wolf);
 	else
 		fd = open("wolf3d.map", O_RDONLY);
 	//printf("size of wolf = %ld texture %ld door %ld\n", sizeof(wolf), sizeof(t_texture) , sizeof(t_door));
-	//load_music("./music/hallo.wav", &audio);
-	load_music("./music/steps.wav", &audio);
-	SDL_PauseAudio(0);
+	load_music("./music/hallo.wav", &audio);
+	//load_music("./music/steps.wav", &audio);
+	//SDL_PauseAudio(0);
 	if (fd > 0)
 	{
 		tkneizer(fd, &wolf);
@@ -205,7 +187,7 @@ mem_init(&wolf);
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
 		SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
-		//printf("tsize = %zu, usize %zu\n", wolf.mem.tsize, wolf.mem.usize);
+		printf("tsize = %I64d, usize %I64d\n", wolf.mem.tsize, wolf.mem.usize);
 		while (1)
 		{
 if (audio.audio_len == 0)
@@ -228,7 +210,6 @@ if (audio.audio_len == 0)
 			event_handler(&wolf, wolf.map, wolf.doors);
 			frames[i] = SDL_GetTicks();
 			back(wolf.img, &cel);
-			//ceiling(wolf.img, &wolf);
 			raycast(&wolf);
 			entity_update(&wolf);
 			if (i == 0)

@@ -51,6 +51,6 @@ void	mem_init(t_wolf *wolf)
 	//printf("size of wolf = %d\n", sizeof(*wolf));
 	//printf("size of ind %d\n", sizeof(t_sdl) + sizeof(t_mem) + sizeof(t_obj) + sizeof(wolf->img) + sizeof(char));
 	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 100)), wolf, -5);
-	wolf->mem.tsize = 1024 * 1024 * 100;
+	wolf->mem.tsize = (1024 * 1024 * 100);
 	wolf->mem.usize = sizeof(sint32);
 	}
