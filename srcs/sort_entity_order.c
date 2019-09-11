@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort_depth_buffer.c                                :+:      :+:    :+:   */
+/*   sort_entity_order.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/05 01:40:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/06 03:09:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 18:06:00 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,28 +66,28 @@ void	quick_sort(sint32 *depth_buffer, f32 *depth, sint32 low, sint32 high)
 	}
 }
 
-void	sort_depth_buffer(t_wolf *wf, sint32 *depth_buffer, f32 *depth)
+void	sort_depth_buffer(t_entity *entity, t_items *item, t_player *player)
 {
 	sint32	index;
 	t_2d	relative_entity_pos;
 	f32		inv_det;
 
 	index = 0;
-	while (index < NBR_OF_ENTITIES)
+	while (index < entity->nbr_of_entities)
 	{
-		relative_entity_pos.x = wf->entity[index].pos.x - wf->player->pos.x;
-		relative_entity_pos.y = wf->entity[index].pos.y - wf->player->pos.y;
-		inv_det = 1.0f / (wf->player->plane.x * wf->player->direction.y -
-			wf->player->plane.y * wf->player->direction.x);
-		wf->entity[index].transformed_sprite_pos.x = inv_det *
-			(wf->player->direction.y * relative_entity_pos.x -
-				wf->player->direction.x * relative_entity_pos.y);
-		wf->entity[index].transformed_sprite_pos.y = inv_det *
-			(-wf->player->plane.y * relative_entity_pos.x +
-				wf->player->plane.x * relative_entity_pos.y);
-		depth_buffer[index] = index;
-		depth[index] = wf->entity[index].transformed_sprite_pos.y;
+		relative_entity_pos.x = item[index].pos.x - player->pos.x;
+		relative_entity_pos.y = item[index].pos.y - player->pos.y;
+		inv_det = 1.0f / (player->plane.x * player->direction.y -
+			player->plane.y * player->direction.x);
+		item[index].transformed_sprite_pos.x = inv_det *
+			(player->direction.y * relative_entity_pos.x -
+				player->direction.x * relative_entity_pos.y);
+		item[index].transformed_sprite_pos.y = inv_det *
+			(-player->plane.y * relative_entity_pos.x +
+				player->plane.x * relative_entity_pos.y);
+		entity->order[index] = index;
+		entity->depth[index] = item[index].transformed_sprite_pos.y;
 		index++;
 	}
-	quick_sort(depth_buffer, depth, 0, NBR_OF_ENTITIES - 1);
+	quick_sort(entity->order, entity->depth, 0, entity->nbr_of_entities - 1);
 }

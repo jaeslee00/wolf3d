@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/09 20:29:24 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/09 18:20:52 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,20 @@ t_palette pal;
 	//printf("pal size = %I64d, \n", pal.size * sizeof(int));
 }
 
+void	init_entities(t_entity *entity, t_wolf *wolf)
+{
+	sint32	index;
+	is_alloc(entity->item = (t_items*)ft_mem(&wolf->mem, sizeof(t_items) * entity->nbr_of_entities), wolf, -1);
+	is_alloc(entity->order = (sint32*)ft_mem(&wolf->mem, sizeof(sint32) * entity->nbr_of_entities), wolf, -1);
+	is_alloc(entity->depth = (f32*)ft_mem(&wolf->mem, sizeof(f32) * entity->nbr_of_entities), wolf, -1);
+	index = 0;
+	while (index < entity->nbr_of_entities)
+	{
+		entity->item[index].tex = &wolf->tex[12];
+		index++;
+	}
+}
+
 void	ft_wolf_init(t_wolf *wolf)
 {
 	wolf->map = int_to_tab(wolf);
@@ -48,23 +62,19 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->flag = 0;
 	wolf->dist = perp_dist(wolf);
 	wolf->a.size = round(W / (1920 / 4));
-	wolf->map_width = wolf->obj.len;
-	wolf->map_height = wolf->obj.size / wolf->obj.len;
 	wolf->view = 0;
 	wolf->a.frame = 100;
 	is_alloc(wolf->doors = (t_door*)ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
 	is_alloc(wolf->player = (t_player*)ft_mem(&wolf->mem, sizeof(t_player)), wolf, -1);
 	is_alloc(wolf->player->m = (t_minimap *)ft_mem(&wolf->mem, wolf->obj.size * sizeof(t_minimap)), wolf, -1);
 	is_alloc(wolf->perp_dist = (f32*)ft_mem(&wolf->mem, sizeof(f32) * W), wolf, -1);
-	is_alloc(wolf->entity = (t_entity *)ft_mem(&wolf->mem, sizeof(t_entity) * NBR_OF_ENTITIES), wolf, -1);
-wolf->player->direction.x = -1;
-	wolf->player->direction.y = 0;
+is_alloc(wolf->entity = (t_entity*)ft_mem(&wolf->mem, sizeof(t_entity)), wolf, -1);
+	wolf->player->direction.x = -1;
+wolf->player->direction.y = 0;
 	wolf->player->plane.x = 0;
 	wolf->player->plane.y = 1;
 	wolf->player->speed = 0;
 	wolf->player->health = 75;
-	wolf->player->minimap_width = wolf->map_width + 1;
-	wolf->player->minimap_height = wolf->map_height + 1;
 	wolf->player->minimap_zoom = 20;
 }
 
@@ -178,8 +188,10 @@ mem_init(&wolf);
 	{
 		tkneizer(fd, &wolf);
 		ft_wolf_init(&wolf);
-		cel = ceiling(wolf.img, &wolf);
-		print_map(wolf.map, wolf.obj, wolf.player, wolf.doors, &wolf);
+cel = ceiling(wolf.img, &wolf);
+count_entities(wolf.map, wolf.obj, wolf.entity);
+		init_entities(wolf.entity, &wolf);
+print_map(wolf.map, wolf.obj, wolf.player, wolf.doors, &wolf);
 		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
 			SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
@@ -208,10 +220,12 @@ if (audio.audio_len == 0)
 				check_flag(&wolf, wolf.map,
 					SDL_GetTicks() - frames[i - 1]);
 			event_handler(&wolf, wolf.map, wolf.doors);
+			//TODO (jae) : need a good condition to execute re-order
+			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);
 			frames[i] = SDL_GetTicks();
 			back(wolf.img, &cel);
 			raycast(&wolf);
-			entity_update(&wolf);
+			entity_draw_loop(&wolf, wolf.entity, wolf.entity->item, wolf.entity->order);
 			if (i == 0)
 				draw_hud(&wolf, 16);
 			else

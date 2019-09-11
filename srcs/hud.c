@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 17:19:22 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/06 03:09:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 17:42:49 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,9 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 		wolf->a.gun += deltaframe;
 		if (wolf->a.gun < 100)
 		{
-			for (int i=0; i < NBR_OF_ENTITIES; i++)
-				if (wolf->entity[i].flag == 0b1)
-					wolf->entity[i].flag |= 0b10;
+			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
+				if (wolf->entity->item[i].flag & 1UL)
+					wolf->entity->item[i].flag |= 1UL << 1;
 			draw_gun(wolf, 6);
 		}
 		else if(wolf->a.gun < 145)
@@ -101,6 +101,9 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 			draw_gun(wolf, 9);
 		if (wolf->a.gun >= 600)
 		{
+			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
+				if (wolf->entity->item[i].flag & 1UL << 1)
+					wolf->entity->item[i].flag &= ~(1UL << 1);	
 			wolf->flag &= ~(1UL << 9);
 			wolf->a.gun = 0;
 		}
@@ -114,7 +117,7 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 void	draw_hud(t_wolf *wolf, uint32 deltaframe)
 {
 	if (wolf->flag & 1UL << 8)
-		minimap(wolf, wolf->player->minimap_width, wolf->player->minimap_height);
+		minimap(wolf);
 	draw_bar(wolf, wolf->player->health);
 	if (wolf->flag & 1UL << 10)
 		draw_shotgun(wolf, deltaframe);

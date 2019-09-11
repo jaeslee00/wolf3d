@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/09 18:13:40 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/09 18:19:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,13 @@
 # define TEXTURE_2	2
 # define TEXTURE_3	3
 # define TEXTURE_4	4
-# define OBJ_ON_TARGET 0b1
+
+# define OBJ_ON_TARGET 1UL
+# define OBJ_DAMAGED 1UL << 1
+# define OBJ_DEAD 1UL << 2
+
 # define ENEMY_SIZE 50
-# define NBR_OF_ENTITIES 10
+# define NBR_OF_ENTITIES 9
 # define TEXTURE_BLANK 0x980088
 # ifndef INT_MAX
 #  define INT_MAX 2147483647
@@ -101,6 +105,7 @@ typedef struct	s_texture_map
 
 typedef struct	s_door
 {
+	uint64	state;
 	t_2d_p	pos;
 	uint8	flag;
 }				t_door;
@@ -117,10 +122,10 @@ typedef struct	s_minimap
 
 typedef struct	s_obj
 {
-
-	sint8	*nb;
+sint8	*nb;
 	sint32	size;
-	sint32	len;
+	sint32	w;
+	sint32	h;
 }				t_obj;
 
 typedef struct	s_sdl
@@ -145,11 +150,9 @@ typedef struct	s_player
 	t_2d		plane;
 	f32			speed;
 	//TODO (jae) : maybe it's better to put t_minimap + minimap infos into another structure heheh
+	
 	t_minimap	*m;
-	sint32		minimap_width;
-	sint32		minimap_height;
 	sint32		minimap_zoom;
-	//////////////////////////////////////
 	int			health;
 }				t_player;
 
@@ -176,7 +179,7 @@ typedef struct	s_raycaster
 typedef f32 (*funct)(t_raycaster * ray, t_player *player);
 
 //TODO (jae) : need to have multiple textures for status of NPC
-typedef struct	s_entity
+typedef struct	s_items
 {
 	sint32		id;
 	t_2d		pos;
@@ -184,7 +187,16 @@ typedef struct	s_entity
 	sint32		flag;
 	sint32		hp;
 	t_texture	*tex;
+}				t_items;
+
+typedef struct	s_entity
+{
+	sint32	nbr_of_entities;
+	f32		*depth;
+	sint32	*order;
+	t_items	*item;
 }				t_entity;
+
 
 typedef struct	s_wolf
 {
@@ -195,10 +207,9 @@ typedef struct	s_wolf
 	uint32		*img;
 	t_mem		mem;
 	sint8		**map;
-	sint32		map_width; //TODO remove it from here
-	sint32		map_height; //TODO remove it from here
 	t_door		*doors;
-	sint32		nbr_of_doors;
+	uint32		nbr_of_doors;
+	uint32		door_idx;
 	t_texture	*tex;
 	uint32		flag;
 	uint8		res;
@@ -248,7 +259,7 @@ void			mem_init(t_wolf *wolf);
 void			is_alloc(void *mem, t_wolf *wolf, sint32 error);
 void			draw_to_img(t_wolf wolf);
 void			pers_keys(sint32 keycode, t_wolf *wolf);
-void			minimap(t_wolf *wolf, sint32 minimap_width, sint32 minimap_height);
+void			minimap(t_wolf *wolf);
 void			mouse_movement(t_wolf *wolf, SDL_Event event);
 void			draw_gun(t_wolf *wolf, uint32 tex_id);
 void			draw_machinegun(t_wolf *wolf, uint32 deltaframe);
@@ -256,7 +267,8 @@ void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
 sint32			lighting(sint32 color, f32 distance);
 t_texture		read_bmp(const sint8 *filename, t_wolf *wolf, t_palette *pal);
 void			entity_update(t_wolf *wf);
-void 			sort_depth_buffer(t_wolf *wf, sint32 *depth_buffer, f32 *depth);
-void 			entity_draw(t_entity *entity, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist);
-
+void			entity_draw(t_items *item, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist);
+void			entity_draw_loop(t_wolf *wf, t_entity *entity, t_items *item, sint32 *order);
+void			sort_depth_buffer(t_entity *entity, t_items *item, t_player *player);
+void			count_entities(sint8 **map, t_obj obj, t_entity *entity);
 #endif

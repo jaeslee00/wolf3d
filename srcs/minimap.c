@@ -158,11 +158,11 @@ void	minimap_obj_color_vertical(t_wolf *wolf, sint32 x, sint32 y, sint32 *y_key)
 {
 	sint32	minimap_width;
 
-	minimap_width = wolf->player->minimap_width;
-	if (wolf->obj.nb[x + y * wolf->map_width] == 3
-		|| wolf->obj.nb[x - 1 + y * wolf->map_width] == 3
-		|| wolf->obj.nb[x + y * wolf->map_width] == 5
-		|| wolf->obj.nb[x - 1 + y * wolf->map_width] == 5)
+	minimap_width = wolf->obj.w + 1;
+	if (wolf->obj.nb[x + y * wolf->obj.w] == 3
+		|| wolf->obj.nb[x - 1 + y * wolf->obj.w] == 3
+		|| wolf->obj.nb[x + y * wolf->obj.w] == 5
+		|| wolf->obj.nb[x - 1 + y * wolf->obj.w] == 5)
 	{
 		wolf->player->m[x + y * minimap_width].v_color_head = -1;
 		wolf->player->m[x + (y + 1) * minimap_width].v_color_tail = -1;
@@ -179,11 +179,11 @@ void	minimap_obj_color_horiz(t_wolf *wolf, sint32 x, sint32 y, sint32 *x_key)
 {
 	sint32	minimap_width;
 
-	minimap_width = wolf->player->minimap_width;
-	if (wolf->obj.nb[x + y * wolf->map_width] == 3
-		|| wolf->obj.nb[x + (y - 1) * wolf->map_width] == 3
-		|| wolf->obj.nb[x + y * wolf->map_width] == 5
-		|| wolf->obj.nb[x + (y - 1) * wolf->map_width] == 5)
+	minimap_width = wolf->obj.w + 1;
+	if (wolf->obj.nb[x + y * wolf->obj.w] == 3
+		|| wolf->obj.nb[x + (y - 1) * wolf->obj.w] == 3
+		|| wolf->obj.nb[x + y * wolf->obj.w] == 5
+		|| wolf->obj.nb[x + (y - 1) * wolf->obj.w] == 5)
 	{
 		wolf->player->m[x + y * minimap_width].h_color_head = -1;
 		wolf->player->m[x + 1 + y * minimap_width].h_color_tail = -1;
@@ -204,16 +204,16 @@ void	minimap_obj_color(t_wolf *wolf, sint32 x, sint32 y)
 
 	x_key = 0;
 	y_key = 0;
-	minimap_width = wolf->player->minimap_width;
+	minimap_width = wolf->obj.w + 1;
 	if (y == 1)
 		wolf->player->m[x + y * minimap_width].v_color_tail = INT_MAX;
 	if (x == 1)
 		wolf->player->m[x + y * minimap_width].h_color_tail = INT_MAX;
-	if (!(wolf->obj.nb[x + y * wolf->map_width] == 0
-		&& wolf->obj.nb[x - 1 + y * wolf->map_width] == 0))
+	if (!(wolf->obj.nb[x + y * wolf->obj.w] == 0
+		&& wolf->obj.nb[x - 1 + y * wolf->obj.w] == 0))
 		minimap_obj_color_vertical(wolf, x, y, &y_key);
-	if (!(wolf->obj.nb[x + y * wolf->map_width] == 0
-		&& wolf->obj.nb[x + (y - 1) * wolf->map_width] == 0))
+	if (!(wolf->obj.nb[x + y * wolf->obj.w] == 0
+		&& wolf->obj.nb[x + (y - 1) * wolf->obj.w] == 0))
 		minimap_obj_color_horiz(wolf, x, y, &x_key);
 }
 
@@ -235,8 +235,8 @@ void	minimap_transform(t_minimap *m, t_wolf *wolf, sint32 x, sint32 y)
 	sint32		zoom;
 	sint32		transform[2];
 
-	width = wolf->player->minimap_width;
-	height = wolf->player->minimap_height;
+	width = wolf->obj.w + 1;
+	height = wolf->obj.h + 1;
 	zoom = wolf->player->minimap_zoom;
 	uniform_translation(transform, width, height, wolf);
 	m[x + y * width].x = x * zoom + transform[0];
@@ -249,31 +249,31 @@ void	minimap_transform(t_minimap *m, t_wolf *wolf, sint32 x, sint32 y)
 	m[(x + 1) + (y + 1) * width].y = (y + 1) * zoom + transform[1];
 }
 
-void	minimap(t_wolf *wolf, sint32 minimap_width, sint32 minimap_height)
+void	minimap(t_wolf *wolf)
 {
 	sint32	x;
 	sint32	y;
 
 	y = 0;
-	while (y < wolf->map_height)
+	while (y < wolf->obj.h)
 	{
 		x = 0;
-		while (x < wolf->map_width)
+		while (x < wolf->obj.w)
 		{
 			minimap_transform(wolf->player->m, wolf, x, y);
 			if (x > 0 && y > 0)
 				minimap_obj_color(wolf, x, y);
 			else
 			{
-				wolf->player->m[x + y * minimap_width].h_color_head = INT_MAX;
-				wolf->player->m[x + y * minimap_width].h_color_tail = INT_MAX;
-				wolf->player->m[x + y * minimap_width].v_color_head = INT_MAX;
-				wolf->player->m[x + y * minimap_width].v_color_tail = INT_MAX;
+				wolf->player->m[x + y * wolf->obj.w + 1].h_color_head = INT_MAX;
+				wolf->player->m[x + y * wolf->obj.w + 1].h_color_tail = INT_MAX;
+				wolf->player->m[x + y * wolf->obj.w + 1].v_color_head = INT_MAX;
+				wolf->player->m[x + y * wolf->obj.w + 1].v_color_tail = INT_MAX;
 			}
 			x++;
 		}
 		y++;
 	}
-	minimap_set_edge_color(wolf->player->m, minimap_width, minimap_height);
-	minimap_render(wolf, minimap_width, minimap_height);
+	minimap_set_edge_color(wolf->player->m, wolf->obj.w + 1, wolf->obj.h + 1);
+	minimap_render(wolf, wolf->obj.w + 1, wolf->obj.h + 1);
 }

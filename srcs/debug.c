@@ -13,22 +13,39 @@
 
 #include "wolf3d.h"
 
+void	count_entities(sint8 **map, t_obj obj, t_entity *entity)
+{
+	sint32	i;
+	sint32	j;
+	
+	i = 0;
+	while (i < obj.h)
+	{
+		j = 0;
+		while (j < obj.w)
+		{
+			if (map[i][j] == 4)
+				entity->nbr_of_entities++;
+			j++;
+		}
+		i++;
+	}
+}
+
 sint32 print_map(sint8 **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf)
 {
-	sint32	lines;
 	sint32	i;
 	sint32	j;
 	sint32	k;
 	sint32	w;
 
-	lines = (obj.size / obj.len);
 	i = 0;
 	k = 0;
 	w = 0;
-	while (i < lines)
+	while (i < obj.h)
 	{
 		j = 0;
-		while (j < obj.len)
+		while (j < obj.w)
 		{
 			if (map[i][j] == 9)
 			{
@@ -38,8 +55,8 @@ sint32 print_map(sint8 **map, t_obj obj, t_player *player, t_door *doors, t_wolf
 			}
 			else if (map[i][j] == 4)
 			{
-				wolf->entity[w].pos.x = (f32)j + 0.5f;
-				wolf->entity[w].pos.y = (f32)i + 0.5f;
+				wolf->entity->item[w].pos.x = (f32)j + 0.5f;
+				wolf->entity->item[w].pos.y = (f32)i + 0.5f;
 				w++;
 			}
 			else if (map[i][j] == 3 || map[i][j] == 5)
