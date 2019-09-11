@@ -14,7 +14,7 @@
 
 void	load_textures(t_wolf *wolf)
 {
-t_palette pal;
+	t_palette pal;
 
 	pal.size = 0;
 	is_alloc(pal.palete = ft_mem(&wolf->mem, 2948), wolf, -1);
@@ -30,14 +30,15 @@ t_palette pal;
 	wolf->tex[9] = read_bmp("./texture/shotgun4.bmp", wolf, &pal);
 	wolf->tex[10] = read_bmp("./texture/gun0.bmp", wolf, &pal);
 	wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf, &pal);
-	wolf->tex[12] = read_bmp("./texture/guard/guard00.bmp", wolf, &pal);
-	wolf->tex[13] = read_bmp("./texture/guard/guard01.bmp", wolf, &pal);
+	wolf->tex[12] = read_bmp("./texture/guard0.bmp", wolf, &pal);
+	wolf->tex[13] = read_bmp("./texture/guard1.bmp", wolf, &pal);
 	//printf("pal size = %I64d, \n", pal.size * sizeof(int));
 }
 
 void	init_entities(t_entity *entity, t_wolf *wolf)
 {
 	sint32	index;
+
 	is_alloc(entity->item = (t_items*)ft_mem(&wolf->mem, sizeof(t_items) * entity->nbr_of_entities), wolf, -1);
 	is_alloc(entity->order = (sint32*)ft_mem(&wolf->mem, sizeof(sint32) * entity->nbr_of_entities), wolf, -1);
 	is_alloc(entity->depth = (f32*)ft_mem(&wolf->mem, sizeof(f32) * entity->nbr_of_entities), wolf, -1);
@@ -68,9 +69,9 @@ void	ft_wolf_init(t_wolf *wolf)
 	is_alloc(wolf->player = (t_player*)ft_mem(&wolf->mem, sizeof(t_player)), wolf, -1);
 	is_alloc(wolf->player->m = (t_minimap *)ft_mem(&wolf->mem, wolf->obj.size * sizeof(t_minimap)), wolf, -1);
 	is_alloc(wolf->perp_dist = (f32*)ft_mem(&wolf->mem, sizeof(f32) * W), wolf, -1);
-is_alloc(wolf->entity = (t_entity*)ft_mem(&wolf->mem, sizeof(t_entity)), wolf, -1);
+	is_alloc(wolf->entity = (t_entity*)ft_mem(&wolf->mem, sizeof(t_entity)), wolf, -1);
 	wolf->player->direction.x = -1;
-wolf->player->direction.y = 0;
+	wolf->player->direction.y = 0;
 	wolf->player->plane.x = 0;
 	wolf->player->plane.y = 1;
 	wolf->player->speed = 0;
@@ -78,7 +79,7 @@ wolf->player->direction.y = 0;
 	wolf->player->minimap_zoom = 20;
 }
 
-void back(uint32 *img, t_palette *cel)
+void		back(uint32 *img, t_palette *cel)
 {
 	sint32	x;
 	sint32	y;
@@ -94,11 +95,11 @@ void back(uint32 *img, t_palette *cel)
 		while (x < W - 1)
 		{
 			if (i < (int)cel->size)
-{
+			{
 				img[x + y * W] = cel->palete[i];
 				img[x + y1 * W] = cel->palete[i];
 			}
-else
+			else
 			{
 				img[x + y * W] = 0;
 				img[x + y1 * W] = 0;
@@ -112,7 +113,7 @@ else
 	}
 }
 
-	t_palette ceiling(uint32 *img, t_wolf *wolf)
+t_palette	ceiling(uint32 *img, t_wolf *wolf)
 {
 	t_palette p;
 	sint32	x;
@@ -175,7 +176,7 @@ int		main(int ac, char **av)
 	sint32	frames[61];
 	
 	ft_bzero(&audio, sizeof(audio));
-mem_init(&wolf);
+	mem_init(&wolf);
 	if (ac == 2)
 		fd = open(av[1], O_RDONLY);
 	else
@@ -188,10 +189,10 @@ mem_init(&wolf);
 	{
 		tkneizer(fd, &wolf);
 		ft_wolf_init(&wolf);
-cel = ceiling(wolf.img, &wolf);
-count_entities(wolf.map, wolf.obj, wolf.entity);
+		cel = ceiling(wolf.img, &wolf);
+		count_entities(wolf.map, wolf.obj, wolf.entity);
 		init_entities(wolf.entity, &wolf);
-print_map(wolf.map, wolf.obj, wolf.player, wolf.doors, &wolf);
+		print_map(wolf.map, wolf.obj, wolf.player, wolf.doors, &wolf);
 		wolf.sdl.renderer = SDL_CreateRenderer(wolf.sdl.win, -1, 0);
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
 			SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
@@ -202,7 +203,7 @@ print_map(wolf.map, wolf.obj, wolf.player, wolf.doors, &wolf);
 		printf("tsize = %I64d, usize %I64d\n", wolf.mem.tsize, wolf.mem.usize);
 		while (1)
 		{
-if (audio.audio_len == 0)
+			if (audio.audio_len == 0)
 			{
 				audio.audio_pos = audio.wav_buffer;
 				audio.audio_len = audio.wav_length;
