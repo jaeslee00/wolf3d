@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/12 13:16:46 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/12 14:38:04 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ void	entity_draw(t_items *item, t_texture *tex, sint32 view, uint32 *img, f32 *p
 	draw_end.x = (sprite_width + sprite_pos_screen) >> 1;
 	draw_start.y = ((-sprite_height + H) >> 1) - view;
 	draw_end.y = ((sprite_height + H) >> 1) - view;
-
 	sint32 x_offset = 0;
 
 	if (draw_start.x < 0)
@@ -97,17 +96,17 @@ void	entity_draw(t_items *item, t_texture *tex, sint32 view, uint32 *img, f32 *p
 		x_offset = draw_start.x;
 		draw_start.x = 0;
 	}
-if (draw_end.x >= W)
+	if (draw_end.x >= W)
 		draw_end.x = W - 1;
 
-if (draw_start.y < 0)
-draw_start.y = 0;
+	if (draw_start.y < 0)
+		draw_start.y = 0;
 	if (draw_end.y >= H)
 		draw_end.y = H - 1;
-	if ((draw_start.x + draw_end.x) / 2 < W / 2 + ENEMY_SIZE
-		&& (draw_start.x + draw_end.x) / 2 > W / 2 - ENEMY_SIZE)
-item->flag |= 1UL;
-else
+	if (((draw_start.x + draw_end.x) >> 1) < (W >> 1) + (sprite_width >> 2)
+		&& ((draw_start.x + draw_end.x) >> 1) > (W >> 1) - (sprite_width >> 2))
+		item->flag |= 1UL;
+	else
 		item->flag &= ~1UL;
 
 	if (draw_start.x >= W || draw_end.x < 0 || draw_start.y >= H || draw_end.y < 0)
@@ -120,11 +119,11 @@ void	entity_draw_loop(t_wolf *wf, t_entity *entity, t_items *item, sint32 *order
 	sint32		index;
 
 	index = 0;
-while (index < entity->nbr_of_entities)
+	while (index < entity->nbr_of_entities)
 	{	
 		if (item[order[index]].transformed_sprite_pos.y > 0.0f)
 			entity_draw(&item[order[index]], item[order[index]].tex,
 				wf->view, wf->img, wf->perp_dist);
-index++;
+		index++;
 	}
 }
