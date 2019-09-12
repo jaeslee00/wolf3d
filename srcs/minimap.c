@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 04:27:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/12 13:14:27 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/12 16:16:21 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,10 +267,10 @@ void	minimap(t_wolf *wolf)
 				minimap_obj_color(wolf, x, y);
 			else
 			{
-				wolf->player->m[x + y * wolf->obj.w + 1].h_color_head = INT_MAX;
-				wolf->player->m[x + y * wolf->obj.w + 1].h_color_tail = INT_MAX;
-				wolf->player->m[x + y * wolf->obj.w + 1].v_color_head = INT_MAX;
-				wolf->player->m[x + y * wolf->obj.w + 1].v_color_tail = INT_MAX;
+				wolf->player->m[x + y * (wolf->obj.w + 1)].h_color_head = INT_MAX;
+				wolf->player->m[x + y * (wolf->obj.w + 1)].h_color_tail = INT_MAX;
+				wolf->player->m[x + y * (wolf->obj.w + 1)].v_color_head = INT_MAX;
+				wolf->player->m[x + y * (wolf->obj.w + 1)].v_color_tail = INT_MAX;
 			}
 			x++;
 		}
