@@ -19,6 +19,12 @@ void	draw_machinegun(t_wolf *wolf, uint32 deltaframe)
 		wolf->a.gun += deltaframe;
 		if(wolf->a.gun < (sint32)wolf->a.frame)
 		{
+			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
+				if (wolf->entity->item[i].flag & 1UL)
+			{
+				wolf->entity->item[i].flag |= 1UL << 1;
+				wolf->entity->item[i].tex = &wolf->tex[13];
+			}
 			wolf->view -= 1;
 			draw_gun(wolf, 11);
 		}
@@ -37,6 +43,11 @@ void	draw_machinegun(t_wolf *wolf, uint32 deltaframe)
 	}
 	else
 	{
+		for (int i=0; i < wolf->entity->nbr_of_entities; i++)
+		{
+			wolf->entity->item[i].flag |= 1UL << 1;
+			wolf->entity->item[i].tex = &wolf->tex[12];
+		}
 		wolf->a.frame = 0;
 		draw_gun(wolf, 10);
 	}

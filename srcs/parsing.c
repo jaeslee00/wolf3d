@@ -18,18 +18,16 @@ sint8		**int_to_tab(t_wolf *wolf)
 	sint32	j;
 	sint32	k;
 	sint8	**tab;
-	sint32	lines;
-
+	
 	i = 0;
 	k = 0;
-	lines = (wolf->obj.size / wolf->obj.len);
-	is_alloc(tab = ft_mem(&wolf->mem, sizeof(*tab) * lines), wolf, -1);
-	while (i < lines)
+	is_alloc(tab = ft_mem(&wolf->mem, sizeof(*tab) * wolf->obj.h), wolf, -1);
+	while (i < wolf->obj.h)
 	{
 		j = 0;
 		is_alloc(tab[i] = ft_mem(&wolf->mem,
-			sizeof(**tab) * (wolf->obj.len)), wolf, -1);
-		while (j < wolf->obj.len)
+			sizeof(**tab) * (wolf->obj.w)), wolf, -1);
+		while (j < wolf->obj.w)
 		{
 			tab[i][j] = wolf->obj.nb[k];
 			j++;
@@ -66,13 +64,14 @@ sint32		tkneizer(sint32 fd, t_wolf *wolf)
 				allocate_atois(wolf, &line[i], &xy);
 			i++;
 		}
-		if (wolf->obj.len == 0)
-			wolf->obj.len = xy.x;
+		if (wolf->obj.w == 0)
+			wolf->obj.w = xy.x;
 		xy.y++;
-		if ((xy.x) % wolf->obj.len != 0 || is_invalid(line))
+		if ((xy.x) % wolf->obj.w != 0 || is_invalid(line))
 			is_alloc(NULL, wolf, -2);
 		free(line);
 	}
 	wolf->obj.size = xy.x;
+	wolf->obj.h = wolf->obj.size / wolf->obj.w;
 	return (1);
 }

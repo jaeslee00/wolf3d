@@ -12,7 +12,7 @@
 
 #include "wolf3d.h"
 
-sint32	lighting(sint32 color, f32	distance)
+sint32	lighting(sint32 color, f32 distance)
 {
 	f32		light;
 
@@ -45,11 +45,11 @@ void	texture_map(t_wolf *wf, t_texture_map *tex_map, sint32 x, f32 perp_dist,
 	sint32	tex_y;
 	sint32	y_offset;
 	sint32	y;
-	sint32 precalc;
+sint32 precalc;
 	uint32	*img = wf->img;
 	
 	precalc = (tex->height << 24) / tex_map->column_height;
-	y_offset = ((tex_map->column_height - H) >> 1) + wf->view;
+y_offset = ((tex_map->column_height - H) >> 1) + wf->view;
 	y = tex_map->start + 1;
 	while (y < tex_map->end)
 	{
@@ -57,9 +57,9 @@ void	texture_map(t_wolf *wf, t_texture_map *tex_map, sint32 x, f32 perp_dist,
 		tex_y = ((tex_height_scale * precalc) >> 24) * tex->width;
 		color = tex->data[tex_y + tex_map->coord.x];
 		//NOTE (jae) : lighting in ray_casting seems quite expensive. Needs to check!!
-		img[x + y * W] = lighting(color, perp_dist);
+img[x + y * W] = lighting(color, perp_dist);
 		y++;
-	}
+}
 }
 
 void	draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray)

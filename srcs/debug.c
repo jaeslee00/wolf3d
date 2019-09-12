@@ -17,16 +17,12 @@ void	count_entities(sint8 **map, t_obj obj, t_entity *entity)
 {
 	sint32	i;
 	sint32	j;
-	sint32	k;
-	sint32	lines;
-
-	lines = obj.size / obj.len;
+	
 	i = 0;
-	k = 0;
-	while (i < lines)
+	while (i < obj.h)
 	{
 		j = 0;
-		while (j < obj.len)
+		while (j < obj.w)
 		{
 			if (map[i][j] == 4)
 				entity->nbr_of_entities++;
@@ -38,20 +34,18 @@ void	count_entities(sint8 **map, t_obj obj, t_entity *entity)
 
 sint32 print_map(sint8 **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf)
 {
-	sint32	lines;
 	sint32	i;
 	sint32	j;
 	sint32	k;
 	sint32	w;
 
-	lines = (obj.size / obj.len);
 	i = 0;
 	k = 0;
 	w = 0;
-	while (i < lines)
+	while (i < obj.h)
 	{
 		j = 0;
-		while (j < obj.len)
+		while (j < obj.w)
 		{
 			if (map[i][j] == 9)
 			{
@@ -96,10 +90,10 @@ void ft_frametimes(sint32 *frames, sint32 *count)
 			ft_putstr(" ms ");
 			*count += 1;
 			if (*count % 12 == 0)
-				ft_putchar('\n');
-			j++;
+ft_putchar('\n');
+j++;
 		}
-		test(frames, 0, sizeof(sint32) * 61);
+		ft_memset(frames, 0, sizeof(sint32) * 61);
 		ft_putchar('\n');
 		*count = -1;
 	}

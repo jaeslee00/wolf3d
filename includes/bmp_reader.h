@@ -14,18 +14,18 @@
 
 typedef struct s_bitmap_header
 {
-    uint16 file_type; // 0;
-		uint32 file_size; // 2;
-		uint16 reserved1; // 6;
-		uint16 reserved2; // 8;
-		uint32 bitmap_offset; // 10;
-    uint32 size;          //14;
-    sint32 width;         // 18;
-		sint32 height;        //22;
-		uint16 planes;        //26;
-    uint16 bits_per_pixel; // 28;
-    uint32 compression;     //30;
-    uint32 size_of_bitmap;  // 34;
+    uint16 file_type;
+		uint32 file_size;
+		uint16 reserved1;
+		uint16 reserved2;
+		uint32 bitmap_offset;
+    uint32 size;
+    sint32 width;
+		sint32 height;
+		uint16 planes;
+    uint16 bits_per_pixel;
+    uint32 compression;
+    uint32 size_of_bitmap;
     sint32 horiz_resolution;
     sint32 vert_resolution;
     uint32 colors_used;

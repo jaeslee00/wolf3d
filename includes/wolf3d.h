@@ -25,8 +25,8 @@
 # include <SDL2/SDL.h>
 // # define W	(2560)
 // # define H	(1080)
-# define W	(1920)
-# define H	(1080)
+# define W	(3840)
+# define H	(2160)
 
 # define TEXTURE_0	0
 # define TEXTURE_1	1
@@ -70,6 +70,7 @@ typedef double				f64;
 ** E[ROW][COLUMN]
 ** ROW Major
 */
+
 typedef struct	s_2d_p
 {
 	sint32	x;
@@ -104,6 +105,7 @@ typedef struct	s_texture_map
 
 typedef struct	s_door
 {
+	uint64	state;
 	t_2d_p	pos;
 	uint8	flag;
 }				t_door;
@@ -120,10 +122,10 @@ typedef struct	s_minimap
 
 typedef struct	s_obj
 {
-
-	sint8	*nb;
+sint8	*nb;
 	sint32	size;
-	sint32	len;
+	sint32	w;
+	sint32	h;
 }				t_obj;
 
 typedef struct	s_sdl
@@ -134,6 +136,12 @@ typedef struct	s_sdl
 	SDL_Texture		*texture;
 }				t_sdl;
 
+typedef struct	s_palette
+{
+	uint32	*palete;
+	uint32		size;
+	}				t_palette;
+
 typedef struct	s_player
 {
 	t_2d		ray;
@@ -142,11 +150,9 @@ typedef struct	s_player
 	t_2d		plane;
 	f32			speed;
 	//TODO (jae) : maybe it's better to put t_minimap + minimap infos into another structure heheh
+	
 	t_minimap	*m;
-	sint32		minimap_width;
-	sint32		minimap_height;
 	sint32		minimap_zoom;
-	//////////////////////////////////////
 	int			health;
 }				t_player;
 
@@ -201,10 +207,9 @@ typedef struct	s_wolf
 	uint32		*img;
 	t_mem		mem;
 	sint8		**map;
-	sint32		map_width; //TODO remove it from here
-	sint32		map_height; //TODO remove it from here
 	t_door		*doors;
-	sint32		nbr_of_doors;
+	uint32		nbr_of_doors;
+	uint32		door_idx;
 	t_texture	*tex;
 	uint32		flag;
 	uint8		res;
@@ -215,7 +220,6 @@ typedef struct	s_wolf
 }				t_wolf;
 
 void				load_music(char *path, t_audio *audio);
-void				*test(void *b, int c, size_t len);
 void				draw_hud(t_wolf *wolf, uint32 deltaframe);
 t_2d_p			init_2d(sint32 x, sint32 y);
 void				draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, uint32 size);
@@ -241,6 +245,7 @@ sint32			lerp(f64 a, f32 t, f64 b);
 sint32			rgb_lerp(sint32 color1, f32 t, sint32 color2);
 sint32			direction_movement(t_wolf *wolf, sint8 **map, sint32 framedelta);
 sint32			print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
+void			palette(uint32 *img, t_palette *p, uint32 size);
 void			check_flag(t_wolf *wolf, sint8 **map, sint32 framedelta);
 void			set_flag(t_wolf *wolf, SDL_Event event);
 void			ft_frametimes(sint32 *frames, sint32 *count);
@@ -254,15 +259,16 @@ void			mem_init(t_wolf *wolf);
 void			is_alloc(void *mem, t_wolf *wolf, sint32 error);
 void			draw_to_img(t_wolf wolf);
 void			pers_keys(sint32 keycode, t_wolf *wolf);
-void			minimap(t_wolf *wolf, sint32 minimap_width, sint32 minimap_height);
+void			minimap(t_wolf *wolf);
 void			mouse_movement(t_wolf *wolf, SDL_Event event);
 void			draw_gun(t_wolf *wolf, uint32 tex_id);
 void			draw_machinegun(t_wolf *wolf, uint32 deltaframe);
 void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
 sint32			lighting(sint32 color, f32 distance);
-t_texture		read_bmp(const sint8 *filename, t_wolf *wolf);
-
-void	entity_draw_loop(t_wolf *wf, t_entity *entity, t_items *item, sint32 *order);
-void	sort_depth_buffer(t_entity *entity, t_items *item, t_player *player);
-void	count_entities(sint8 **map, t_obj obj, t_entity *entity);
+t_texture		read_bmp(const sint8 *filename, t_wolf *wolf, t_palette *pal);
+void			entity_update(t_wolf *wf);
+void			entity_draw(t_items *item, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist);
+void			entity_draw_loop(t_wolf *wf, t_entity *entity, t_items *item, sint32 *order);
+void			sort_depth_buffer(t_entity *entity, t_items *item, t_player *player);
+void			count_entities(sint8 **map, t_obj obj, t_entity *entity);
 #endif

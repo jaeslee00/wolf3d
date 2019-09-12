@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sound.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:51:29 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/06 04:07:22 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 20:28:55 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	my_audio_callback(void *userdata, Uint8 *stream, int len)
 	a = (t_audio *)userdata;
 	if (a->audio_len == 0)
 		return;
-	len = (len > (int)a->audio_len ? a->audio_len : len);
-	ft_memcpy(stream, a->audio_pos, len);
+len = (len > (int)a->audio_len ? (int)a->audio_len : len);
+ft_memcpy(stream, a->audio_pos, len);
 	a->audio_pos += len;
 	a->audio_len -= len;
 }
@@ -34,6 +34,6 @@ void	load_music(char *path, t_audio *audio)
 	audio->wav_spec.userdata = audio;
 	audio->audio_pos = audio->wav_buffer;
 	audio->audio_len = audio->wav_length;
-	if (SDL_OpenAudio(&audio->wav_spec, NULL) < 0)
-	exit(-1);
+	SDL_OpenAudio(&audio->wav_spec, NULL);
+	//exit(-1);
 	}

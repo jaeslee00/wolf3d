@@ -34,7 +34,7 @@ void	draw_crosshair(t_wolf *wolf)
 	while (k <= 10 * wolf->a.size)
 	{
 		if (j != (H / 2))
-		wolf->img[i + j * W] = rgb_lerp(wolf->img[i + j * W] - 0xFFFF00,
+			wolf->img[i + j * W] = rgb_lerp(wolf->img[i + j * W] - 0xFFFF00,
 			0.2f, 0xFFFF00) - 0x0000FF;
 		j++;
 		k++;
@@ -85,7 +85,10 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 		{
 			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
 				if (wolf->entity->item[i].flag & 1UL)
-					wolf->entity->item[i].flag |= 1UL << 1;
+			{
+				wolf->entity->item[i].flag |= 1UL << 1;
+				wolf->entity->item[i].tex = &wolf->tex[13];
+			}
 			draw_gun(wolf, 6);
 		}
 		else if(wolf->a.gun < 145)
@@ -96,14 +99,15 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 		else if (wolf->a.gun < 250)
 			draw_gun(wolf, 9);
 		else if (wolf->a.gun < 500)
+		{
+			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
+				wolf->entity->item[i].tex = &wolf->tex[12];
 			draw_gun(wolf, 8);
+		}
 		else
 			draw_gun(wolf, 9);
 		if (wolf->a.gun >= 600)
 		{
-			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
-				if (wolf->entity->item[i].flag & 1UL << 1)
-					wolf->entity->item[i].flag &= ~(1UL << 1);	
 			wolf->flag &= ~(1UL << 9);
 			wolf->a.gun = 0;
 		}
@@ -117,7 +121,7 @@ void	draw_shotgun(t_wolf *wolf, uint32 deltaframe)
 void	draw_hud(t_wolf *wolf, uint32 deltaframe)
 {
 	if (wolf->flag & 1UL << 8)
-		minimap(wolf, wolf->player->minimap_width, wolf->player->minimap_height);
+		minimap(wolf);
 	draw_bar(wolf, wolf->player->health);
 	if (wolf->flag & 1UL << 10)
 		draw_shotgun(wolf, deltaframe);

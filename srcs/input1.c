@@ -32,7 +32,7 @@ void	interaction_door(t_door *doors, sint8 **map, sint32 i)
 void	event_handler(t_wolf *wolf, sint8 **map, t_door *doors)
 {
 	t_player	*p;
-	sint32		i;
+	uint32		i;
 
 	i = 0;
 	p = wolf->player;
