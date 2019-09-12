@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 04:27:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/06 03:09:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/09 23:30:01 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	draw_line(t_minimap p1, t_minimap p2, uint32 *img)
 	}
 }
 
-void	minimap_render(t_wolf *wolf, sint32 minimap_width, sint32 minimap_height)
+void	minimap_render(uint32 *img, t_minimap *m, sint32 minimap_width, sint32 minimap_height)
 {
 	sint32	x;
 	sint32	y;
@@ -118,11 +118,11 @@ void	minimap_render(t_wolf *wolf, sint32 minimap_width, sint32 minimap_height)
 		while (x < minimap_width)
 		{
 			if (x < minimap_width - 1)
-				draw_line(wolf->player->m[x + y * minimap_width],
-					wolf->player->m[(x + 1) + y * minimap_width], wolf->img);
+				draw_line(m[x + y * minimap_width],
+					m[(x + 1) + y * minimap_width], img);
 			if (y < minimap_height - 1)
-				draw_line(wolf->player->m[x + y * minimap_width],
-					wolf->player->m[x + (y + 1) * minimap_width], wolf->img);
+				draw_line(m[x + y * minimap_width],
+					m[x + (y + 1) * minimap_width], img);
 			x++;
 		}
 		y++;
@@ -201,14 +201,16 @@ void	minimap_obj_color(t_wolf *wolf, sint32 x, sint32 y)
 	sint32	x_key;
 	sint32	y_key;
 	sint32	minimap_width;
+	t_minimap	*m;
 
+	m = wolf->player->m;
 	x_key = 0;
 	y_key = 0;
 	minimap_width = wolf->player->minimap_width;
 	if (y == 1)
-		wolf->player->m[x + y * minimap_width].v_color_tail = INT_MAX;
+		m[x + y * minimap_width].v_color_tail = INT_MAX;
 	if (x == 1)
-		wolf->player->m[x + y * minimap_width].h_color_tail = INT_MAX;
+		m[x + y * minimap_width].h_color_tail = INT_MAX;
 	if (!(wolf->obj.nb[x + y * wolf->map_width] == 0
 		&& wolf->obj.nb[x - 1 + y * wolf->map_width] == 0))
 		minimap_obj_color_vertical(wolf, x, y, &y_key);
@@ -222,9 +224,9 @@ void	uniform_translation(sint32 transform[2], sint32 width, sint32 height, t_wol
 	sint32	zoom;
 
 	zoom = wolf->player->minimap_zoom;
-	transform[0] = W / 2 - zoom * width / 2 -
+	transform[0] = ((W - zoom * width) >> 1) -
 		(sint32)((f32)zoom * (wolf->player->pos.x * 2.0f - (f32)width) / 2.0f);
-	transform[1] = H / 2 - zoom * height / 2 -
+	transform[1] = ((H - zoom * height) >> 1) -
 		(sint32)((f32)zoom * (wolf->player->pos.y * 2.0f - (f32)height) / 2.0f);
 }
 
@@ -275,5 +277,5 @@ void	minimap(t_wolf *wolf, sint32 minimap_width, sint32 minimap_height)
 		y++;
 	}
 	minimap_set_edge_color(wolf->player->m, minimap_width, minimap_height);
-	minimap_render(wolf, minimap_width, minimap_height);
+	minimap_render(wolf->img, wolf->player->m, minimap_width, minimap_height);
 }
