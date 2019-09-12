@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 04:27:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/12 10:44:46 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/12 13:14:27 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,5 +277,5 @@ void	minimap(t_wolf *wolf)
 		y++;
 	}
 	minimap_set_edge_color(wolf->player->m, wolf->obj.w + 1, wolf->obj.h + 1);
-	minimap_render(wolf, wolf->obj.w + 1, wolf->obj.h + 1);
+	minimap_render(wolf->img, wolf->player->m, wolf->obj.w + 1, wolf->obj.h + 1);
 }

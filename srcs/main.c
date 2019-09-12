@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/09 18:20:52 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/12 13:18:09 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ int		main(int ac, char **av)
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
 		SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
-		printf("tsize = %I64d, usize %I64d\n", wolf.mem.tsize, wolf.mem.usize);
+		printf("tsize = %zu, usize %zu\n", wolf.mem.tsize, wolf.mem.usize);
 		while (1)
 		{
 			if (audio.audio_len == 0)

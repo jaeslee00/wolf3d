@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/09 17:48:49 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/12 13:16:46 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_2d_p draw_start, t_2d_p draw_end, sint32 view, sint32 sprite_height,
 	sint32 tex_sprite_scale_x = (tex->width << 16) / sprite_width;
 	
 	x_offset += draw_start.x;
-	y = draw_start.y;
+	y = draw_start.y + 1;
 	y_cam_pos = sprite_height - H;
 	while (y < draw_end.y)
 	{
