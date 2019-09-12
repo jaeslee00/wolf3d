@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 04:27:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/12 16:16:21 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/12 18:03:05 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ sint32	get_color_horiz(t_minimap *p1, t_minimap *p2)
 {
 	if (p1->h_color_head == p2->h_color_tail && p1->h_color_head > 0)
 		return (0xFFFFFF);
-	else if (p1->h_color_head == p2->h_color_tail && p1->h_color_head < 0)
+	else if (p1->h_color_head == p2->h_color_tail && p1->h_color_head == -1)
+		return (0x0000FF);
+	else if (p1->h_color_head == p2->h_color_tail && p1->h_color_head == -2)
 		return (0xFF0000);
 	else
 		return (0x00);
@@ -26,7 +28,9 @@ sint32	get_color_vertical(t_minimap *p1, t_minimap *p2)
 {
 	if (p1->v_color_head == p2->v_color_tail && p1->v_color_head > 0)
 		return (0xFFFFFF);
-	else if (p1->v_color_head == p2->v_color_tail && p1->v_color_head < 0)
+	else if (p1->v_color_head == p2->v_color_tail && p1->v_color_head == -1)
+		return (0x0000FF);
+	else if (p1->v_color_head == p2->v_color_tail && p1->v_color_head == -2)
 		return (0xFF0000);
 	else
 		return (0x00);
@@ -167,6 +171,12 @@ void	minimap_obj_color_vertical(t_wolf *wolf, sint32 x, sint32 y, sint32 *y_key)
 		wolf->player->m[x + y * minimap_width].v_color_head = -1;
 		wolf->player->m[x + (y + 1) * minimap_width].v_color_tail = -1;
 	}
+	else if (wolf->obj.nb[x + y * wolf->obj.w] == 4
+		|| wolf->obj.nb[x - 1 + y * wolf->obj.w] == 4)
+	{
+		wolf->player->m[x + y * minimap_width].v_color_head = -2;
+		wolf->player->m[x + (y + 1) * minimap_width].v_color_tail = -2;
+	}		
 	else
 	{
 		(*y_key)++;
@@ -187,6 +197,12 @@ void	minimap_obj_color_horiz(t_wolf *wolf, sint32 x, sint32 y, sint32 *x_key)
 	{
 		wolf->player->m[x + y * minimap_width].h_color_head = -1;
 		wolf->player->m[x + 1 + y * minimap_width].h_color_tail = -1;
+	}
+	else if (wolf->obj.nb[x + y * wolf->obj.w] == 4
+		|| wolf->obj.nb[x + (y - 1) * wolf->obj.w] == 4)
+	{
+		wolf->player->m[x + y * minimap_width].h_color_head = -2;
+		wolf->player->m[x + 1 + y * minimap_width].h_color_tail = -2;		
 	}
 	else
 	{
@@ -211,15 +227,16 @@ void	minimap_obj_color(t_wolf *wolf, sint32 x, sint32 y)
 		m[x + y * minimap_width].v_color_tail = INT_MAX;
 	if (x == 1)
 		wolf->player->m[x + y * minimap_width].h_color_tail = INT_MAX;
-	if (!(wolf->obj.nb[x + y * wolf->obj.w] == 0
-		&& wolf->obj.nb[x - 1 + y * wolf->obj.w] == 0))
+	if (wolf->obj.nb[x + y * wolf->obj.w] != 0
+		|| wolf->obj.nb[x - 1 + y * wolf->obj.w] != 0)
 		minimap_obj_color_vertical(wolf, x, y, &y_key);
-	if (!(wolf->obj.nb[x + y * wolf->obj.w] == 0
-		&& wolf->obj.nb[x + (y - 1) * wolf->obj.w] == 0))
+	if (wolf->obj.nb[x + y * wolf->obj.w] != 0
+		|| wolf->obj.nb[x + (y - 1) * wolf->obj.w] != 0)
 		minimap_obj_color_horiz(wolf, x, y, &x_key);
 }
 
-void	uniform_translation(sint32 transform[2], sint32 width, sint32 height, t_wolf *wolf)
+void	uniform_translation(sint32 transform[2], sint32 width, sint32 height,
+			t_wolf *wolf)
 {
 	sint32	zoom;
 
