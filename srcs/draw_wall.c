@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/12 13:18:09 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/15 22:53:35 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ sint8	texture_pick(t_raycaster *ray)
 void	texture_map(t_wolf *wf, t_texture_map *tex_map, sint32 x, f32 perp_dist,
 			t_texture *tex)
 {
-	sint32	tex_height_scale;
+	sint32	translated_y;
 	sint32	color;
 	sint32	tex_y;
 	sint32	y_offset;
@@ -53,8 +53,8 @@ void	texture_map(t_wolf *wf, t_texture_map *tex_map, sint32 x, f32 perp_dist,
 	y = tex_map->start + 1;
 	while (y < tex_map->end)
 	{
-		tex_height_scale = y + y_offset;
-		tex_y = ((tex_height_scale * precalc) >> 24) * tex->width;
+		translated_y = y + y_offset;
+		tex_y = ((translated_y * precalc) >> 24) * tex->width;
 		color = tex->data[tex_y + tex_map->coord.x];
 		//NOTE (jae) : lighting in ray_casting seems quite expensive. Needs to check!!
 		img[x + y * W] = lighting(color, perp_dist);

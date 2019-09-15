@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/12 13:18:09 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/15 19:49:47 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player->plane.y = 1;
 	wolf->player->speed = 0;
 	wolf->player->health = 75;
-	wolf->player->minimap_zoom = 20;
+	wolf->player->minimap_zoom = 40;
 }
 
 void		back(uint32 *img, t_palette *cel)
@@ -199,7 +199,7 @@ int		main(int ac, char **av)
 		i = 1;
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
-		SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		//SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
 		printf("tsize = %zu, usize %zu\n", wolf.mem.tsize, wolf.mem.usize);
 		while (1)
 		{
@@ -226,7 +226,7 @@ int		main(int ac, char **av)
 			frames[i] = SDL_GetTicks();
 			back(wolf.img, &cel);
 			raycast(&wolf);
-			entity_draw_loop(&wolf, wolf.entity, wolf.entity->item, wolf.entity->order);
+			entity_draw_loop(&wolf, wolf.entity->item, wolf.entity->order, wolf.entity->nbr_of_entities);
 			if (i == 0)
 				draw_hud(&wolf, 16);
 			else

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/05 01:40:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/09 18:06:00 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/15 18:17:38 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,12 @@ void	sort_depth_buffer(t_entity *entity, t_items *item, t_player *player)
 	f32		inv_det;
 
 	index = 0;
+	inv_det = 1.0f / (player->plane.x * player->direction.y -
+		player->plane.y * player->direction.x);
 	while (index < entity->nbr_of_entities)
 	{
 		relative_entity_pos.x = item[index].pos.x - player->pos.x;
 		relative_entity_pos.y = item[index].pos.y - player->pos.y;
-		inv_det = 1.0f / (player->plane.x * player->direction.y -
-			player->plane.y * player->direction.x);
 		item[index].transformed_sprite_pos.x = inv_det *
 			(player->direction.y * relative_entity_pos.x -
 				player->direction.x * relative_entity_pos.y);

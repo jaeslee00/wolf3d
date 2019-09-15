@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/09 18:19:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/15 22:58:43 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@
 # include <SDL2/SDL.h>
 // # define W	(2560)
 // # define H	(1080)
-# define W	(3840)
-# define H	(2160)
-
+// # define W	(3120)
+// # define H	(2080)
+ # define W	(1920)
+ # define H	(1080)
 # define TEXTURE_0	0
 # define TEXTURE_1	1
 # define TEXTURE_2	2
@@ -179,6 +180,16 @@ typedef struct	s_raycaster
 typedef f32 (*funct)(t_raycaster * ray, t_player *player);
 
 //TODO (jae) : need to have multiple textures for status of NPC
+typedef struct	s_entity_render_info
+{
+	sint32	sprite_size;
+	t_2d_p	draw_start;
+	t_2d_p	draw_end;
+	sint32	x_offset;
+	sint32	sprite_width_scale;
+	sint32	view;
+}				t_entity_render_info;
+
 typedef struct	s_items
 {
 	sint32		id;
@@ -267,8 +278,7 @@ void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
 sint32			lighting(sint32 color, f32 distance);
 t_texture		read_bmp(const sint8 *filename, t_wolf *wolf, t_palette *pal);
 void			entity_update(t_wolf *wf);
-void			entity_draw(t_items *item, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist);
-void			entity_draw_loop(t_wolf *wf, t_entity *entity, t_items *item, sint32 *order);
+void			entity_draw_loop(t_wolf *wf, t_items *item, sint32 *order, sint32 nbr_of_entities);
 void			sort_depth_buffer(t_entity *entity, t_items *item, t_player *player);
 void			count_entities(sint8 **map, t_obj obj, t_entity *entity);
 #endif
