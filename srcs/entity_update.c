@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/15 23:08:29 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/17 16:52:27 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 //TODO (jae) : need a condition to call draw_enemy() for only those are within the player's view for optimization
 
-void	texel_scale(sint32 *texel, sint32 precalc_x, sint32 sprite_width_scale, sint32 tex_y)
+void	texel_scale(sint32 *texel, sint32 translatedx, sint32 sprite_width_scale, sint32 tex_y)
 {
 	sint32	tex_x[4];
 	sint32	translated_x[4];
 
-	translated_x[0] = precalc_x;
-	translated_x[1] = precalc_x + 1;
-	translated_x[2] = precalc_x + 2;
-	translated_x[3] = precalc_x + 3;
+	translated_x[0] = translatedx;
+	translated_x[1] = translatedx + 1;
+	translated_x[2] = translatedx + 2;
+	translated_x[3] = translatedx + 3;
 	tex_x[0] = (translated_x[0] * sprite_width_scale) >> 16;
 	tex_x[1] = (translated_x[1] * sprite_width_scale) >> 16;
 	tex_x[2] = (translated_x[2] * sprite_width_scale) >> 16;
@@ -47,38 +47,43 @@ void	draw_to_pixel(uint32 *img, uint32 *tex_data, sint32 *texel, f32 distance)
 		*(img + 3) = lighting(color[3], distance);	
 }
 
+static t_2d_p	precalculate_offset(t_entity_render_info *info)
+{
+	t_2d_p	offset;
+
+	offset.x = info->x_offset + info->draw_start.x;
+	offset.y = info->sprite_size - H;
+
+	return (offset);
+}
+
+//NOTE (jae) : can be troublesome if the size of the sprite is not multiple of 4
 void	entity_render(uint32 *img, f32 *perp_dist, t_items *item, t_entity_render_info *info)
 {
-	sint32	x;
-	sint32	y;
-	sint32	tex_y;
-	sint32	translated_y;
-	sint32	texel[4];
-	sint32	img_y;
-	t_2d_p	precalc;
-	t_texture *tex;
-	
-	tex = item->tex;
-	info->x_offset += info->draw_start.x;
-	y = info->draw_start.y + 1;
-	precalc.y = info->sprite_size - H;
-	while (y < info->draw_end.y)
+	t_2d_p		idx;
+	sint32		tex_y;
+	sint32		img_y;
+	t_2d_p		translated;
+	sint32		texel[4]; // texel[4] = img_y... it feels like shit to do this T-T
+	t_2d_p		offset;
+
+	offset = precalculate_offset(info);
+	idx.y = info->draw_start.y + 1;
+	while (idx.y < info->draw_end.y)
 	{
-		img_y = y * W;
-		translated_y = ((y + info->view) << 1) + precalc.y;
-		tex_y =
-			(((translated_y * tex->height) / info->sprite_size) >> 1)
-				* tex->width;
-		x = info->draw_start.x;
-		while (x < info->draw_end.x - 4)
+		translated.y = ((idx.y + info->view) << 1) + offset.y;
+		tex_y = (((translated.y * item->tex->height) / info->sprite_size) >> 1) * item->tex->width;
+		img_y = idx.y * W;
+		idx.x = info->draw_start.x;
+		while (idx.x < info->draw_end.x - 3)
 		{
-			precalc.x = x - info->x_offset;
-			texel_scale(texel, precalc.x, info->sprite_width_scale, tex_y);
-			if (item->transformed_sprite_pos.y < perp_dist[x])
-				draw_to_pixel(img + (x + img_y), tex->data, texel, item->transformed_sprite_pos.y);
-			x += 4;
+			translated.x = idx.x - offset.x;
+			texel_scale(texel, translated.x, info->sprite_width_scale, tex_y);
+			if (item->transformed_sprite_pos.y < perp_dist[idx.x])
+				draw_to_pixel(img + (idx.x + img_y), item->tex->data, texel, item->transformed_sprite_pos.y);
+			idx.x += 4;
 		}
-		y++;
+		idx.y++;
 	}
 }
 
@@ -129,7 +134,7 @@ void	entity_draw_loop(t_wolf *wf, t_items *item, sint32 *order, sint32 nbr_of_en
 {
 	sint32					index;
 	t_entity_render_info	info;
-
+	
 	index = 0;
 	info.view = wf->view;
 	while (index < nbr_of_entities)

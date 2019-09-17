@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/15 22:58:43 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/16 16:33:52 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@
 //
 #include <stdio.h>
 
+//TODO (jae) : typedef fuckin needs t_ at the beginning fuuuuuuk
 typedef unsigned char		uint8;
 typedef char				sint8;
 
@@ -139,7 +140,7 @@ typedef struct	s_sdl
 
 typedef struct	s_palette
 {
-	uint32	*palete;
+	uint32	*palette;
 	uint32		size;
 	}				t_palette;
 
@@ -151,7 +152,6 @@ typedef struct	s_player
 	t_2d		plane;
 	f32			speed;
 	//TODO (jae) : maybe it's better to put t_minimap + minimap infos into another structure heheh
-	
 	t_minimap	*m;
 	sint32		minimap_zoom;
 	int			health;

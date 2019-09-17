@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/15 22:53:35 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/15 23:23:24 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	texture_map(t_wolf *wf, t_texture_map *tex_map, sint32 x, f32 perp_dist,
 		translated_y = y + y_offset;
 		tex_y = ((translated_y * precalc) >> 24) * tex->width;
 		color = tex->data[tex_y + tex_map->coord.x];
-		//NOTE (jae) : lighting in ray_casting seems quite expensive. Needs to check!!
 		img[x + y * W] = lighting(color, perp_dist);
 		y++;
 }

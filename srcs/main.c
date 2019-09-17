@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/15 19:49:47 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/16 16:33:54 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	load_textures(t_wolf *wolf)
 	t_palette pal;
 
 	pal.size = 0;
-	is_alloc(pal.palete = ft_mem(&wolf->mem, 2948), wolf, -1);
+	is_alloc(pal.palette = ft_mem(&wolf->mem, 2948), wolf, -1);
 	wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp", wolf, &pal);
 	wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp", wolf, &pal);
 	wolf->tex[2] = read_bmp("./texture/BrownbrickD.bmp", wolf, &pal);
@@ -76,7 +76,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player->plane.y = 1;
 	wolf->player->speed = 0;
 	wolf->player->health = 75;
-	wolf->player->minimap_zoom = 40;
+	wolf->player->minimap_zoom = 20;
 }
 
 void		back(uint32 *img, t_palette *cel)
@@ -96,8 +96,8 @@ void		back(uint32 *img, t_palette *cel)
 		{
 			if (i < (int)cel->size)
 			{
-				img[x + y * W] = cel->palete[i];
-				img[x + y1 * W] = cel->palete[i];
+				img[x + y * W] = cel->palette[i];
+				img[x + y1 * W] = cel->palette[i];
 			}
 			else
 			{
@@ -123,7 +123,7 @@ t_palette	ceiling(uint32 *img, t_wolf *wolf)
 	f32		per;
 
 	ft_bzero(&p, sizeof(p));
-	p.palete = ft_memalloc(sizeof(sint32) * 20000);
+	p.palette = ft_memalloc(sizeof(sint32) * 20000);
 	color = 1;
 	x = 0;
 	y = 0;
