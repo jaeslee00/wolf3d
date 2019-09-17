@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/17 16:52:27 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/17 20:34:05 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,10 @@ void	draw_to_pixel(uint32 *img, uint32 *tex_data, sint32 *texel, f32 distance)
 		*(img + 3) = lighting(color[3], distance);	
 }
 
-static t_2d_p	precalculate_offset(t_entity_render_info *info)
+static void	precalculate_offset(t_entity_render_info *info)
 {
-	t_2d_p	offset;
-
-	offset.x = info->x_offset + info->draw_start.x;
-	offset.y = info->sprite_size - H;
-
-	return (offset);
+	info->offset.x += info->draw_start.x;
+	info->offset.y = info->sprite_size - H;
 }
 
 //NOTE (jae) : can be troublesome if the size of the sprite is not multiple of 4
@@ -65,19 +61,17 @@ void	entity_render(uint32 *img, f32 *perp_dist, t_items *item, t_entity_render_i
 	sint32		img_y;
 	t_2d_p		translated;
 	sint32		texel[4]; // texel[4] = img_y... it feels like shit to do this T-T
-	t_2d_p		offset;
 
-	offset = precalculate_offset(info);
 	idx.y = info->draw_start.y + 1;
 	while (idx.y < info->draw_end.y)
 	{
-		translated.y = ((idx.y + info->view) << 1) + offset.y;
+		translated.y = ((idx.y + info->view) << 1) + info->offset.y;
 		tex_y = (((translated.y * item->tex->height) / info->sprite_size) >> 1) * item->tex->width;
 		img_y = idx.y * W;
 		idx.x = info->draw_start.x;
 		while (idx.x < info->draw_end.x - 3)
 		{
-			translated.x = idx.x - offset.x;
+			translated.x = idx.x - info->offset.x;
 			texel_scale(texel, translated.x, info->sprite_width_scale, tex_y);
 			if (item->transformed_sprite_pos.y < perp_dist[idx.x])
 				draw_to_pixel(img + (idx.x + img_y), item->tex->data, texel, item->transformed_sprite_pos.y);
@@ -91,7 +85,7 @@ void	entity_render_init(t_entity_render_info *info, sint32 view, t_items *item)
 {
 	sint32	sprite_pos_screen;
 	
-	info->x_offset = 0;
+	info->offset.x = 0;
 	info->sprite_size = abs((sint32)((f32)H / item->transformed_sprite_pos.y));
 	info->sprite_width_scale = (item->tex->width << 16) / info->sprite_size;
 	sprite_pos_screen = (sint32)(((f32)W) *
@@ -103,7 +97,7 @@ void	entity_render_init(t_entity_render_info *info, sint32 view, t_items *item)
 	info->draw_end.y = ((info->sprite_size + H) >> 1) - view;
 	if (info->draw_start.x < 0)
 	{
-		info->x_offset = info->draw_start.x;
+		info->offset.x = info->draw_start.x;
 		info->draw_start.x = 0;
 	}
 	if (info->draw_end.x >= W)
@@ -111,7 +105,8 @@ void	entity_render_init(t_entity_render_info *info, sint32 view, t_items *item)
 	if (info->draw_start.y < 0)
 		info->draw_start.y = 0;
 	if (info->draw_end.y >= H)
-		info->draw_end.y = H - 1;	
+		info->draw_end.y = H - 1;
+	precalculate_offset(info);
 }
 
 sint8	entity_render_setup(t_items *item, sint32 view, t_entity_render_info *info)
@@ -125,7 +120,8 @@ sint8	entity_render_setup(t_items *item, sint32 view, t_entity_render_info *info
 		item->flag |= 1UL;
 	else
 		item->flag &= ~1UL;
-	if (info->draw_start.x >= W || info->draw_end.x < 0 || info->draw_start.y >= H || info->draw_end.y < 0)
+	if (info->draw_start.x >= W || info->draw_end.x < 0
+		|| info->draw_start.y >= H || info->draw_end.y < 0)
 		return (-1);
 	return (1);
 }
