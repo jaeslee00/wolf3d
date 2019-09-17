@@ -6,7 +6,7 @@
 #    By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/09 12:55:04 by viccarau          #+#    #+#              #
-#    Updated: 2019/09/08 01:20:48 by jaelee           ###   ########.fr        #
+#    Updated: 2019/08/31 18:02:17 by jaelee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,12 +20,15 @@ SRC = $(SRC_DIR)main.c $(SRC_DIR)input1.c   $(SRC_DIR)parsing.c \
 	$(SRC_DIR)raycaster.c $(SRC_DIR)debug.c $(SRC_DIR)checks.c  \
 	$(SRC_DIR)math.c $(SRC_DIR)keycode.c $(SRC_DIR)perp_distance.c $(SRC_DIR)minimap.c \
 	$(SRC_DIR)draw_wall.c $(SRC_DIR)input.c $(SRC_DIR)bmp_reader.c \
-	$(SRC_DIR)draw_sprite.c $(SRC_DIR)hud.c $(SRC_DIR)hud1.c \
-	$(SRC_DIR)entity_update.c $(SRC_DIR)sort_depth_buffer.c $(SRC_DIR)sound.c
-OBJ = $(SRC:$(SRC_DIR)%.c=%.o)
+	$(SRC_DIR)draw_sprite.c $(SRC_DIR)hud.c  $(SRC_DIR)hud1.c $(SRC_DIR)sound.c $(SRC_DIR)entity_update.c $(SRC_DIR)sort_entity_order.c
+OBJ = $(SRC:$(SRC_DIR)%.c=$(SRC_DIR)%.o)
 
-FLAGS += -pg -O -O2 -O3 -Llibft -lft -lm -lmingw32 -lSDL2 -lSDL2main
-CFLAGS += $(LIB_INC) -F. -Wall -Wextra -Werror 
+
+LIB_INC = -Iincludes -Ilibft/includes -Imingw
+
+FLAGS += -g -pg -O -O2 -O3 -Llibft -lft -lm -lmingw32 -lSDL2 -lSDL2main
+
+CFLAGS += -g -pg -O -O2 -O3 -lmingw32 -lSDL2 -lSDL2main $(LIB_INC) -Wall -Wextra -Werror #-fsanitize=address -g
 
 all: $(NAME)
 

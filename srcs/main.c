@@ -15,23 +15,23 @@
 void	load_textures(t_wolf *wolf)
 {
 	t_palette pal;
-
+	
 	pal.size = 0;
 	is_alloc(pal.palete = ft_mem(&wolf->mem, 2948), wolf, -1);
-	wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp", wolf, &pal);
-	wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp", wolf, &pal);
-	wolf->tex[2] = read_bmp("./texture/BrownbrickD.bmp", wolf, &pal);
-	wolf->tex[3] = read_bmp("./texture/WoodbrickD.bmp", wolf, &pal);
-	wolf->tex[4] = read_bmp("./texture/Wooddoor.bmp", wolf, &pal);
-	wolf->tex[5] = read_bmp("./texture/shotgun0.bmp", wolf, &pal);
-	wolf->tex[6] = read_bmp("./texture/shotgun1.bmp", wolf, &pal);
-	wolf->tex[7] = read_bmp("./texture/shotgun2.bmp", wolf, &pal);
-	wolf->tex[8] = read_bmp("./texture/shotgun3.bmp", wolf, &pal);
-	wolf->tex[9] = read_bmp("./texture/shotgun4.bmp", wolf, &pal);
-	wolf->tex[10] = read_bmp("./texture/gun0.bmp", wolf, &pal);
-	wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf, &pal);
-	wolf->tex[12] = read_bmp("./texture/guard0.bmp", wolf, &pal);
-	wolf->tex[13] = read_bmp("./texture/guard1.bmp", wolf, &pal);
+	tex_to_mem(wolf->tex[0] = read_bmp("./texture/MultibrickD.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[1] = read_bmp("./texture/BookshelfD.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[2] = read_bmp("./texture/WoodbrickD.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[3] = read_bmp("./texture/BrownbrickD.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[4] = read_bmp("./texture/Wooddoor.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[5] = read_bmp("./texture/shotgun0.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[6] = read_bmp("./texture/shotgun1.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[7] = read_bmp("./texture/shotgun2.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[8] = read_bmp("./texture/shotgun3.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[9] = read_bmp("./texture/shotgun4.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[10] = read_bmp("./texture/gun0.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[11] = read_bmp("./texture/gun1.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[12] = read_bmp("./texture/guard0.bmp", wolf, &pal), wolf);
+	tex_to_mem(wolf->tex[13] = read_bmp("./texture/guard1.bmp", wolf, &pal), wolf);
 	//printf("pal size = %I64d, \n", pal.size * sizeof(int));
 }
 
@@ -79,40 +79,51 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player->minimap_zoom = 20;
 }
 
-void		back(uint32 *img, t_palette *cel)
+void		back(t_wolf *wolf, uint32 *img, t_palette *cel)
 {
-	sint32	x;
-	sint32	y;
-	sint32	y1;
-	sint32	i;
+	uint32	x;
+	uint32	y;
+	uint32	y1;
+	uint32	i;
+	uint32	j;
 
-	i = 0;
+	i = 1;
+	j = 29;
 	y = 0;
-	y1 = H - 1;
-	while (y < (H / 2))
+	y1 = (H / 2) - 1;
+	while (y1 < H)
 	{
 		x = 0;
 		while (x < W - 1)
 		{
-			if (i < (int)cel->size)
+			if (x + y * W < W * H && x + y * W < W * H)
 			{
-				img[x + y * W] = cel->palete[i];
-				img[x + y1 * W] = cel->palete[i];
-			}
-			else
-			{
-				img[x + y * W] = 0;
-				img[x + y1 * W] = 0;
+				if (i < cel->size)
+				{
+					img[x + y * W] = cel->palete[i];
+					img[x + y1 * W] = cel->palete[j];
+				}
+				else
+				{
+					img[x + y * W] = 0;
+					img[x + y1 * W] = 0;
+				}
 			}
 			x++;
 		}
 		if (y % 20 == 0)
+		{
 			i++;
+			j--;
+		}
 		y++;
-		y1--;
+		y1++;
 	}
+	printf("i = %d, %d\n", i, wolf->view);
 }
 
+// TODO(viccarau): In order to create the pallete, we can calculate the H * 2,
+// then the middle point is where the pallete starts to draw
 t_palette	ceiling(uint32 *img, t_wolf *wolf)
 {
 	t_palette p;
@@ -182,7 +193,7 @@ int		main(int ac, char **av)
 	else
 		fd = open("wolf3d.map", O_RDONLY);
 	//printf("size of wolf = %ld texture %ld door %ld\n", sizeof(wolf), sizeof(t_texture) , sizeof(t_door));
-	load_music("./music/hallo.wav", &audio);
+	//load_music("./music/hallo.wav", &audio);
 	//load_music("./music/steps.wav", &audio);
 	//SDL_PauseAudio(0);
 	if (fd > 0)
@@ -199,9 +210,9 @@ int		main(int ac, char **av)
 		i = 1;
 		ft_bzero(frames, sizeof(sint32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
-		SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
-		printf("tsize = %I64d, usize %I64d\n", wolf.mem.tsize, wolf.mem.usize);
-		while (1)
+//SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		//printf("tsize = %zu, usize %zu\n", wolf.mem.tsize, wolf.mem.usize);
+while (1)
 		{
 			if (audio.audio_len == 0)
 			{
@@ -224,7 +235,7 @@ int		main(int ac, char **av)
 			//TODO (jae) : need a good condition to execute re-order
 			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);
 			frames[i] = SDL_GetTicks();
-			back(wolf.img, &cel);
+			back(&wolf, wolf.img, &cel);
 			raycast(&wolf);
 			entity_draw_loop(&wolf, wolf.entity, wolf.entity->item, wolf.entity->order);
 			if (i == 0)

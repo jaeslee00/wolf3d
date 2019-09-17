@@ -13,6 +13,12 @@
 
 #include "wolf3d.h"
 
+void	tex_to_mem(t_texture tex, t_wolf *wolf)
+{
+	if (tex.size == 0)
+		is_alloc(NULL, wolf, -3);
+}
+
 sint32		is_invalid(sint8 *str)
 {
 	sint32	i;
@@ -35,13 +41,15 @@ void	is_alloc(void *mem, t_wolf *wolf, sint32 error)
 	{
 		if (error == -2)
 			ft_putstr_fd("Invalid map, not enough y values or invalid file\n", 2);
-		if (error < 0 && error != -2)
+		else if (error == -3)
+			ft_putstr_fd("Texture(s) couldn't load\n", 2);
+		else
 			ft_putstr_fd("Malloc didn't want to give you memory. SAD\n", 2);
 		if (error < 0)
 			error = -1;
 		exit(error);
 	}
-	}
+}
 
 // TODO(viccarau): All the allocations of memory will be done here
 //                Music, textures, EVERYTHING
@@ -53,4 +61,4 @@ void	mem_init(t_wolf *wolf)
 	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 100)), wolf, -5);
 	wolf->mem.tsize = (1024 * 1024 * 100);
 	wolf->mem.usize = sizeof(sint32);
-	}
+}

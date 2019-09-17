@@ -110,14 +110,19 @@ t_texture	read_bmp(const sint8 *filename, t_wolf *wolf, t_palette *pal)
 
 	ft_bzero(data, sizeof(data));
 	fd = open(filename, O_RDONLY);
-	read(fd, header, 54);
-	bitmap = get_header(header);
-	tex.width = bitmap.width;
-	tex.height = bitmap.height;
-	tex.size = 3 * tex.width * tex.height;
-	is_alloc(tex.data = (uint32*)ft_mem(&wolf->mem, tex.width * tex.height * sizeof(uint32)), wolf, -1);
-	read_all(fd, data, tex.size);
-	data_to_img(bitmap, &data[0], &tex, (bitmap.height - 1) * (bitmap.width % 4));
-	palette(tex.data, pal, (bitmap.height * bitmap.width) - 1);
+	if (fd > 0)
+	{
+		read(fd, header, 54);
+		bitmap = get_header(header);
+		tex.width = bitmap.width;
+		tex.height = bitmap.height;
+		tex.size = 3 * tex.width * tex.height;
+		is_alloc(tex.data = (uint32*)ft_mem(&wolf->mem, tex.width * tex.height * sizeof(uint32)), wolf, -1);
+		read_all(fd, data, tex.size);
+		data_to_img(bitmap, &data[0], &tex, (bitmap.height - 1) * (bitmap.width % 4));
+		palette(tex.data, pal, (bitmap.height * bitmap.width) - 1);
+	}
+	else
+		ft_bzero(&tex, sizeof(tex));
 	return (tex);
 }

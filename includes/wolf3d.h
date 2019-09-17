@@ -10,13 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/* TODO(viccarau): For optimisation purposes we need to make the size of the
-   **				 structs64-bytes maximum. That is the cache-line size on the
-**				processor we're working on.
-**				I think we should allocate all the structs inside our wolf.
-** TODO(viccarau): protect the textures SHERLOCK
-*/
-
 #ifndef WOLF3D_H
 # define WOLF3D_H
 # include "libft.h"
@@ -25,9 +18,10 @@
 # include <SDL2/SDL.h>
 // # define W	(2560)
 // # define H	(1080)
-# define W	(3840)
-# define H	(2160)
-
+//# define W	(3120)
+//# define H	(2080)
+ # define W	(1920)
+ # define H	(1080)
 # define TEXTURE_0	0
 # define TEXTURE_1	1
 # define TEXTURE_2	2
@@ -80,19 +74,18 @@ typedef struct	s_2d_p
 typedef struct	s_audio
 {
 	SDL_AudioSpec	wav_spec;
-	uint8	*wav_buffer;
-	uint32	wav_length;
-	uint8	*audio_pos;
-	uint32	audio_len;
+	uint8			*wav_buffer;
+	uint32			wav_length;
+	uint8			*audio_pos;
+	uint32			audio_len;
 
 }				t_audio;
-
 typedef struct	s_texture
 {
 	sint32			width;
 	sint32			height;
 	sint32			size;
-	uint32_t		*data;
+	uint32			*data;
 }				t_texture;
 
 typedef struct	s_texture_map
@@ -122,7 +115,7 @@ typedef struct	s_minimap
 
 typedef struct	s_obj
 {
-sint8	*nb;
+	sint8	*nb;
 	sint32	size;
 	sint32	w;
 	sint32	h;
@@ -138,9 +131,9 @@ typedef struct	s_sdl
 
 typedef struct	s_palette
 {
-	uint32	*palete;
+	uint32		*palete;
 	uint32		size;
-	}				t_palette;
+}				t_palette;
 
 typedef struct	s_player
 {
@@ -171,7 +164,6 @@ typedef struct	s_raycaster
 	t_2d	delta_dist;
 	t_2d	plane;
 	f32		perp_dist;
-	//id_t	tex_flag;
 	sint32	hit;
 	sint32	side;
 }				t_raycaster;
@@ -219,10 +211,11 @@ typedef struct	s_wolf
 	f32			*perp_dist;
 }				t_wolf;
 
-void				load_music(char *path, t_audio *audio);
-void				draw_hud(t_wolf *wolf, uint32 deltaframe);
+void			tex_to_mem(t_texture tex, t_wolf *wolf);
+void			load_music(char *path, t_audio *audio);
+void			draw_hud(t_wolf *wolf, uint32 deltaframe);
 t_2d_p			init_2d(sint32 x, sint32 y);
-void				draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, uint32 size);
+void			draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, uint32 size);
 funct			*perp_dist(t_wolf *wolf);
 f32				perp_distance_ew(t_raycaster *ray, t_player *player);
 f32				perp_distance_sn(t_raycaster *ray, t_player *player);
