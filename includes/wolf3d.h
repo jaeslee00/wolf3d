@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/16 16:33:52 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/17 20:44:16 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,13 +179,12 @@ typedef struct	s_raycaster
 
 typedef f32 (*funct)(t_raycaster * ray, t_player *player);
 
-//TODO (jae) : need to have multiple textures for status of NPC
 typedef struct	s_entity_render_info
 {
 	sint32	sprite_size;
 	t_2d_p	draw_start;
 	t_2d_p	draw_end;
-	sint32	x_offset;
+	t_2d_p	offset;
 	sint32	sprite_width_scale;
 	sint32	view;
 }				t_entity_render_info;
