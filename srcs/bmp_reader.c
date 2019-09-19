@@ -32,6 +32,8 @@ t_bitmap_header get_header(t_u8 *mem)
 	t_bitmap_header header;
 	
 	ft_memcpy(&header.file_type, &mem[0], sizeof(t_u16));
+	if (header.file_type != 19778)
+		               is_alloc(NULL, NULL, -4);
 	ft_memcpy(&header.file_size, &mem[2], sizeof(t_u32));
 	ft_memcpy(&header.reserved1, &mem[6], sizeof(t_u16));
 	ft_memcpy(&header.reserved2, &mem[8], sizeof(t_u16));

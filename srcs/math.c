@@ -24,8 +24,8 @@ t_f64		fov_calculator(t_wolf *wolf)
 
 	d = &wolf->player->direction;
 	pn = &wolf->player->plane;
-	fov = (sqrt(pn->x * pn->x) + (pn->y * pn->y))
-		/ (sqrt(d->x * d->x) + (d->y * d->y));
+	fov = (sqrt(pn->x * pn->x) + (pn->y * pn->y)) /
+		(sqrt(d->x * d->x) + (d->y * d->y));
 	fov = round(atan(fov) * 180 / PI32) * 2;
 	return (fov);
 }

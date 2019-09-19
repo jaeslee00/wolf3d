@@ -16,8 +16,8 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-// # define W	(2560)
-// # define H	(1080)
+ //# define W	(2560)
+ //# define H	(1080)
 //# define W	(3120)
 //# define H	(2080)
  # define W	(1920)
@@ -150,8 +150,8 @@ typedef struct	s_player
 
 typedef struct	s_file
 {
-	t_s8	*str[30];
-	}				t_file;
+	t_s8	*str[14];
+}				t_file;
 
 typedef struct	s_animation
 {
@@ -216,7 +216,7 @@ typedef struct	s_wolf
 }				t_wolf;
 
 void			back(t_wolf *wolf, t_u32 *img, t_palette *cel);
-t_palette		ceiling(t_u32 *img, t_wolf *wolf);
+t_palette		ceiling(void);
 void			load_textures(t_wolf *wolf);
 void			ft_wolf_init(t_wolf *wolf);
 void			init_entities(t_entity *entity, t_wolf *wolf);

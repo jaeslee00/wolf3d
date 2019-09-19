@@ -72,7 +72,7 @@ t_s32 print_map(t_s8 **map, t_obj obj, t_player *player, t_door *doors, t_wolf *
 			j++;
 		}
 		i++;
-		}
+	}
 	return (0);
 }
 
@@ -90,8 +90,8 @@ void ft_frametimes(t_s32 *frames, t_s32 *count)
 			ft_putstr(" ms ");
 			*count += 1;
 			if (*count % 12 == 0)
-ft_putchar('\n');
-j++;
+				ft_putchar('\n');
+			j++;
 		}
 		ft_memset(frames, 0, sizeof(t_s32) * 61);
 		ft_putchar('\n');

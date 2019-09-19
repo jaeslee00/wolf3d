@@ -6,115 +6,75 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/01 13:16:29 by viccarau          #+#    #+#             */
-
 /*   Updated: 2019/08/01 13:18:39 by viccarau         ###   ########.fr       */
 /*                                                                            */
+/* ************************************************************************** */
 
 #include "wolf3d.h"
 
-t_s32	verLine(t_s32 x, t_s32 y1, t_s32 y2, const t_s32 color, t_u32 *img)
+void		back(t_wolf *wolf, t_u32 *img, t_palette *cel)
 {
-	t_s32 y;
+	t_u32	x;
+	t_u32	y;
+	t_u32	y1;
+	t_u32	i;
+	t_u32	j;
 
-	if (y2 < y1)
+	(void)wolf;
+	i = 1;
+	j = 29;
+	y = 0;
+	y1 = (H / 2) - 1;
+	while (y1 < H)
 	{
-		y1 += y2;
-		y2 = y1 - y2;
-		y1 -= y2;
-	}
-	if (y2 < 0 || y1 >= H  || x < 0 || x >= W)
-		return (0);
-	if (y1 < 0)
-		y1 = 0;
-	if (y2 >= W)
-		y2 = H - 1;
-	y = y1;
-	while (++y < y2)
-		img[x + y * W] = color;
-	return (1);
-}
-
-void	render(t_wolf *wolf)
-{
-	t_s32 x;
-	t_s32 line_height;
-	t_s32 draw_start;
-
-	t_raycaster r;
-	x = 0;
-
-	while (x < W)
+		x = 0;
+		while (x < W - 1)
 		{
-		r.hit = 0;
-		wolf->player->ray.x = wolf->player->direction.x + wolf->player->plane.x * (2 * x / (f64)(W) - 1);
-		wolf->player->ray.y = wolf->player->direction.y + wolf->player->plane.y * (2 * x / (f64)(W) - 1);
-		r.delta_dist.x = ft_abs(1 / wolf->player->ray.x);
-		 r.delta_dist.y = ft_abs(1 / wolf->player->ray.y);
-		  r.map.x = (t_s32)wolf->player->pos.x;
-		  r.map.y = (t_s32)wolf->player->pos.y;
-			if (wolf->player->ray.x < 0)
+			if (x + y * W < W * H && x + y * W < W * H)
 			{
-				r.step.x = -1;
-				r.side_dist.x = (wolf->player->pos.x - r.map.x) * r.delta_dist.x;
-			}
-			else
-			{
-				r.step.x = 1;
-				r.side_dist.x = (r.map.x + 1.0 - wolf->player->pos.x) * r.delta_dist.x;
-			}
-			if (wolf->player->ray.y < 0)
-			{
-				r.step.y = -1;
-				r.side_dist.y = (wolf->player->pos.y - r.map.y) * r.delta_dist.y;
-			}
-			else
-			{
-				r.step.y = 1;
-				r.side_dist.y = (r.map.y + 1.0 - wolf->player->pos.y) * r.delta_dist.y;
-			}
-
-		//perform DDA
-
-		while (r.hit == 0)
-			{
-				//jump to next map square, OR in x-direction, OR in y-direction
-				if (r.side_dist.x < r.side_dist.y)
+				if (i < cel->size)
 				{
-					r.side_dist.x += r.delta_dist.x;
-					r.map.x += r.step.x;
-					r.side = 0;
+					img[x + y * W] = cel->palete[i];
+					img[x + y1 * W] = cel->palete[j];
 				}
 				else
 				{
-					r.side_dist.y += r.delta_dist.y;
-					r.map.y += r.step.y;
-					r.side = 1;
+					img[x + y * W] = 0;
+					img[x + y1 * W] = 0;
 				}
-			if (wolf->map[r.map.x][r.map.y] == 1 || wolf->map[r.map.x][r.map.y] > 2)
-				r.hit = 1;
 			}
-
-		if (r.side == 0)
-			r.perp_distance = (r.map.x - wolf->player->pos.x + (1 - r.step.x) / 2) / wolf->player->ray.x;
-		else
-			 r.perp_distance = (r.map.y - wolf->player->pos.y + (1 - r.step.y) / 2) / wolf->player->ray.y;
-
-		 line_height = (t_s32)(H / r.perp_distance);
-		draw_start = -line_height / 2 + H / 2;
-			if (draw_start < 0)
-			draw_start = 0;
-			t_s32 draw_end = line_height / 2 + H / 2;
-			if (draw_end >= H)
-			draw_end = H - 1;
-t_s32 color;
-
-			if (wolf->map[r.map.x][r.map.y])
-			color = 0x440000 * wolf->map[r.map.x][r.map.y];
-else
-color = 0;
-			if (r.side == 1)
-		color = color >> 1;
-verLine(x, draw_start, draw_end, color, wolf->img);
-		x++;
+			x++;
 		}
+		if (y % 20 == 0)
+		{
+			i++;
+			j--;
+		}
+		y++;
+		y1++;
 	}
+	//printf("i = %d, %d\n", i, wolf->view);
+}
+
+// TODO(viccarau): In order to create the pallete, we can calculate the H * 2,
+// then the middle point is where the pallete starts to draw
+t_palette	ceiling(void)
+{
+	t_palette	p;
+	t_s32	y;
+	t_f32		per;
+
+	ft_bzero(&p, sizeof(p));
+	p.palete = ft_memalloc(sizeof(t_s32) * H / 2);
+	per = 2.71f;
+	y = 0;
+	while (y < H / 2)
+	{
+		p.palete[y] = rgb_lerp(0x111111, per, 0x222222);
+		y++;
+		per -= 0.01f;
+	}
+	p.size = y;
+	//printf("sizeof(pal) = %d\n", p.size);
+	return (p);
+}

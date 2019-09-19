@@ -27,11 +27,11 @@ void	set_flag(t_wolf *wolf, SDL_Event event)
 {
 	if (event.key.keysym.scancode == SDL_SCANCODE_1
 		&& !(wolf->flag & 1UL << 9))
-wolf->flag |= 1UL << 10;
+		wolf->flag |= 1UL << 10;
 	if (event.key.keysym.scancode == SDL_SCANCODE_2
 		&& !(wolf->flag & 1UL << 9))
-wolf->flag &= ~(1UL << 10);
-		if (event.type == SDL_MOUSEBUTTONDOWN)
+		wolf->flag &= ~(1UL << 10);
+	if (event.type == SDL_MOUSEBUTTONDOWN)
 		wolf->flag |= 1UL << 9;
 	check_key(wolf, event, SDL_SCANCODE_W, 1UL);
 	check_key(wolf, event, SDL_SCANCODE_S, 1UL << 1);

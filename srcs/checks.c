@@ -6,18 +6,11 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
-
 /*   Updated: 2019/08/27 13:45:37 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-void	tex_to_mem(t_texture tex, t_wolf *wolf)
-{
-	if (tex.size == 0)
-		is_alloc(NULL, wolf, -3);
-}
 
 t_s32		is_invalid(t_s8 *str)
 {
@@ -43,8 +36,10 @@ void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 			ft_putstr_fd("Invalid map, not enough y values or invalid file\n", 2);
 		else if (error == -3)
 			ft_putstr_fd("Texture(s) couldn't load\n", 2);
-		else
+		else if (error == -1)
 			ft_putstr_fd("Malloc didn't want to give you memory. SAD\n", 2);
+		else if (error == -4)
+			ft_putstr_fd("Texture isn't actually bmp file\n", 2);
 		if (error < 0)
 			error = -1;
 		exit(error);

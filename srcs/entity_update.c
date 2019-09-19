@@ -15,7 +15,7 @@
 //TODO (jae) : need a condition to call draw_enemy() for only those are within the player's view for optimization
 
 void	image_fill(t_u32 *img, t_f32 *perp_dist, t_texture *tex, t_items *item,
-t_2d_p draw_start, t_2d_p draw_end, t_s32 view, t_s32 sprite_height,
+			t_2d_p draw_start, t_2d_p draw_end, t_s32 view, t_s32 sprite_height,
 				t_s32 sprite_width, t_s32 x_offset)
 {
 	t_s32	x;
@@ -97,17 +97,17 @@ void	entity_draw(t_items *item, t_texture *tex, t_s32 view, t_u32 *img, t_f32 *p
 		x_offset = draw_start.x;
 		draw_start.x = 0;
 	}
-if (draw_end.x >= W)
+	if (draw_end.x >= W)
 		draw_end.x = W - 1;
 
-if (draw_start.y < 0)
-draw_start.y = 0;
+	if (draw_start.y < 0)
+		draw_start.y = 0;
 	if (draw_end.y >= H)
 		draw_end.y = H - 1;
 	if ((draw_start.x + draw_end.x) / 2 < W / 2 + ENEMY_SIZE
 		&& (draw_start.x + draw_end.x) / 2 > W / 2 - ENEMY_SIZE)
-item->flag |= 1UL;
-else
+		item->flag |= 1UL;
+	else
 		item->flag &= ~1UL;
 
 	if (draw_start.x >= W || draw_end.x < 0 || draw_start.y >= H || draw_end.y < 0)
@@ -120,11 +120,11 @@ void	entity_draw_loop(t_wolf *wf, t_entity *entity, t_items *item, t_s32 *order)
 	t_s32		index;
 
 	index = 0;
-while (index < entity->nbr_of_entities)
+	while (index < entity->nbr_of_entities)
 	{	
 		if (item[order[index]].transformed_sprite_pos.y > 0.0f)
 			entity_draw(&item[order[index]], item[order[index]].tex,
-				wf->view, wf->img, wf->perp_dist);
-index++;
+						wf->view, wf->img, wf->perp_dist);
+		index++;
 	}
 }

@@ -20,8 +20,8 @@ typedef struct	s_m4x4
 
 typedef struct	s_2d
 {
-			float	x;
-			float	y;
+	float	x;
+	float	y;
 }				t_2d;
 
 typedef union	u_3d
