@@ -16,9 +16,9 @@
 ** Calculate from radians to degrees - (angle * 180 / PI32) degrees
 */
 
-f64		fov_calculator(t_wolf *wolf)
+t_f64		fov_calculator(t_wolf *wolf)
 {
-	f64		fov;
+	t_f64		fov;
 	t_2d	*pn;
 	t_2d	*d;
 
@@ -30,31 +30,31 @@ f64		fov_calculator(t_wolf *wolf)
 	return (fov);
 }
 
-f32		degree_radian(sint32 degree)
+t_f32		degree_radian(t_s32 degree)
 {
 	return (degree * PI32 / 180);
 }
 
-f64		ft_abs(f64 x)
+t_f64		ft_abs(t_f64 x)
 {
 	if (x < 0)
 		x = -x;
 	return (x);
 }
 
-sint32	lerp(f64 a, f32 t, f64 b)
+t_s32	lerp(t_f64 a, t_f32 t, t_f64 b)
 {
-	sint32	result;
+	t_s32	result;
 
 	result = (1.0f - t) * a + (t * b);
 	return (result);
 }
 
-sint32	rgb_lerp(sint32 color1, f32 t, sint32 color2)
+t_s32	rgb_lerp(t_s32 color1, t_f32 t, t_s32 color2)
 {
-	sint32	r;
-	sint32	g;
-	sint32	b;
+	t_s32	r;
+	t_s32	g;
+	t_s32	b;
 
 	r = lerp((color1 >> 16), t, (color2 >> 16));
 	g = lerp(((color1 >> 8) & 0xFF), t, ((color2 >> 8) & 0xFF));

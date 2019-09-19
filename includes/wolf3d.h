@@ -45,20 +45,20 @@
 //
 #include <stdio.h>
 
-typedef unsigned char		uint8;
-typedef char				sint8;
+typedef unsigned char		t_u8;
+typedef char				t_s8;
 
-typedef unsigned short int	uint16;
-typedef short int			sint16;
+typedef unsigned short int	t_u16;
+typedef short int			t_s16;
 
-typedef unsigned int		uint32;
-typedef int					sint32;
+typedef unsigned int		t_u32;
+typedef int					t_s32;
 
-typedef unsigned long long int	uint64;
-typedef long long int			sint64;
+typedef unsigned long long int	t_u64;
+typedef long long int			t_s64;
 
-typedef float				f32;
-typedef double				f64;
+typedef float				t_f32;
+typedef double				t_f64;
 
 /*
 ** E[ROW][COLUMN]
@@ -67,58 +67,57 @@ typedef double				f64;
 
 typedef struct	s_2d_p
 {
-	sint32	x;
-	sint32	y;
+	t_s32	x;
+	t_s32	y;
 }				t_2d_p;
 
 typedef struct	s_audio
 {
 	SDL_AudioSpec	wav_spec;
-	uint8			*wav_buffer;
-	uint32			wav_length;
-	uint8			*audio_pos;
-	uint32			audio_len;
-
+	t_u8			*wav_buffer;
+	t_u32			wav_length;
+	t_u8			*audio_pos;
+	t_u32			audio_len;
 }				t_audio;
 typedef struct	s_texture
 {
-	sint32			width;
-	sint32			height;
-	sint32			size;
-	uint32			*data;
+	t_s32			width;
+	t_s32			height;
+	t_s32			size;
+	t_u32			*data;
 }				t_texture;
 
 typedef struct	s_texture_map
 {
-	sint32	start;
-	sint32	end;
+	t_s32	start;
+	t_s32	end;
 	t_2d_p	coord;
-	sint32	column_height;
+	t_s32	column_height;
 }				t_texture_map;
 
 typedef struct	s_door
 {
-	uint64	state;
+	t_u64	state;
 	t_2d_p	pos;
-	uint8	flag;
+	t_u8	flag;
 }				t_door;
 
 typedef struct	s_minimap
 {
-	sint32	x;
-	sint32	y;
-	sint32	h_color_head;
-	sint32	h_color_tail;
-	sint32	v_color_head;
-	sint32	v_color_tail;
+	t_s32	x;
+	t_s32	y;
+	t_s32	h_color_head;
+	t_s32	h_color_tail;
+	t_s32	v_color_head;
+	t_s32	v_color_tail;
 }				t_minimap;
 
 typedef struct	s_obj
 {
-	sint8	*nb;
-	sint32	size;
-	sint32	w;
-	sint32	h;
+	t_s8	*nb;
+	t_s32	size;
+	t_s32	w;
+	t_s32	h;
 }				t_obj;
 
 typedef struct	s_sdl
@@ -131,8 +130,8 @@ typedef struct	s_sdl
 
 typedef struct	s_palette
 {
-	uint32		*palete;
-	uint32		size;
+	t_u32		*palete;
+	t_u32		size;
 }				t_palette;
 
 typedef struct	s_player
@@ -141,19 +140,24 @@ typedef struct	s_player
 	t_2d		pos;
 	t_2d		direction;
 	t_2d		plane;
-	f32			speed;
+	t_f32			speed;
 	//TODO (jae) : maybe it's better to put t_minimap + minimap infos into another structure heheh
 	
 	t_minimap	*m;
-	sint32		minimap_zoom;
+	t_s32		minimap_zoom;
 	int			health;
 }				t_player;
 
+typedef struct	s_file
+{
+	t_s8	*str[30];
+	}				t_file;
+
 typedef struct	s_animation
 {
-	sint32	gun;
-	uint32	frame;
-	uint32	size;
+	t_s32	gun;
+	t_u32	frame;
+	t_u32	size;
 }				t_animation;
 
 typedef struct	s_raycaster
@@ -163,29 +167,29 @@ typedef struct	s_raycaster
 	t_2d	side_dist;
 	t_2d	delta_dist;
 	t_2d	plane;
-	f32		perp_dist;
-	sint32	hit;
-	sint32	side;
+	t_f32		perp_dist;
+	t_s32	hit;
+	t_s32	side;
 }				t_raycaster;
 
-typedef f32 (*funct)(t_raycaster * ray, t_player *player);
+typedef t_f32 (*funct)(t_raycaster * ray, t_player *player);
 
 //TODO (jae) : need to have multiple textures for status of NPC
 typedef struct	s_items
 {
-	sint32		id;
+	t_s32		id;
 	t_2d		pos;
 	t_2d		transformed_sprite_pos;
-	sint32		flag;
-	sint32		hp;
+	t_s32		flag;
+	t_s32		hp;
 	t_texture	*tex;
 }				t_items;
 
 typedef struct	s_entity
 {
-	sint32	nbr_of_entities;
-	f32		*depth;
-	sint32	*order;
+	t_s32	nbr_of_entities;
+	t_f32		*depth;
+	t_s32	*order;
 	t_items	*item;
 }				t_entity;
 
@@ -196,52 +200,57 @@ typedef struct	s_wolf
 	t_player	*player;
 	t_sdl		sdl;
 	t_obj		obj;
-	uint32		*img;
+	t_u32		*img;
 	t_mem		mem;
-	sint8		**map;
+	t_s8		**map;
 	t_door		*doors;
-	uint32		nbr_of_doors;
-	uint32		door_idx;
+	t_u32		nbr_of_doors;
+	t_u32		door_idx;
 	t_texture	*tex;
-	uint32		flag;
-	uint8		res;
+	t_u32		flag;
+	t_u8		res;
 	t_animation	a;
-	sint32		view;
+	t_s32		view;
 	t_entity	*entity;
-	f32			*perp_dist;
+	t_f32			*perp_dist;
 }				t_wolf;
 
+void			back(t_wolf *wolf, t_u32 *img, t_palette *cel);
+t_palette		ceiling(t_u32 *img, t_wolf *wolf);
+void			load_textures(t_wolf *wolf);
+void			ft_wolf_init(t_wolf *wolf);
+void			init_entities(t_entity *entity, t_wolf *wolf);
 void			tex_to_mem(t_texture tex, t_wolf *wolf);
 void			load_music(char *path, t_audio *audio);
-void			draw_hud(t_wolf *wolf, uint32 deltaframe);
-t_2d_p			init_2d(sint32 x, sint32 y);
-void			draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, uint32 size);
+void			draw_hud(t_wolf *wolf, t_u32 deltaframe);
+t_2d_p			init_2d(t_s32 x, t_s32 y);
+void			draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, t_u32 size);
 funct			*perp_dist(t_wolf *wolf);
-f32				perp_distance_ew(t_raycaster *ray, t_player *player);
-f32				perp_distance_sn(t_raycaster *ray, t_player *player);
-f32				perp_distance_ew_door(t_raycaster *ray, t_player *player);
-f32				perp_distance_sn_door(t_raycaster *ray, t_player *player);
-f32				my_sin(f32 angle);
-f32				my_cos(f32 angle);
-f32				my_asin(f32 angle);
-f32				my_acos(f32 angle);
-f32				my_tan(f32 angle);
-f32				my_atan(f32 angle);
-f32				degree_radian(sint32 degree);
-f64				fov_calculator(t_wolf *wolf);
-f64				ft_abs(f64 x);
-sint8			**int_to_tab(t_wolf *wolf);
-sint32			is_invalid(char *str);
-sint32			is_valid(f32 x, f32 y);
-sint32			tkneizer(sint32 fd, t_wolf *wolf);
-sint32			lerp(f64 a, f32 t, f64 b);
-sint32			rgb_lerp(sint32 color1, f32 t, sint32 color2);
-sint32			direction_movement(t_wolf *wolf, sint8 **map, sint32 framedelta);
-sint32			print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
-void			palette(uint32 *img, t_palette *p, uint32 size);
-void			check_flag(t_wolf *wolf, sint8 **map, sint32 framedelta);
+t_f32				perp_distance_ew(t_raycaster *ray, t_player *player);
+t_f32				perp_distance_sn(t_raycaster *ray, t_player *player);
+t_f32				perp_distance_ew_door(t_raycaster *ray, t_player *player);
+t_f32				perp_distance_sn_door(t_raycaster *ray, t_player *player);
+t_f32				my_sin(t_f32 angle);
+t_f32				my_cos(t_f32 angle);
+t_f32				my_asin(t_f32 angle);
+t_f32				my_acos(t_f32 angle);
+t_f32				my_tan(t_f32 angle);
+t_f32				my_atan(t_f32 angle);
+t_f32				degree_radian(t_s32 degree);
+t_f64				fov_calculator(t_wolf *wolf);
+t_f64				ft_abs(t_f64 x);
+t_s8			**int_to_tab(t_wolf *wolf);
+t_s32			is_invalid(char *str);
+t_s32			is_valid(t_f32 x, t_f32 y);
+t_s32			tkneizer(t_s32 fd, t_wolf *wolf);
+t_s32			lerp(t_f64 a, t_f32 t, t_f64 b);
+t_s32			rgb_lerp(t_s32 color1, t_f32 t, t_s32 color2);
+t_s32			direction_movement(t_wolf *wolf, t_s8 **map, t_s32 framedelta);
+t_s32			print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
+void			palette(t_u32 *img, t_palette *p, t_u32 size);
+void			check_flag(t_wolf *wolf, t_s8 **map, t_s32 framedelta);
 void			set_flag(t_wolf *wolf, SDL_Event event);
-void			ft_frametimes(sint32 *frames, sint32 *count);
+void			ft_frametimes(t_s32 *frames, t_s32 *count);
 void			event_handler(t_wolf *wolf, char **map, t_door *doors);
 void			render(t_wolf *wolf);
 void			raycast(t_wolf *wf);
@@ -249,19 +258,19 @@ void			calculate_distance(t_player *p, t_2d_p *a);
 void			ft_raycast(t_wolf *wolf, t_player *player);
 void			draw_minimap(t_wolf *wolf);
 void			mem_init(t_wolf *wolf);
-void			is_alloc(void *mem, t_wolf *wolf, sint32 error);
+void			is_alloc(void *mem, t_wolf *wolf, t_s32 error);
 void			draw_to_img(t_wolf wolf);
-void			pers_keys(sint32 keycode, t_wolf *wolf);
+void			pers_keys(t_s32 keycode, t_wolf *wolf);
 void			minimap(t_wolf *wolf);
 void			mouse_movement(t_wolf *wolf, SDL_Event event);
-void			draw_gun(t_wolf *wolf, uint32 tex_id);
-void			draw_machinegun(t_wolf *wolf, uint32 deltaframe);
-void			draw_wall(t_wolf *wf, sint32 line_height, sint32 x, t_raycaster *ray);
-sint32			lighting(sint32 color, f32 distance);
-t_texture		read_bmp(const sint8 *filename, t_wolf *wolf, t_palette *pal);
+void			draw_gun(t_wolf *wolf, t_u32 tex_id);
+void			draw_machinegun(t_wolf *wolf, t_u32 deltaframe);
+void			draw_wall(t_wolf *wf, t_s32 line_height, t_s32 x, t_raycaster *ray);
+t_s32			lighting(t_s32 color, t_f32 distance);
+t_texture		read_bmp(const t_s8 *filename, t_wolf *wolf, t_palette *pal);
 void			entity_update(t_wolf *wf);
-void			entity_draw(t_items *item, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist);
-void			entity_draw_loop(t_wolf *wf, t_entity *entity, t_items *item, sint32 *order);
+void			entity_draw(t_items *item, t_texture *tex, t_s32 view, t_u32 *img, t_f32 *perp_dist);
+void			entity_draw_loop(t_wolf *wf, t_entity *entity, t_items *item, t_s32 *order);
 void			sort_depth_buffer(t_entity *entity, t_items *item, t_player *player);
-void			count_entities(sint8 **map, t_obj obj, t_entity *entity);
+void			count_entities(t_s8 **map, t_obj obj, t_entity *entity);
 #endif

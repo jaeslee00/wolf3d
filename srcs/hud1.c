@@ -12,12 +12,12 @@
 
 #include "wolf3d.h"
 
-void	draw_machinegun(t_wolf *wolf, uint32 deltaframe)
+void	draw_machinegun(t_wolf *wolf, t_u32 deltaframe)
 {
 	if (wolf->flag & 1UL << 9)
 	{
 		wolf->a.gun += deltaframe;
-		if(wolf->a.gun < (sint32)wolf->a.frame)
+		if(wolf->a.gun < (t_s32)wolf->a.frame)
 		{
 			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
 				if (wolf->entity->item[i].flag & 1UL)

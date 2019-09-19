@@ -12,7 +12,7 @@
 
 #include "wolf3d.h"
 
-t_2d_p init_2d(sint32 x, sint32 y)
+t_2d_p init_2d(t_s32 x, t_s32 y)
 {
 	t_2d_p coord;
 
@@ -21,7 +21,7 @@ t_2d_p init_2d(sint32 x, sint32 y)
 	return (coord);
 }
 
-void	draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, uint32 size)
+void	draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, t_u32 size)
 {
 	t_2d_p xy;
 	t_2d_p sprite;

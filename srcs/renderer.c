@@ -9,13 +9,12 @@
 
 /*   Updated: 2019/08/01 13:18:39 by viccarau         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
 
 #include "wolf3d.h"
 
-sint32	verLine(sint32 x, sint32 y1, sint32 y2, const sint32 color, uint32 *img)
+t_s32	verLine(t_s32 x, t_s32 y1, t_s32 y2, const t_s32 color, t_u32 *img)
 {
-	sint32 y;
+	t_s32 y;
 
 	if (y2 < y1)
 	{
@@ -37,9 +36,9 @@ sint32	verLine(sint32 x, sint32 y1, sint32 y2, const sint32 color, uint32 *img)
 
 void	render(t_wolf *wolf)
 {
-	sint32 x;
-	sint32 line_height;
-	sint32 draw_start;
+	t_s32 x;
+	t_s32 line_height;
+	t_s32 draw_start;
 
 	t_raycaster r;
 	x = 0;
@@ -51,8 +50,8 @@ void	render(t_wolf *wolf)
 		wolf->player->ray.y = wolf->player->direction.y + wolf->player->plane.y * (2 * x / (f64)(W) - 1);
 		r.delta_dist.x = ft_abs(1 / wolf->player->ray.x);
 		 r.delta_dist.y = ft_abs(1 / wolf->player->ray.y);
-		  r.map.x = (sint32)wolf->player->pos.x;
-		  r.map.y = (sint32)wolf->player->pos.y;
+		  r.map.x = (t_s32)wolf->player->pos.x;
+		  r.map.y = (t_s32)wolf->player->pos.y;
 			if (wolf->player->ray.x < 0)
 			{
 				r.step.x = -1;
@@ -100,14 +99,14 @@ void	render(t_wolf *wolf)
 		else
 			 r.perp_distance = (r.map.y - wolf->player->pos.y + (1 - r.step.y) / 2) / wolf->player->ray.y;
 
-		 line_height = (sint32)(H / r.perp_distance);
+		 line_height = (t_s32)(H / r.perp_distance);
 		draw_start = -line_height / 2 + H / 2;
 			if (draw_start < 0)
 			draw_start = 0;
-			sint32 draw_end = line_height / 2 + H / 2;
+			t_s32 draw_end = line_height / 2 + H / 2;
 			if (draw_end >= H)
 			draw_end = H - 1;
-sint32 color;
+t_s32 color;
 
 			if (wolf->map[r.map.x][r.map.y])
 			color = 0x440000 * wolf->map[r.map.x][r.map.y];

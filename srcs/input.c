@@ -12,7 +12,7 @@
 
 #include "wolf3d.h"
 
-void	check_key(t_wolf *wolf, SDL_Event event, SDL_Scancode key, sint32 bit)
+void	check_key(t_wolf *wolf, SDL_Event event, SDL_Scancode key, t_s32 bit)
 {
 	if (event.key.keysym.scancode == key)
 	{
@@ -49,9 +49,9 @@ wolf->flag &= ~(1UL << 10);
 	}
 }
 
-void	check_flag(t_wolf *wolf, sint8 **map, sint32 framedelta)
+void	check_flag(t_wolf *wolf, t_s8 **map, t_s32 framedelta)
 {
-	f32	fov;
+	t_f32	fov;
 	t_player	*p;
 
 	p = wolf->player;
@@ -78,16 +78,16 @@ void	check_flag(t_wolf *wolf, sint8 **map, sint32 framedelta)
 void	mouse_movement(t_wolf *wolf, SDL_Event event)
 {
 	t_2d	old;
-	f64		motion;
-	f32		cosine;
-	f32		sine;
+	t_f64		motion;
+	t_f32		cosine;
+	t_f32		sine;
 	t_player	*p;
 
 	p = wolf->player;
 	if (event.type == SDL_MOUSEMOTION)
 	{
-		motion = -(f64)(event.motion.xrel * 0.001f);
-		wolf->view += (sint32)(event.motion.yrel);
+		motion = -(t_f64)(event.motion.xrel * 0.001f);
+		wolf->view += (t_s32)(event.motion.yrel);
 		if (wolf->view > H/2)
 			wolf->view = H/2;
 		else if (wolf->view < -H/2)

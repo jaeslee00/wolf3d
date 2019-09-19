@@ -19,9 +19,9 @@ void	tex_to_mem(t_texture tex, t_wolf *wolf)
 		is_alloc(NULL, wolf, -3);
 }
 
-sint32		is_invalid(sint8 *str)
+t_s32		is_invalid(t_s8 *str)
 {
-	sint32	i;
+	t_s32	i;
 
 	i = 0;
 	while (str[i] != '\0')
@@ -34,7 +34,7 @@ sint32		is_invalid(sint8 *str)
 	return (0);
 }
 
-void	is_alloc(void *mem, t_wolf *wolf, sint32 error)
+void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 {
 	(void)wolf;
 	if (mem == NULL)
@@ -60,5 +60,5 @@ void	mem_init(t_wolf *wolf)
 	//printf("size of ind %d\n", sizeof(t_sdl) + sizeof(t_mem) + sizeof(t_obj) + sizeof(wolf->img) + sizeof(char));
 	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 100)), wolf, -5);
 	wolf->mem.tsize = (1024 * 1024 * 100);
-	wolf->mem.usize = sizeof(sint32);
+	wolf->mem.usize = sizeof(t_s32);
 }

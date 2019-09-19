@@ -37,11 +37,11 @@ void	load_textures(t_wolf *wolf)
 
 void	init_entities(t_entity *entity, t_wolf *wolf)
 {
-	sint32	index;
+	t_s32	index;
 
 	is_alloc(entity->item = (t_items*)ft_mem(&wolf->mem, sizeof(t_items) * entity->nbr_of_entities), wolf, -1);
-	is_alloc(entity->order = (sint32*)ft_mem(&wolf->mem, sizeof(sint32) * entity->nbr_of_entities), wolf, -1);
-	is_alloc(entity->depth = (f32*)ft_mem(&wolf->mem, sizeof(f32) * entity->nbr_of_entities), wolf, -1);
+	is_alloc(entity->order = (t_s32*)ft_mem(&wolf->mem, sizeof(t_s32) * entity->nbr_of_entities), wolf, -1);
+	is_alloc(entity->depth = (t_f32*)ft_mem(&wolf->mem, sizeof(t_f32) * entity->nbr_of_entities), wolf, -1);
 	index = 0;
 	while (index < entity->nbr_of_entities)
 	{
@@ -57,7 +57,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, W, H, 0);
 	SDL_SetWindowBordered(wolf->sdl.win, SDL_TRUE);
-	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(uint32));
+	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(t_u32));
 	is_alloc(wolf->tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
 	load_textures(wolf);
 	wolf->flag = 0;
@@ -68,7 +68,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	is_alloc(wolf->doors = (t_door*)ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
 	is_alloc(wolf->player = (t_player*)ft_mem(&wolf->mem, sizeof(t_player)), wolf, -1);
 	is_alloc(wolf->player->m = (t_minimap *)ft_mem(&wolf->mem, wolf->obj.size * sizeof(t_minimap)), wolf, -1);
-	is_alloc(wolf->perp_dist = (f32*)ft_mem(&wolf->mem, sizeof(f32) * W), wolf, -1);
+	is_alloc(wolf->perp_dist = (t_f32*)ft_mem(&wolf->mem, sizeof(t_f32) * W), wolf, -1);
 	is_alloc(wolf->entity = (t_entity*)ft_mem(&wolf->mem, sizeof(t_entity)), wolf, -1);
 	wolf->player->direction.x = -1;
 	wolf->player->direction.y = 0;
@@ -79,13 +79,13 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player->minimap_zoom = 20;
 }
 
-void		back(t_wolf *wolf, uint32 *img, t_palette *cel)
+void		back(t_wolf *wolf, t_u32 *img, t_palette *cel)
 {
-	uint32	x;
-	uint32	y;
-	uint32	y1;
-	uint32	i;
-	uint32	j;
+	t_u32	x;
+	t_u32	y;
+	t_u32	y1;
+	t_u32	i;
+	t_u32	j;
 
 	i = 1;
 	j = 29;
@@ -124,17 +124,17 @@ void		back(t_wolf *wolf, uint32 *img, t_palette *cel)
 
 // TODO(viccarau): In order to create the pallete, we can calculate the H * 2,
 // then the middle point is where the pallete starts to draw
-t_palette	ceiling(uint32 *img, t_wolf *wolf)
+t_palette	ceiling(t_u32 *img, t_wolf *wolf)
 {
 	t_palette p;
-	sint32	x;
-	sint32	y;
-	sint32	y1;
-	sint32	color;
-	f32		per;
+	t_s32	x;
+	t_s32	y;
+	t_s32	y1;
+	t_s32	color;
+	t_f32		per;
 
 	ft_bzero(&p, sizeof(p));
-	p.palete = ft_memalloc(sizeof(sint32) * 20000);
+	p.palete = ft_memalloc(sizeof(t_s32) * 20000);
 	color = 1;
 	x = 0;
 	y = 0;
@@ -181,10 +181,10 @@ int		main(int ac, char **av)
 {
 	t_palette cel;
 	t_audio audio;
-	sint32	i;
+	t_s32	i;
 	t_wolf	wolf;
-	sint32	fd;
-	sint32	frames[61];
+	t_s32	fd;
+	t_s32	frames[61];
 	
 	ft_bzero(&audio, sizeof(audio));
 	mem_init(&wolf);
@@ -208,7 +208,7 @@ int		main(int ac, char **av)
 		wolf.sdl.texture = SDL_CreateTexture(wolf.sdl.renderer,
 			SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
 		i = 1;
-		ft_bzero(frames, sizeof(sint32) * 61);
+		ft_bzero(frames, sizeof(t_s32) * 61);
 		SDL_SetRelativeMouseMode(SDL_TRUE);
 //SDL_SetWindowFullscreen(wolf.sdl.win, SDL_WINDOW_FULLSCREEN_DESKTOP);
 		//printf("tsize = %zu, usize %zu\n", wolf.mem.tsize, wolf.mem.usize);
@@ -243,7 +243,7 @@ while (1)
 			else
 				draw_hud(&wolf, frames[i] - frames[i - 1]);
 			SDL_UpdateTexture(wolf.sdl.texture, NULL, wolf.img,
-				W * sizeof(uint32));
+				W * sizeof(t_u32));
 			SDL_RenderCopy(wolf.sdl.renderer, wolf.sdl.texture, NULL, NULL);
 			SDL_RenderPresent(wolf.sdl.renderer);
 			ft_frametimes(frames, &i);

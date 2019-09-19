@@ -14,24 +14,24 @@
 
 //TODO (jae) : need a condition to call draw_enemy() for only those are within the player's view for optimization
 
-void	image_fill(uint32 *img, f32 *perp_dist, t_texture *tex, t_items *item,
-t_2d_p draw_start, t_2d_p draw_end, sint32 view, sint32 sprite_height,
-				sint32 sprite_width, sint32 x_offset)
+void	image_fill(t_u32 *img, t_f32 *perp_dist, t_texture *tex, t_items *item,
+t_2d_p draw_start, t_2d_p draw_end, t_s32 view, t_s32 sprite_height,
+				t_s32 sprite_width, t_s32 x_offset)
 {
-	sint32	x;
-	sint32	y;
+	t_s32	x;
+	t_s32	y;
 	t_2d_p	tex_coord;
-	sint32	tex_x[4];
-	sint32	tex_y;
-	sint32	tex_width_scale[4];
-	sint32	tex_height_scale;
-	sint32	color[4];
-	sint32	taxi[4];
-	sint32	img_y;
-	sint32	precalc_x;
-	sint32 y_cam_pos;
-	sint32	x_max = draw_end.x - 4;
-	sint32 tex_sprite_scale_x = (tex->width << 16) / sprite_width;
+	t_s32	tex_x[4];
+	t_s32	tex_y;
+	t_s32	tex_width_scale[4];
+	t_s32	tex_height_scale;
+	t_s32	color[4];
+	t_s32	taxi[4];
+	t_s32	img_y;
+	t_s32	precalc_x;
+	t_s32 y_cam_pos;
+	t_s32	x_max = draw_end.x - 4;
+	t_s32 tex_sprite_scale_x = (tex->width << 16) / sprite_width;
 	
 	x_offset += draw_start.x;
 	y = draw_start.y;
@@ -76,11 +76,11 @@ t_2d_p draw_start, t_2d_p draw_end, sint32 view, sint32 sprite_height,
 	}
 }
 
-void	entity_draw(t_items *item, t_texture *tex, sint32 view, uint32 *img, f32 *perp_dist)
+void	entity_draw(t_items *item, t_texture *tex, t_s32 view, t_u32 *img, t_f32 *perp_dist)
 {
-	sint32 sprite_height = abs((sint32)((f32)H / item->transformed_sprite_pos.y));
-	sint32 sprite_width = sprite_height;
-	sint32 sprite_pos_screen = (sint32)(((f32)W) * (1.0f + item->transformed_sprite_pos.x / item->transformed_sprite_pos.y));
+	t_s32 sprite_height = abs((t_s32)((t_f32)H / item->transformed_sprite_pos.y));
+	t_s32 sprite_width = sprite_height;
+	t_s32 sprite_pos_screen = (t_s32)(((t_f32)W) * (1.0f + item->transformed_sprite_pos.x / item->transformed_sprite_pos.y));
 
 	t_2d_p draw_start;
 	t_2d_p draw_end;
@@ -90,7 +90,7 @@ void	entity_draw(t_items *item, t_texture *tex, sint32 view, uint32 *img, f32 *p
 	draw_start.y = ((-sprite_height + H) >> 1) - view;
 	draw_end.y = ((sprite_height + H) >> 1) - view;
 
-	sint32 x_offset = 0;
+	t_s32 x_offset = 0;
 
 	if (draw_start.x < 0)
 	{
@@ -115,9 +115,9 @@ else
 	image_fill(img, perp_dist, tex, item, draw_start, draw_end, view, sprite_height, sprite_width, x_offset);
 }
 
-void	entity_draw_loop(t_wolf *wf, t_entity *entity, t_items *item, sint32 *order)
+void	entity_draw_loop(t_wolf *wf, t_entity *entity, t_items *item, t_s32 *order)
 {
-	sint32		index;
+	t_s32		index;
 
 	index = 0;
 while (index < entity->nbr_of_entities)

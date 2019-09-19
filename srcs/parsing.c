@@ -12,12 +12,12 @@
 
 #include "wolf3d.h"
 
-sint8		**int_to_tab(t_wolf *wolf)
+t_s8		**int_to_tab(t_wolf *wolf)
 {
-	sint32	i;
-	sint32	j;
-	sint32	k;
-	sint8	**tab;
+	t_s32	i;
+	t_s32	j;
+	t_s32	k;
+	t_s8	**tab;
 	
 	i = 0;
 	k = 0;
@@ -38,18 +38,18 @@ sint8		**int_to_tab(t_wolf *wolf)
 	return (tab);
 }
 
-void		allocate_atois(t_wolf *wolf, sint8 *line, t_2d_p *xy)
+void		allocate_atois(t_wolf *wolf, t_s8 *line, t_2d_p *xy)
 {
-	ft_mem(&wolf->mem, sizeof(sint8));
+	ft_mem(&wolf->mem, sizeof(t_s8));
 	wolf->obj.nb = wolf->mem.m;
-	wolf->obj.nb[xy->x] = (sint8)ft_atoi(line);
+	wolf->obj.nb[xy->x] = (t_s8)ft_atoi(line);
 	xy->x++;
 }
 
-sint32		tkneizer(sint32 fd, t_wolf *wolf)
+t_s32		tkneizer(t_s32 fd, t_wolf *wolf)
 {
-	sint8	*line;
-	sint32	i;
+	t_s8	*line;
+	t_s32	i;
 	t_2d_p	xy;
 
 	ft_bzero(&xy, sizeof(xy));

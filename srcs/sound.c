@@ -12,15 +12,15 @@
 
 #include "wolf3d.h"
 
-void	my_audio_callback(void *userdata, Uint8 *stream, int len)
+void	my_audio_callback(void *userdata, t_u8 *stream, int len)
 {
 	t_audio *a;
 
 	a = (t_audio *)userdata;
 	if (a->audio_len == 0)
 		return;
-len = (len > (int)a->audio_len ? (int)a->audio_len : len);
-ft_memcpy(stream, a->audio_pos, len);
+	len = (len > (int)a->audio_len ? (int)a->audio_len : len);
+	ft_memcpy(stream, a->audio_pos, len);
 	a->audio_pos += len;
 	a->audio_len -= len;
 }
@@ -36,4 +36,4 @@ void	load_music(char *path, t_audio *audio)
 	audio->audio_len = audio->wav_length;
 	SDL_OpenAudio(&audio->wav_spec, NULL);
 	//exit(-1);
-	}
+}
