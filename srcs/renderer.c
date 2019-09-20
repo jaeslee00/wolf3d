@@ -12,52 +12,6 @@
 
 #include "wolf3d.h"
 
-void		back(t_wolf *wolf, t_u32 *img, t_palette *cel)
-{
-	t_u32	x;
-	t_u32	y;
-	t_u32	y1;
-	t_u32	i;
-	t_u32	j;
-
-	(void)wolf;
-	i = 1;
-	j = 29;
-	y = 0;
-	y1 = (H / 2) - 1;
-	while (y1 < H)
-	{
-		x = 0;
-		while (x < W - 1)
-		{
-			if (x + y * W < W * H && x + y * W < W * H)
-			{
-				if (i < cel->size)
-				{
-					img[x + y * W] = cel->palete[i];
-					img[x + y1 * W] = cel->palete[j];
-				}
-				else
-				{
-					img[x + y * W] = 0;
-					img[x + y1 * W] = 0;
-				}
-			}
-			x++;
-		}
-		if (y % 20 == 0)
-		{
-			i++;
-			j--;
-		}
-		y++;
-		y1++;
-	}
-	//printf("i = %d, %d\n", i, wolf->view);
-}
-
-// TODO(viccarau): In order to create the pallete, we can calculate the H * 2,
-// then the middle point is where the pallete starts to draw
 t_palette	ceiling(void)
 {
 	t_palette	p;
@@ -78,3 +32,50 @@ t_palette	ceiling(void)
 	//printf("sizeof(pal) = %d\n", p.size);
 	return (p);
 }
+
+void		background(t_wolf *wolf, t_u32 *img)
+{
+	t_2d_p	coord;
+	t_2d_p	iter;
+	t_u32	y1;
+	t_palette	p;
+
+	p = ceiling();
+	(void)wolf;
+	iter.x = 1;
+	iter.y = p.size;
+	coord.y = 0;
+	y1 = (H / 2) - 1;
+	while (y1 < H)
+	{
+		coord.x = 0;
+		while (coord.x < W - 1)
+		{
+			if (coord.x + coord.y * W < W * H && coord.x + coord.y * W < W * H)
+			{
+				if (iter.x < (t_s32)p.size)
+				{
+					img[coord.x + coord.y * W] = p.palete[iter.x];
+					img[coord.x + y1 * W] = p.palete[iter.y];
+				}
+				else
+				{
+					img[coord.x + coord.y * W] = 0;
+					img[coord.x + y1 * W] = 0;
+				}
+			}
+			coord.x++;
+		}
+		if (coord.y % 20 == 0)
+		{
+			iter.x++;
+			iter.y--;
+		}
+		coord.y++;
+		y1++;
+	}
+	//printf("iter.x= %d, %d\n", i, wolf->view);
+}
+
+// TODO(viccarau): In order to create the pallete, we can calculate the H * 2,
+// then the middle point is where the pallete starts to draw

@@ -70,7 +70,7 @@ typedef struct	s_2d_p
 	t_s32	x;
 	t_s32	y;
 }				t_2d_p;
-
+ 
 typedef struct	s_audio
 {
 	SDL_AudioSpec	wav_spec;
@@ -215,7 +215,7 @@ typedef struct	s_wolf
 	t_f32			*perp_dist;
 }				t_wolf;
 
-void			back(t_wolf *wolf, t_u32 *img, t_palette *cel);
+void			background(t_wolf *wolf, t_u32 *img);
 t_palette		ceiling(void);
 void			load_textures(t_wolf *wolf);
 void			ft_wolf_init(t_wolf *wolf);
@@ -247,6 +247,7 @@ t_s32			lerp(t_f64 a, t_f32 t, t_f64 b);
 t_s32			rgb_lerp(t_s32 color1, t_f32 t, t_s32 color2);
 t_s32			direction_movement(t_wolf *wolf, t_s8 **map, t_s32 framedelta);
 t_s32			print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
+t_s32			mem_init(t_wolf *wolf, t_s32 ac, char **av);
 void			palette(t_u32 *img, t_palette *p, t_u32 size);
 void			check_flag(t_wolf *wolf, t_s8 **map, t_s32 framedelta);
 void			set_flag(t_wolf *wolf, SDL_Event event);
@@ -257,7 +258,6 @@ void			raycast(t_wolf *wf);
 void			calculate_distance(t_player *p, t_2d_p *a);
 void			ft_raycast(t_wolf *wolf, t_player *player);
 void			draw_minimap(t_wolf *wolf);
-void			mem_init(t_wolf *wolf);
 void			is_alloc(void *mem, t_wolf *wolf, t_s32 error);
 void			draw_to_img(t_wolf wolf);
 void			pers_keys(t_s32 keycode, t_wolf *wolf);
