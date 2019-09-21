@@ -81,7 +81,7 @@ void	draw_shotgun(t_wolf *wolf, t_u32 deltaframe)
 	if (wolf->flag & 1UL << 9)
 	{
 		wolf->a.gun += deltaframe;
-		if (wolf->a.gun < 100)
+		if (wolf->a.gun < 50)
 		{
 			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
 				if (wolf->entity->item[i].flag & 1UL)
@@ -91,14 +91,14 @@ void	draw_shotgun(t_wolf *wolf, t_u32 deltaframe)
 			}
 			draw_gun(wolf, 6);
 		}
-		else if(wolf->a.gun < 145)
+		else if(wolf->a.gun < 100)
 		{
 			wolf->view -= 10;
 			draw_gun(wolf, 7);
 		}
-		else if (wolf->a.gun < 250)
+		else if (wolf->a.gun < 150)
 			draw_gun(wolf, 9);
-		else if (wolf->a.gun < 500)
+		else if (wolf->a.gun < 250)
 		{
 			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
 				wolf->entity->item[i].tex = &wolf->tex[12];
@@ -106,7 +106,7 @@ void	draw_shotgun(t_wolf *wolf, t_u32 deltaframe)
 		}
 		else
 			draw_gun(wolf, 9);
-		if (wolf->a.gun >= 600)
+		if (wolf->a.gun >= 300)
 		{
 			wolf->flag &= ~(1UL << 9);
 			wolf->a.gun = 0;
@@ -122,7 +122,7 @@ void	draw_hud(t_wolf *wolf, t_u32 deltaframe)
 {
 	if (wolf->flag & 1UL << 8)
 		minimap(wolf);
-	draw_bar(wolf, wolf->player->health);
+	//draw_bar(wolf, wolf->player->health);
 	if (wolf->flag & 1UL << 10)
 		draw_shotgun(wolf, deltaframe);
 	else

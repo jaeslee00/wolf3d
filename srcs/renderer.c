@@ -12,69 +12,52 @@
 
 #include "wolf3d.h"
 
-t_palette	ceiling(void)
+static t_palette	ceiling(t_wolf *wolf)
 {
 	t_palette	p;
 	t_s32	y;
 	t_f32		per;
 
 	ft_bzero(&p, sizeof(p));
-	p.palete = ft_memalloc(sizeof(t_s32) * H / 2);
-	per = 2.71f;
+	is_alloc(p.palete = ft_mem(&wolf->mem, sizeof(t_s32) * H / 2), wolf, -1);
+	per = 0.5f;
 	y = 0;
 	while (y < H / 2)
 	{
-		p.palete[y] = rgb_lerp(0x111111, per, 0x222222);
+		p.palete[y] = rgb_lerp(0x0, per, 0xFFFFFF);
 		y++;
-		per -= 0.01f;
+		per -= 0.0009f;
 	}
 	p.size = y;
-	//printf("sizeof(pal) = %d\n", p.size);
 	return (p);
 }
 
 void		background(t_wolf *wolf, t_u32 *img)
 {
 	t_2d_p	coord;
-	t_2d_p	iter;
-	t_u32	y1;
+	t_s32		i;
 	t_palette	p;
+	t_s32		y1;
 
-	p = ceiling();
-	(void)wolf;
-	iter.x = 1;
-	iter.y = p.size;
+	p = ceiling(wolf);
+	i = ft_abs(wolf->view);
 	coord.y = 0;
-	y1 = (H / 2) - 1;
-	while (y1 < H)
+	y1 = H - 1;
+	while (coord.y < H / 2)
 	{
 		coord.x = 0;
 		while (coord.x < W - 1)
 		{
-			if (coord.x + coord.y * W < W * H && coord.x + coord.y * W < W * H)
-			{
-				if (iter.x < (t_s32)p.size)
-				{
-					img[coord.x + coord.y * W] = p.palete[iter.x];
-					img[coord.x + y1 * W] = p.palete[iter.y];
-				}
-				else
-				{
-					img[coord.x + coord.y * W] = 0;
-					img[coord.x + y1 * W] = 0;
-				}
-			}
-			coord.x++;
+			img[coord.x + coord.y * W] = p.palete[i];
+					img[coord.x + y1 * W] = p.palete[i];
+				coord.x++;
 		}
-		if (coord.y % 20 == 0)
-		{
-			iter.x++;
-			iter.y--;
+		if (i < (t_s32)p.size)
+		i++;
+			coord.y++;
+		y1--;
 		}
-		coord.y++;
-		y1++;
-	}
-	//printf("iter.x= %d, %d\n", i, wolf->view);
+	//printf("iter.x= %d, %d %d\n", iter.x, wolf->view, p.size);
 }
 
 // TODO(viccarau): In order to create the pallete, we can calculate the H * 2,

@@ -40,11 +40,11 @@ void	set_flag(t_wolf *wolf, SDL_Event event)
 	check_key(wolf, event, SDL_SCANCODE_EQUALS, 1UL << 4);
 	check_key(wolf, event, SDL_SCANCODE_MINUS, 1UL << 5);
 	check_key(wolf, event, SDL_SCANCODE_LSHIFT, 1UL << 6);
-	if (wolf->sdl.event.key.repeat == 0)
+	if (event.key.repeat == 0)
 	{
 		check_key(wolf, event, SDL_SCANCODE_E, 1UL << 7);
-		if (wolf->sdl.event.key.keysym.scancode == SDL_SCANCODE_TAB)
-			if (wolf->sdl.event.type == SDL_KEYDOWN)
+		if (event.key.keysym.scancode == SDL_SCANCODE_TAB)
+			if (event.type == SDL_KEYDOWN)
 			wolf->flag ^= 1UL << 8;
 	}
 }

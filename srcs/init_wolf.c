@@ -30,13 +30,13 @@ void	init_entities(t_entity *entity, t_wolf *wolf)
 	}
 }
 
-void	ft_wolf_init(t_wolf *wolf)
+void	ft_wolf_init(t_wolf *wolf, t_sdl *sdl)
 {
 	wolf->map = int_to_tab(wolf);
 	SDL_Init(SDL_INIT_EVERYTHING);
-	wolf->sdl.win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
+	sdl->win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, W, H, 0);
-	SDL_SetWindowBordered(wolf->sdl.win, SDL_TRUE);
+	SDL_SetWindowBordered(sdl->win, SDL_TRUE);
 	wolf->img = ft_mem(&wolf->mem, W * H * sizeof(t_u32));
 	is_alloc(wolf->tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
 	load_textures(wolf);
@@ -55,7 +55,7 @@ void	ft_wolf_init(t_wolf *wolf)
 	wolf->player->plane.x = 0;
 	wolf->player->plane.y = 1;
 	wolf->player->speed = 0;
-	wolf->player->health = 75;
+	//wolf->player->health = 75;
 	wolf->player->minimap_zoom = 20;
 }
 

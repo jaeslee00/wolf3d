@@ -12,47 +12,48 @@
 
 #include "wolf3d.h"
 
-static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time)
+static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 {
 	ft_bzero(time, sizeof(t_2d_p));
 	tkneizer(fd, wolf);
-	ft_wolf_init(wolf);
+	ft_wolf_init(wolf, sdl);
 	count_entities(wolf->map, wolf->obj, wolf->entity);
 	init_entities(wolf->entity, wolf);
 	print_map(wolf->map, wolf->obj, wolf->player, wolf->doors, wolf);
-	wolf->sdl.renderer = SDL_CreateRenderer(wolf->sdl.win, -1, 0);
-	wolf->sdl.texture = SDL_CreateTexture(wolf->sdl.renderer,
+	sdl->renderer = SDL_CreateRenderer(sdl->win, -1, 0);
+	sdl->texture = SDL_CreateTexture(sdl->renderer,
 		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
-static void	get_input(t_wolf *wolf, t_s32 deltatime)
+static void	get_input(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
 {
-	while (SDL_PollEvent(&wolf->sdl.event))
+	while (SDL_PollEvent(&sdl->event))
 	{
-		if (wolf->sdl.event.type == SDL_QUIT)
+		if (sdl->event.type == SDL_QUIT)
 			exit(0);
-		if (wolf->sdl.event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+		if (sdl->event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 			is_alloc(NULL, wolf, 0);
-		set_flag(wolf, wolf->sdl.event);
-		mouse_movement(wolf, wolf->sdl.event);
+		set_flag(wolf, sdl->event);
+		mouse_movement(wolf, sdl->event);
 	}
 	check_flag(wolf, wolf->map, deltatime);
 }
 
 
-static void	draw_on_screen(t_wolf *wolf, t_s32 deltatime)
+static void	draw_on_screen(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
 {
 	entity_draw_loop(wolf, wolf->entity, wolf->entity->item, wolf->entity->order);
 	draw_hud(wolf, deltatime);
-	SDL_UpdateTexture(wolf->sdl.texture, NULL, wolf->img,
+	SDL_UpdateTexture(sdl->texture, NULL, wolf->img,
 		W * sizeof(t_u32));
-	SDL_RenderCopy(wolf->sdl.renderer, wolf->sdl.texture, NULL, NULL);
-	SDL_RenderPresent(wolf->sdl.renderer);
+	SDL_RenderCopy(sdl->renderer, sdl->texture, NULL, NULL);
+	SDL_RenderPresent(sdl->renderer);
 }
 
 int		main(int ac, char **av)
 {
+	t_sdl		sdl;
 	t_wolf		wolf;
 	t_s32		fd;
 	t_2d_p		time;
@@ -60,17 +61,18 @@ int		main(int ac, char **av)
 	fd = mem_init(&wolf, ac, av);
 	if (fd > 0)
 	{
-		general_inits(&wolf, fd, &time);
+		general_inits(&wolf, fd, &time, &sdl);
 		while (1)
 		{
 			time.x = SDL_GetTicks();
-			get_input(&wolf, time.x - time.y);
+			get_input(&wolf, time.x - time.y, &sdl);
+			printf("%d ms\t", time.x - time.y);
 			time.y = SDL_GetTicks();
 			event_handler(&wolf, wolf.map, wolf.doors);
 			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);
 			background(&wolf, wolf.img);
 			raycast(&wolf);
-			draw_on_screen(&wolf, SDL_GetTicks() - time.x);
+			draw_on_screen(&wolf, SDL_GetTicks() - time.x, &sdl);
 		}
 	}
 	return (0);

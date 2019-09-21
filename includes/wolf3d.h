@@ -79,6 +79,7 @@ typedef struct	s_audio
 	t_u8			*audio_pos;
 	t_u32			audio_len;
 }				t_audio;
+
 typedef struct	s_texture
 {
 	t_s32			width;
@@ -141,11 +142,8 @@ typedef struct	s_player
 	t_2d		direction;
 	t_2d		plane;
 	t_f32			speed;
-	//TODO (jae) : maybe it's better to put t_minimap + minimap infos into another structure heheh
-	
 	t_minimap	*m;
 	t_s32		minimap_zoom;
-	int			health;
 }				t_player;
 
 typedef struct	s_file
@@ -193,12 +191,10 @@ typedef struct	s_entity
 	t_items	*item;
 }				t_entity;
 
-
 typedef struct	s_wolf
 {
 	funct		*dist;
 	t_player	*player;
-	t_sdl		sdl;
 	t_obj		obj;
 	t_u32		*img;
 	t_mem		mem;
@@ -216,9 +212,8 @@ typedef struct	s_wolf
 }				t_wolf;
 
 void			background(t_wolf *wolf, t_u32 *img);
-t_palette		ceiling(void);
 void			load_textures(t_wolf *wolf);
-void			ft_wolf_init(t_wolf *wolf);
+void			ft_wolf_init(t_wolf *wolf, t_sdl *sdl);
 void			init_entities(t_entity *entity, t_wolf *wolf);
 void			tex_to_mem(t_texture tex, t_wolf *wolf);
 void			load_music(char *path, t_audio *audio);
