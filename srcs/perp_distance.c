@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:50:11 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/09 16:14:35 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/22 15:09:23 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ f32		perp_distance_sn(t_raycaster *ray, t_player *player)
 	return ((ray->map.y - player->pos.y + (1 - ray->step.y) / 2) / player->ray.y);
 }
 
-f32		perp_distance_ew_door(t_raycaster *ray, t_player *player)
+f32		perp_distance_sn_door(t_raycaster *ray, t_player *player)
 {
 	return ((ray->map.y + 0.5f - player->pos.y) / player->ray.y);
 }
 
-f32		perp_distance_sn_door(t_raycaster *ray, t_player *player)
+f32		perp_distance_ew_door(t_raycaster *ray, t_player *player)
 {
 	return ((ray->map.x + 0.5f - player->pos.x) / player->ray.x);
 }
@@ -39,7 +39,7 @@ funct	*perp_dist(t_wolf *wolf)
 	is_alloc(dist = ft_mem(&wolf->mem, sizeof(funct) * 4), wolf, -1);
 	dist[0] = perp_distance_ew;
 	dist[1] = perp_distance_sn;
-	dist[2] = perp_distance_ew_door;
-	dist[3] = perp_distance_sn_door;
+	dist[2] = perp_distance_sn_door;
+	dist[3] = perp_distance_ew_door;
 	return (dist);
 }
