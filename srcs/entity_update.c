@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/17 20:46:53 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/22 16:44:56 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ void	entity_render_init(t_entity_render_info *info, sint32 view,
 		info->draw_start.y = 0;
 	if (info->draw_end.y >= H)
 		info->draw_end.y = H - 1;
-	precalculate_offset(info);
 }
 
 sint8	entity_render_setup(t_items *item, sint32 view,
@@ -119,15 +118,16 @@ sint8	entity_render_setup(t_items *item, sint32 view,
 	sint32	sprite_horiz_pos;
 
 	entity_render_init(info, view, item);
-	sprite_horiz_pos = (info->draw_start.x + info->draw_end.x) >> 1;
+	if (info->draw_start.x >= W || info->draw_end.x < 0
+		|| info->draw_start.y >= H || info->draw_end.y < 0)
+		return (-1);
+	sprite_horiz_pos = (info->draw_start.x + info->offset.x + info->draw_end.x) >> 1;
 	if (sprite_horiz_pos < (W >> 1) + (info->sprite_size >> 2)
 		&& sprite_horiz_pos > (W >> 1) - (info->sprite_size >> 2))
 		item->flag |= 1UL;
 	else
 		item->flag &= ~1UL;
-	if (info->draw_start.x >= W || info->draw_end.x < 0
-		|| info->draw_start.y >= H || info->draw_end.y < 0)
-		return (-1);
+	precalculate_offset(info);
 	return (1);
 }
 
