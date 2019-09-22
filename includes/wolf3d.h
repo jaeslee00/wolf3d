@@ -218,8 +218,31 @@ typedef struct	s_wolf
 	t_s32		view;
 	t_entity	*entity;
 	t_f32			*perp_dist;
+	t_2d		*minimap;
 }				t_wolf;
 
+typedef struct	s_ln
+{
+	t_2d	d;
+	t_2d	s;
+	int		p;
+}				t_ln;
+
+
+typedef struct	s_pts
+{
+	t_2d	min;
+	t_2d	max;
+}				t_pts;
+
+
+typedef struct	s_m2x2
+{
+	float		e[4][4];
+}				t_m2x2;
+
+
+void			draw_minimap(t_wolf *wolf);
 void			background(t_wolf *wolf, t_u32 *img);
 void			load_textures(t_wolf *wolf);
 void			ft_wolf_init(t_wolf *wolf, t_sdl *sdl);
