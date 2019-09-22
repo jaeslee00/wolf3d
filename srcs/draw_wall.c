@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/09 18:13:15 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/21 20:56:20 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,23 @@ t_s8	texture_pick(t_raycaster *ray)
 void	texture_map(t_wolf *wf, t_texture_map *tex_map, t_s32 x, t_f32 perp_dist,
 			t_texture *tex)
 {
-	t_s32	tex_height_scale;
+t_s32	translated_y;
 	t_s32	color;
 	t_s32	tex_y;
 	t_s32	y_offset;
 	t_s32	y;
-	t_s32	precalc;
+	t_s32 precalc;
 	t_u32	*img = wf->img;
-
-	precalc = (tex->height << 24) / tex_map->column_height;
+	
+precalc = (tex->height << 24) / tex_map->column_height;
 	y_offset = ((tex_map->column_height - H) >> 1) + wf->view;
 	y = tex_map->start + 1;
 	while (y < tex_map->end)
 	{
-		tex_height_scale = y + y_offset;
-		tex_y = ((tex_height_scale * precalc) >> 24) * tex->width;
+		translated_y = y + y_offset;
+		tex_y = ((translated_y * precalc) >> 24) * tex->width;
 		color = tex->data[tex_y + tex_map->coord.x];
-		//NOTE (jae) : lighting in ray_casting seems quite expensive. Needs to check!!
-		img[x + y * W] = lighting(color, perp_dist);
+img[x + y * W] = lighting(color, perp_dist);
 		y++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 04:38:32 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/18 04:38:32 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/21 21:00:52 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	load_textures(t_wolf *wolf)
 	i = -1;
 	pal.size = 0;
 	file = file_str();
-	is_alloc(pal.palete = ft_mem(&wolf->mem, 2948), wolf, 1);
+	is_alloc(pal.pal = ft_mem(&wolf->mem, 2948), wolf, 1);
 	while (i++ < 13)
 		wolf->tex[i] = read_bmp(file.str[i], wolf, &pal);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bmp_reader.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:43:55 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/09 17:12:03 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/21 21:00:00 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	palette(t_u32 *img, t_palette *p, t_u32 size)
 		i = 0;
 		while (i < p->size)
 		{
-			if (img[j] == p->palete[i])
+			if (img[j] == p->pal[i])
 			{
 				j++;
 				break;
@@ -66,7 +66,7 @@ void	palette(t_u32 *img, t_palette *p, t_u32 size)
 		}
 		if (i == p->size)
 		{
-			p->palete[i] = img[j];
+			p->pal[i] = img[j];
 			p->size++;
 		}
 		j++;

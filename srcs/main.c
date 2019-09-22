@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/09 18:20:52 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/21 21:09:52 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 {
-	ft_bzero(time, sizeof(t_2d_p));
+ft_bzero(time, sizeof(t_2d_p));
 	tkneizer(fd, wolf);
 	ft_wolf_init(wolf, sdl);
 	count_entities(wolf->map, wolf->obj, wolf->entity);
@@ -40,10 +40,9 @@ static void	get_input(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
 	check_flag(wolf, wolf->map, deltatime);
 }
 
-
 static void	draw_on_screen(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
 {
-	entity_draw_loop(wolf, wolf->entity, wolf->entity->item, wolf->entity->order);
+entity_draw_loop(wolf, wolf->entity->item, wolf->entity->order, wolf->entity->nbr_of_entities);
 	draw_hud(wolf, deltatime);
 	SDL_UpdateTexture(sdl->texture, NULL, wolf->img,
 		W * sizeof(t_u32));
@@ -61,8 +60,8 @@ int		main(int ac, char **av)
 	fd = mem_init(&wolf, ac, av);
 	if (fd > 0)
 	{
-		general_inits(&wolf, fd, &time, &sdl);
-		while (1)
+general_inits(&wolf, fd, &time, &sdl);
+while (1)
 		{
 			time.x = SDL_GetTicks();
 			get_input(&wolf, time.x - time.y, &sdl);
@@ -72,8 +71,8 @@ int		main(int ac, char **av)
 			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);
 			background(&wolf, wolf.img);
 			raycast(&wolf);
-			draw_on_screen(&wolf, SDL_GetTicks() - time.x, &sdl);
-		}
+draw_on_screen(&wolf, SDL_GetTicks() - time.x, &sdl);
+}
 	}
 	return (0);
 }

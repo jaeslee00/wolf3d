@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/01 13:16:29 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/01 13:18:39 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/21 21:01:26 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ static t_palette	ceiling(t_wolf *wolf)
 	t_f32		per;
 
 	ft_bzero(&p, sizeof(p));
-	is_alloc(p.palete = ft_mem(&wolf->mem, sizeof(t_s32) * H / 2), wolf, -1);
+	is_alloc(p.pal = ft_mem(&wolf->mem, sizeof(t_s32) * H / 2), wolf, -1);
 	per = 0.5f;
 	y = 0;
 	while (y < H / 2)
 	{
-		p.palete[y] = rgb_lerp(0x0, per, 0xFFFFFF);
+		p.pal[y] = rgb_lerp(0x0, per, 0xFFFFFF);
 		y++;
 		per -= 0.0009f;
 	}
@@ -48,8 +48,8 @@ void		background(t_wolf *wolf, t_u32 *img)
 		coord.x = 0;
 		while (coord.x < W - 1)
 		{
-			img[coord.x + coord.y * W] = p.palete[i];
-					img[coord.x + y1 * W] = p.palete[i];
+			img[coord.x + coord.y * W] = p.pal[i];
+					img[coord.x + y1 * W] = p.pal[i];
 				coord.x++;
 		}
 		if (i < (t_s32)p.size)
