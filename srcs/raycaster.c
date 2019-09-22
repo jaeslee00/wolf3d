@@ -6,19 +6,20 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/07 22:44:10 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/22 18:53:45 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	raycast_collision(sint8 **map, t_raycaster *ray, int *hit)
+void	raycast_collision(sint8 **map, t_raycaster *ray, sint8 *hit, t_wolf *wf)
 {
+	(void)wf;
 	if (map[ray->map.y][ray->map.x] == 1)
 		*hit = 1;
 	else if (map[ray->map.y][ray->map.x] == 3)
 	{
-		if (ray->side_dist.x < ray->side_dist.y + 0.5f)
+		if (ray->side_dist.x - 0.5f * ray->side_dist.x / fabs(ray->map.x - wf->player->pos.x) < ray->side_dist.y)
 		{
 			*hit = 1;
 			ray->side = 3;
@@ -26,7 +27,7 @@ void	raycast_collision(sint8 **map, t_raycaster *ray, int *hit)
 	}
 	else if (map[ray->map.y][ray->map.x] == 5)
 	{
-		if (ray->side_dist.y < ray->side_dist.x + 0.5f)
+		if (ray->side_dist.y - 0.5f * ray->side_dist.y / fabs(ray->map.y - wf->player->pos.y) < ray->side_dist.x)
 		{
 			*hit = 1;
 			ray->side = 2;
@@ -36,7 +37,7 @@ void	raycast_collision(sint8 **map, t_raycaster *ray, int *hit)
 
 sint32	dda_raycast(t_wolf *wf, t_raycaster *ray)
 {
-	int	hit;
+	sint8	hit;
 
 	hit = 0;
 	while (hit == 0)
@@ -53,7 +54,7 @@ sint32	dda_raycast(t_wolf *wf, t_raycaster *ray)
 			ray->map.y += ray->step.y;
 			ray->side = 1;
 		}
-		raycast_collision(wf->map, ray, &hit);
+		raycast_collision(wf->map, ray, &hit, wf);
 	}
 	return (ray->side);
 }
