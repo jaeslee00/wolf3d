@@ -6,20 +6,21 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/22 18:53:45 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/22 19:03:07 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	raycast_collision(sint8 **map, t_raycaster *ray, sint8 *hit, t_wolf *wf)
+void	raycast_collision(sint8 **map, t_raycaster *ray, sint8 *hit,
+			t_2d player_pos)
 {
-	(void)wf;
 	if (map[ray->map.y][ray->map.x] == 1)
 		*hit = 1;
 	else if (map[ray->map.y][ray->map.x] == 3)
 	{
-		if (ray->side_dist.x - 0.5f * ray->side_dist.x / fabs(ray->map.x - wf->player->pos.x) < ray->side_dist.y)
+		if (ray->side_dist.x - (0.5f * ray->side_dist.x) /
+			fabs(ray->map.x - player_pos.x) < ray->side_dist.y)
 		{
 			*hit = 1;
 			ray->side = 3;
@@ -27,7 +28,8 @@ void	raycast_collision(sint8 **map, t_raycaster *ray, sint8 *hit, t_wolf *wf)
 	}
 	else if (map[ray->map.y][ray->map.x] == 5)
 	{
-		if (ray->side_dist.y - 0.5f * ray->side_dist.y / fabs(ray->map.y - wf->player->pos.y) < ray->side_dist.x)
+		if (ray->side_dist.y - (0.5f * ray->side_dist.y) /
+			fabs(ray->map.y - player_pos.y) < ray->side_dist.x)
 		{
 			*hit = 1;
 			ray->side = 2;
@@ -54,7 +56,7 @@ sint32	dda_raycast(t_wolf *wf, t_raycaster *ray)
 			ray->map.y += ray->step.y;
 			ray->side = 1;
 		}
-		raycast_collision(wf->map, ray, &hit, wf);
+		raycast_collision(wf->map, ray, &hit, wf->player->pos);
 	}
 	return (ray->side);
 }
