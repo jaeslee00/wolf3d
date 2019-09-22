@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/21 21:06:33 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/22 21:30:59 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
- //# define W	(2560)
- //# define H	(1440)
- # define W	(3120)
- # define H	(2080)
+//# define W	(2560)
+//# define H	(1440)
+#define W	(720)
+#define H	(520)
+ //# define W	(3120)
+ //# define H	(2080)
 //# define W	(1920)
  //# define H	(1080)
 # define TEXTURE_0	0
@@ -33,7 +35,7 @@
 # define OBJ_DEAD 1UL << 2
 
 # define ENEMY_SIZE 50
-# define NBR_OF_ENTITIES 9
+# define NBR_OF_ENTITIES 10
 # define TEXTURE_BLANK 0x980088
 # ifndef INT_MAX
 #  define INT_MAX 2147483647
@@ -238,7 +240,7 @@ typedef struct	s_pts
 
 typedef struct	s_m2x2
 {
-	float		e[4][4];
+	float		e[2][2];
 }				t_m2x2;
 
 

@@ -6,12 +6,13 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 22:18:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/19 22:18:07 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/22 22:09:58 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
+/*
 void	fill_rect(t_2d beg, t_2d end)
 {
 	int	size;
@@ -22,6 +23,7 @@ void	fill_rect(t_2d beg, t_2d end)
 	j = 0;
 	size = 0;
 }
+*/
 
 static t_s32		is_valids(t_f32 x, t_f32 y)
 {
@@ -78,21 +80,28 @@ static void	drawline(t_wolf *wolf, t_pts pts, t_s32 nb)
 	err = (ln.d.x > ln.d.y ? ln.d.x : -ln.d.y) / 2;
 	xy.x = (t_s32)round(pts.min.x);
 	xy.y = (t_s32)round(pts.min.y);
-	while (1)
+	if (pts.min.x > 0 && pts.min.y > 0)
 	{
-		if (is_valids(xy.x, xy.y))
+		while (1)
 		{
-			if (nb != 0)
-				wolf->img[xy.x + (xy.y * W)] = 0x000000;
-			else
-				wolf->img[xy.x + (xy.y * W)] = 0xFFFFFF;
+			if (is_valids(xy.x, xy.y))
+			{
+				if (nb == 4)
+					wolf->img[xy.x + (xy.y * W)] = 0x00FF00;
+				else if (nb == 3)
+					wolf->img[xy.x + (xy.y * W)] = 0xFF0000;
+				else if (nb != 0)
+					wolf->img[xy.x + (xy.y * W)] = 0x000000;
+				else
+					wolf->img[xy.x + (xy.y * W)] = 0xFFFFFF;
+			}
+			if (xy.x == (t_s32)pts.max.x && xy.y == (t_s32)pts.max.y)
+				break ;
+			e2 = err;
+			error_adjust(&err, &e2, &ln, &xy);
 		}
-		if (xy.x == (t_s32)pts.max.x && xy.y == (t_s32)pts.max.y)
-			break ;
-		e2 = err;
-		error_adjust(&err, &e2, &ln, &xy);
 	}
-	}
+}
 
 t_2d	*init_points(t_wolf *wolf)
 {
@@ -103,20 +112,22 @@ t_2d	*init_points(t_wolf *wolf)
 
 	i = 10;
 	k = 0;
+	// // TODO(viccarau): 
 	points = ft_memalloc(sizeof(t_2d) * wolf->obj.size);
+//// TODO(viccarau): 
 	ft_bzero(points, sizeof(t_2d) * wolf->obj.size);
-	while (i < wolf->obj.h)
+	while (k < wolf->obj.size)
 	{
+		if (k % wolf->obj.w == 0)
+{
 		j = 10;
-		while (j < wolf->obj.w)
-		{
-			points[k].x = j;
+			i += 10;
+		}
+		points[k].x = j;
 			points[k].y = i;
-			j++;
+			j += 10;
 			k++;
 		}
-		i++;
-	}
 	return (points);
 }
 
@@ -128,8 +139,9 @@ void	draw_minimap(t_wolf *wolf)
 
 i = 0;
 	points = init_points(wolf);
-	while (i < wolf->obj.size)
+	while (i < wolf->obj.size - 1)
 	{
+		if ((i + 1) % wolf->obj.w != 0)
 		drawline(wolf, init_pts(points[i], points[i + 1]), wolf->obj.nb[i]);
 		i++;
 	}
@@ -137,8 +149,9 @@ i = 0;
 	j = 0;
 	while (i < wolf->obj.size && j < wolf->obj.size)
 	{
+		j = i + wolf->obj.w;
+		if (j < wolf->obj.size)
 		drawline(wolf, init_pts(points[i], points[j]), wolf->obj.nb[i]);
 		i++;
-		j += wolf->obj.w;
-	}
+		}
 }

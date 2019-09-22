@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/21 21:09:52 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/22 21:31:33 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static void	draw_on_screen(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
 {
 entity_draw_loop(wolf, wolf->entity->item, wolf->entity->order, wolf->entity->nbr_of_entities);
 	draw_hud(wolf, deltatime);
+	draw_minimap(wolf);
 	SDL_UpdateTexture(sdl->texture, NULL, wolf->img,
 		W * sizeof(t_u32));
 	SDL_RenderCopy(sdl->renderer, sdl->texture, NULL, NULL);

@@ -6,17 +6,12 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:46:12 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/21 22:25:50 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/22 20:49:10 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DRAW_H
 # define DRAW_H
-
-typedef struct	s_m2x2
-{
-	float		e[2][2];
-}				t_m2x2;
 
 typedef struct	s_2d
 {
