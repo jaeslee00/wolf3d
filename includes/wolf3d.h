@@ -16,14 +16,14 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-//# define W	(2560)
+# define W	(2560)
 //# define H	(1440)
-#define W	(720)
-#define H	(520)
+//#define W	(720)
+//#define H	(520)
  //# define W	(3120)
  //# define H	(2080)
 //# define W	(1920)
- //# define H	(1080)
+ # define H	(1080)
 # define TEXTURE_0	0
 # define TEXTURE_1	1
 # define TEXTURE_2	2
@@ -107,13 +107,10 @@ typedef struct	s_door
 
 typedef struct	s_minimap
 {
-	t_s32	x;
-	t_s32	y;
-	t_s32	h_color_head;
-	t_s32	h_color_tail;
-	t_s32	v_color_head;
-	t_s32	v_color_tail;
-}				t_minimap;
+	t_f32		scale;
+	t_f32		rotation;
+	t_2d		offset;
+	}				t_minimap;
 
 typedef struct	s_obj
 {
@@ -145,8 +142,7 @@ typedef struct	s_player
 	t_2d		plane;
 t_f32			speed;
 t_minimap	*m;
-	t_s32		minimap_zoom;
-}				t_player;
+	}				t_player;
 
 typedef struct	s_file
 {
@@ -202,6 +198,11 @@ typedef struct	s_entity
 	t_items	*item;
 }				t_entity;
 
+typedef struct	s_m3x3
+{
+	float		e[3][3];
+}				t_m3x3;
+
 typedef struct	s_wolf
 {
 	funct		*dist;
@@ -220,7 +221,9 @@ typedef struct	s_wolf
 	t_s32		view;
 	t_entity	*entity;
 	t_f32			*perp_dist;
-	t_2d		*minimap;
+	//t_2d		*minimap;
+	t_2d		*p;
+	t_m3x3	proj_matrix;
 }				t_wolf;
 
 typedef struct	s_ln
@@ -237,14 +240,17 @@ typedef struct	s_pts
 	t_2d	max;
 }				t_pts;
 
-
-typedef struct	s_m2x2
-{
-	float		e[2][2];
-}				t_m2x2;
-
-
-void			draw_minimap(t_wolf *wolf);
+t_m3x3			translate(t_m3x3 a, t_2d	offset);
+t_m3x3			final_projection(t_wolf *wolf);
+t_m3x3			rot(float angle);
+t_m3x3			y_rot(float angle);
+t_m3x3			scale(t_f32	scale);
+t_m3x3			mx_mul(t_m3x3 a, t_m3x3 b);
+t_m3x3			identity(void);
+t_2d			transform(t_m3x3 a, t_2d p);
+t_2d			find_center(t_wolf *wolf);
+void			find_offset(t_wolf *wolf);
+void			init_points(t_wolf *wolf);
 void			background(t_wolf *wolf, t_u32 *img);
 void			load_textures(t_wolf *wolf);
 void			ft_wolf_init(t_wolf *wolf, t_sdl *sdl);
@@ -277,6 +283,7 @@ t_s32			rgb_lerp(t_s32 color1, t_f32 t, t_s32 color2);
 t_s32			direction_movement(t_wolf *wolf, t_s8 **map, t_s32 framedelta);
 t_s32			print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
 t_s32			mem_init(t_wolf *wolf, t_s32 ac, char **av);
+void			draw_minimap(t_wolf *wolf);
 void			palette(t_u32 *img, t_palette *p, t_u32 size);
 void			check_flag(t_wolf *wolf, t_s8 **map, t_s32 framedelta);
 void			set_flag(t_wolf *wolf, SDL_Event event);
@@ -286,7 +293,6 @@ void			render(t_wolf *wolf);
 void			raycast(t_wolf *wf);
 void			calculate_distance(t_player *p, t_2d_p *a);
 void			ft_raycast(t_wolf *wolf, t_player *player);
-void			draw_minimap(t_wolf *wolf);
 void			is_alloc(void *mem, t_wolf *wolf, t_s32 error);
 void			draw_to_img(t_wolf wolf);
 void			pers_keys(t_s32 keycode, t_wolf *wolf);

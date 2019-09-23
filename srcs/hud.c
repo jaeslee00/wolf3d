@@ -120,8 +120,8 @@ void	draw_shotgun(t_wolf *wolf, t_u32 deltaframe)
 
 void	draw_hud(t_wolf *wolf, t_u32 deltaframe)
 {
-	//if (wolf->flag & 1UL << 8)
-		//minimap(wolf);
+	if (wolf->flag & 1UL << 8)
+		draw_minimap(wolf);
 	//draw_bar(wolf, wolf->player->health);
 	if (wolf->flag & 1UL << 10)
 		draw_shotgun(wolf, deltaframe);

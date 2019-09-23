@@ -55,6 +55,13 @@ void	event_handler(t_wolf *wolf, t_s8 **map, t_door *doors)
 	}
 }
 
+t_2d	mul_point(t_2d point, t_s32 mul)
+{
+	point.x = mul * point.x;
+	point.y = mul * point.y;
+	return (point);
+}
+
 t_s32		direction_movement(t_wolf *wolf, t_s8 **map, t_s32 framedelta)
 {
 	t_f32	time;
@@ -70,7 +77,7 @@ t_s32		direction_movement(t_wolf *wolf, t_s8 **map, t_s32 framedelta)
 			p->pos.x += neg * p->direction.x * time;
 		if (map[(t_s32)(p->pos.y + neg * (p->direction.y * (time + 0.2f)))][(t_s32)(p->pos.x)] == 0)
 			p->pos.y += neg * p->direction.y * time;
-	}
+		}
 	if (wolf->flag & 1UL << 3 || wolf->flag & 1UL << 2)
 	{
 		neg = (wolf->flag & 1UL << 3) ? 1 : -1;

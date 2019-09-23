@@ -12,11 +12,25 @@
 
 #include "wolf3d.h"
 
+t_m3x3	final_projection(t_wolf *wolf)
+{
+	t_m3x3	r;
+
+	r = identity();
+	r = mx_mul(scale(wolf->player->m->scale), mx_mul(rot(wolf->player->m->rotation), identity()));
+	return (r);
+}
+
 static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 {
 ft_bzero(time, sizeof(t_2d_p));
 	tkneizer(fd, wolf);
 	ft_wolf_init(wolf, sdl);
+	wolf->proj_matrix = identity();
+	wolf->player->m->rotation = 1.5f;
+	wolf->player->m->scale = 30;
+	wolf->proj_matrix = final_projection(wolf);
+	wolf->proj_matrix = mx_mul(wolf->proj_matrix, y_rot(1.5));
 	count_entities(wolf->map, wolf->obj, wolf->entity);
 	init_entities(wolf->entity, wolf);
 	print_map(wolf->map, wolf->obj, wolf->player, wolf->doors, wolf);
@@ -43,8 +57,8 @@ static void	get_input(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
 static void	draw_on_screen(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
 {
 entity_draw_loop(wolf, wolf->entity->item, wolf->entity->order, wolf->entity->nbr_of_entities);
+	wolf->proj_matrix = final_projection(wolf);
 	draw_hud(wolf, deltatime);
-	draw_minimap(wolf);
 	SDL_UpdateTexture(sdl->texture, NULL, wolf->img,
 		W * sizeof(t_u32));
 	SDL_RenderCopy(sdl->renderer, sdl->texture, NULL, NULL);
@@ -66,7 +80,7 @@ while (1)
 		{
 			time.x = SDL_GetTicks();
 			get_input(&wolf, time.x - time.y, &sdl);
-			printf("%d ms\t", time.x - time.y);
+			//printf("%d ms\t", time.x - time.y);
 			time.y = SDL_GetTicks();
 			event_handler(&wolf, wolf.map, wolf.doors);
 			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);

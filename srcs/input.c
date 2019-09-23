@@ -61,14 +61,16 @@ void	check_flag(t_wolf *wolf, t_s8 **map, t_s32 framedelta)
 	{
 		p->direction.x *= 0.99f;
 		p->direction.y *= 0.99f;
-		printf("fov = %f\n", fov);
+		ft_putnbr((int)fov);
+		ft_putchar('\n');
 	}
 	if (wolf->flag & 1UL << 5 && fov > 60.0f)
 	{
 		p->direction.x *= 1.01f;
 		p->direction.y *= 1.01f;
-		printf("fov = %f\n", fov);
-	}
+		ft_putnbr((int)fov);
+		ft_putchar('\n');
+		}
 	if (wolf->flag & 1UL << 6)
 		wolf->player->speed = 1.5f;
 	else
@@ -86,7 +88,7 @@ void	mouse_movement(t_wolf *wolf, SDL_Event event)
 	p = wolf->player;
 	if (event.type == SDL_MOUSEMOTION)
 	{
-		motion = -(t_f64)(event.motion.xrel * 0.001f);
+		motion = (t_f64)(event.motion.xrel * 0.001f);
 		wolf->view += (t_s32)(event.motion.yrel);
 		if (wolf->view > H/2)
 			wolf->view = H/2;
@@ -97,8 +99,9 @@ void	mouse_movement(t_wolf *wolf, SDL_Event event)
 		old.x = p->direction.x;
 		p->direction.x = p->direction.x * cosine - p->direction.y * sine;
 		p->direction.y = old.x * sine + p->direction.y * cosine;
+		p->m->rotation += sine;
 		old.y = p->plane.x;
 		p->plane.x = p->plane.x * cosine - p->plane.y * sine;
 		p->plane.y = old.y * sine + p->plane.y * cosine;
-	}
+		}
 }

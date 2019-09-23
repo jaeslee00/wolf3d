@@ -50,14 +50,14 @@ void	ft_wolf_init(t_wolf *wolf, t_sdl *sdl)
 	is_alloc(wolf->player->m = (t_minimap *)ft_mem(&wolf->mem, wolf->obj.size * sizeof(t_minimap)), wolf, -1);
 	is_alloc(wolf->perp_dist = (t_f32*)ft_mem(&wolf->mem, sizeof(t_f32) * W), wolf, -1);
 	is_alloc(wolf->entity = (t_entity*)ft_mem(&wolf->mem, sizeof(t_entity)), wolf, -1);
-	wolf->player->direction.x = -1;
+	wolf->player->direction.x = 1;
 	wolf->player->direction.y = 0;
 	wolf->player->plane.x = 0;
 	wolf->player->plane.y = 1;
 	wolf->player->speed = 0;
-	//wolf->player->health = 75;
-	wolf->player->minimap_zoom = 20;
-}
+	is_alloc(wolf->p = ft_mem(&wolf->mem, sizeof(t_2d) * wolf->obj.size), wolf, -1);
+	  init_points(wolf);
+	}
 
 t_file	file_str(void)
 {
