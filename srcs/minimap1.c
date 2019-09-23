@@ -87,11 +87,11 @@ static void	drawline(t_wolf *wolf, t_pts pts, t_s32 nb, t_s32 nb1)
 			if (is_valids(xy.x, xy.y))
 			{
 				if (nb == 4 || nb1 == 4)
-					wolf->img[xy.x + (xy.y * W)] = 0x00FF00;
-				else if (nb == 3 || nb1 == 3)
-					wolf->img[xy.x + (xy.y * W)] = 0xFF0000;
+					wolf->img[xy.x + (xy.y * W)] = 0x00BB00;
+				else if (nb == 3 || nb1 == 3 || nb == 5 || nb1 == 5)
+					wolf->img[xy.x + (xy.y * W)] = 0xBB0000;
 				else if (nb != 0 || nb1 != 0)
-					wolf->img[xy.x + (xy.y * W)] = 0xFFFFFF;
+					wolf->img[xy.x + (xy.y * W)] = 0x555555;
 				else
 					wolf->img[xy.x + (xy.y * W)] = 0x000000;
 			}
