@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 04:38:32 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/24 12:38:40 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/24 13:41:11 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ void	ft_wolf_init(t_wolf *wolf, t_sdl *sdl)
 	wolf->player->plane.y = 1;
 	wolf->player->speed = 0;
 	is_alloc(wolf->p = ft_mem(&wolf->mem, sizeof(t_2d) * wolf->obj.size), wolf, -1);
-	  init_points(wolf);
-	}
+	init_points(wolf);
+}
 
 t_file	file_str(void)
 {

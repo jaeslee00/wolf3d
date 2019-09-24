@@ -6,13 +6,14 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/24 12:57:02 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/24 13:07:55 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	raycast_collision(t_s8 **map, t_raycaster *ray, t_s8 *hit, t_2d player_pos)
+void	raycast_collision(t_s8 **map, t_raycaster *ray, t_s8 *hit,
+			t_2d player_pos)
 {
 	if (map[ray->map.y][ray->map.x] == 1)
 		*hit = 1;
