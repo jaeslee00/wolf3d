@@ -12,39 +12,25 @@
 
 #include "wolf3d.h"
 
-typedef struct s_bitmap_header
+typedef struct	s_bitmap_header
 {
-    uint16 file_type;
-		uint32 file_size;
-		uint16 reserved1;
-		uint16 reserved2;
-		uint32 bitmap_offset;
-    uint32 size;
-    sint32 width;
-		sint32 height;
-		uint16 planes;
-    uint16 bits_per_pixel;
-    uint32 compression;
-    uint32 size_of_bitmap;
-    sint32 horiz_resolution;
-    sint32 vert_resolution;
-    uint32 colors_used;
-    uint32 colors_important;
-uint32 red_mask;
-    uint32 green_Mask;
-    uint32 blue_mask;
-}			t_bitmap_header;
-
-struct loaded_bitmap
-{
-    void		*memory;
-    sint32	width;
-    sint32	height;
-    sint32	pitch;
-};
-
-struct entire_file
-{
-    uint32 ContentsSize;
-    void *Contents;
-};
+	t_u16	file_type;
+	t_u32	file_size;
+	t_u16	reserved1;
+	t_u16	reserved2;
+	t_u32	bitmap_offset;
+	t_u32	size;
+	t_s32	width;
+	t_s32	height;
+	t_u16	planes;
+	t_u16	bits_per_pixel;
+	t_u32	compression;
+	t_u32	size_of_bitmap;
+	t_s32	horiz_resolution;
+	t_s32	vert_resolution;
+	t_u32	colors_used;
+	t_u32	colors_important;
+	t_u32	red_mask;
+	t_u32	green_Mask;
+	t_u32	blue_mask;
+}				t_bitmap_header;

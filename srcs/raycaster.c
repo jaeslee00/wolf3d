@@ -6,40 +6,41 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/22 19:03:07 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/24 12:57:02 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	raycast_collision(sint8 **map, t_raycaster *ray, sint8 *hit,
-			t_2d player_pos)
+void	raycast_collision(t_s8 **map, t_raycaster *ray, t_s8 *hit, t_2d player_pos)
 {
 	if (map[ray->map.y][ray->map.x] == 1)
 		*hit = 1;
 	else if (map[ray->map.y][ray->map.x] == 3)
 	{
 		if (ray->side_dist.x - (0.5f * ray->side_dist.x) /
-			fabs(ray->map.x - player_pos.x) < ray->side_dist.y)
+			fabs((ray->map.x - player_pos.x) + (t_f32)((1 + ray->step.x) >> 1))
+				< ray->side_dist.y)
 		{
 			*hit = 1;
-			ray->side = 3;
+			ray->side = e_ew_door;
 		}
 	}
 	else if (map[ray->map.y][ray->map.x] == 5)
 	{
 		if (ray->side_dist.y - (0.5f * ray->side_dist.y) /
-			fabs(ray->map.y - player_pos.y) < ray->side_dist.x)
+			fabs((ray->map.y - player_pos.y) + (t_f32)((1 + ray->step.y) >> 1))
+				< ray->side_dist.x)
 		{
 			*hit = 1;
-			ray->side = 2;
+			ray->side = e_sn_door;
 		}
 	}
 }
 
-sint32	dda_raycast(t_wolf *wf, t_raycaster *ray)
+t_s32	dda_raycast(t_wolf *wf, t_raycaster *ray)
 {
-	sint8	hit;
+	t_s8	hit;
 
 	hit = 0;
 	while (hit == 0)
@@ -48,13 +49,13 @@ sint32	dda_raycast(t_wolf *wf, t_raycaster *ray)
 		{
 			ray->side_dist.x += ray->delta_dist.x;
 			ray->map.x += ray->step.x;
-			ray->side = 0;
+			ray->side = e_ew_wall;
 		}
 		else
 		{
 			ray->side_dist.y += ray->delta_dist.y;
 			ray->map.y += ray->step.y;
-			ray->side = 1;
+			ray->side = e_sn_wall;
 		}
 		raycast_collision(wf->map, ray, &hit, wf->player->pos);
 	}
@@ -65,8 +66,8 @@ void	dda_init(t_raycaster *ray, t_player *p)
 {
 	ray->delta_dist.x = fabs(1.0f / p->ray.x);
 	ray->delta_dist.y = fabs(1.0f / p->ray.y);
-	ray->map.x = (sint32)p->pos.x;
-	ray->map.y = (sint32)p->pos.y;
+	ray->map.x = (t_s32)p->pos.x;
+	ray->map.y = (t_s32)p->pos.y;
 	if (p->ray.x < 0)
 	{
 		ray->step.x = -1;
@@ -92,12 +93,12 @@ void	dda_init(t_raycaster *ray, t_player *p)
 void	raycast(t_wolf *wf)
 {
 	t_raycaster	ray;
-	f32			line_height;
-	sint32		x;
-	f32			scale;
-	f32			cam_scale;
+	t_f32			line_height;
+	t_s32		x;
+	t_f32			scale;
+	t_f32			cam_scale;
 
-	scale = 2.0f / (f32)W;
+	scale = 2.0f / (t_f32)W;
 	x = 0;
 	while (x < W)
 	{
@@ -110,7 +111,7 @@ void	raycast(t_wolf *wf)
 		dda_raycast(wf, &ray);
 		ray.perp_dist = wf->dist[ray.side](&ray, wf->player);
 		wf->perp_dist[x] = ray.perp_dist;
-		line_height = (sint32)((f32)H / ray.perp_dist);
+		line_height = (t_s32)((t_f32)H / ray.perp_dist);
 		if (line_height > 1)
 			draw_wall(wf, line_height, x, &ray);
 		x++;

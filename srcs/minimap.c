@@ -6,13 +6,13 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 04:27:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/12 18:03:05 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/21 22:37:07 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-sint32	get_color_horiz(t_minimap *p1, t_minimap *p2)
+t_s32	get_color_horiz(t_minimap *p1, t_minimap *p2)
 {
 	if (p1->h_color_head == p2->h_color_tail && p1->h_color_head > 0)
 		return (0xFFFFFF);
@@ -24,7 +24,7 @@ sint32	get_color_horiz(t_minimap *p1, t_minimap *p2)
 		return (0x00);
 }
 
-sint32	get_color_vertical(t_minimap *p1, t_minimap *p2)
+t_s32	get_color_vertical(t_minimap *p1, t_minimap *p2)
 {
 	if (p1->v_color_head == p2->v_color_tail && p1->v_color_head > 0)
 		return (0xFFFFFF);
@@ -36,7 +36,7 @@ sint32	get_color_vertical(t_minimap *p1, t_minimap *p2)
 		return (0x00);
 }
 
-void	draw_line_x(t_minimap p1, t_minimap p2, uint32 *img)
+void	draw_line_x(t_minimap p1, t_minimap p2, t_u32 *img)
 {
 	t_2d_p d;
 	t_2d_p curr;
@@ -53,6 +53,7 @@ void	draw_line_x(t_minimap p1, t_minimap p2, uint32 *img)
 	while (curr.x < p2.x)
 	{
 		if (curr.x + curr.y * W < H * W && curr.x > 0 && curr.y > 0)
+			if (curr.x < W && curr.y < H)
 			img[curr.x + curr.y * W] =  get_color_horiz(&p1, &p2);
 		if (diff > 0)
 		{
@@ -64,7 +65,7 @@ void	draw_line_x(t_minimap p1, t_minimap p2, uint32 *img)
 	}
 }
 
-void	draw_line_y(t_minimap p1, t_minimap p2, uint32 *img)
+void	draw_line_y(t_minimap p1, t_minimap p2, t_u32 *img)
 {
 	t_2d_p d;
 	t_2d_p curr;
@@ -81,6 +82,7 @@ void	draw_line_y(t_minimap p1, t_minimap p2, uint32 *img)
 	while (curr.y < p2.y)
 	{
 		if (curr.x + curr.y * W < H * W && curr.x > 0 && curr.y > 0)
+			if (curr.x < W && curr.y < H)
 			img[curr.x + curr.y * W] = get_color_vertical(&p1, &p2);
 		if (diff > 0)
 		{
@@ -92,7 +94,7 @@ void	draw_line_y(t_minimap p1, t_minimap p2, uint32 *img)
 	}
 }
 
-void	draw_line(t_minimap p1, t_minimap p2, uint32 *img)
+void	draw_line(t_minimap p1, t_minimap p2, t_u32 *img)
 {
 	if (abs(p1.y - p2.y) < abs(p1.x - p2.x))
 	{
@@ -110,10 +112,10 @@ void	draw_line(t_minimap p1, t_minimap p2, uint32 *img)
 	}
 }
 
-void	minimap_render(uint32 *img, t_minimap *m, sint32 minimap_width, sint32 minimap_height)
+void	minimap_render(t_u32 *img, t_minimap *m, t_s32 minimap_width, t_s32 minimap_height)
 {
-	sint32	x;
-	sint32	y;
+	t_s32	x;
+	t_s32	y;
 
 	y = 0;
 	while (y < minimap_height)
@@ -133,10 +135,10 @@ void	minimap_render(uint32 *img, t_minimap *m, sint32 minimap_width, sint32 mini
 	}
 }
 
-void	minimap_set_edge_color(t_minimap *m, sint32 minimap_width, sint32 minimap_height)
+void	minimap_set_edge_color(t_minimap *m, t_s32 minimap_width, t_s32 minimap_height)
 {
-	sint32	x;
-	sint32	y;
+	t_s32	x;
+	t_s32	y;
 
 	y = 0;
 	while (y < minimap_height)
@@ -158,9 +160,9 @@ void	minimap_set_edge_color(t_minimap *m, sint32 minimap_width, sint32 minimap_h
 	m[(minimap_height - 1) * minimap_width].v_color_tail = INT_MAX;
 }
 
-void	minimap_obj_color_vertical(t_wolf *wolf, sint32 x, sint32 y, sint32 *y_key)
+void	minimap_obj_color_vertical(t_wolf *wolf, t_s32 x, t_s32 y, t_s32 *y_key)
 {
-	sint32	minimap_width;
+	t_s32	minimap_width;
 
 	minimap_width = wolf->obj.w + 1;
 	if (wolf->obj.nb[x + y * wolf->obj.w] == 3
@@ -185,9 +187,9 @@ void	minimap_obj_color_vertical(t_wolf *wolf, sint32 x, sint32 y, sint32 *y_key)
 	}
 }
 
-void	minimap_obj_color_horiz(t_wolf *wolf, sint32 x, sint32 y, sint32 *x_key)
+void	minimap_obj_color_horiz(t_wolf *wolf, t_s32 x, t_s32 y, t_s32 *x_key)
 {
-	sint32	minimap_width;
+	t_s32	minimap_width;
 
 	minimap_width = wolf->obj.w + 1;
 	if (wolf->obj.nb[x + y * wolf->obj.w] == 3
@@ -212,11 +214,11 @@ void	minimap_obj_color_horiz(t_wolf *wolf, sint32 x, sint32 y, sint32 *x_key)
 	}
 }
 
-void	minimap_obj_color(t_wolf *wolf, sint32 x, sint32 y)
+void	minimap_obj_color(t_wolf *wolf, t_s32 x, t_s32 y)
 {
-	sint32	x_key;
-	sint32	y_key;
-	sint32	minimap_width;
+t_s32	x_key;
+	t_s32	y_key;
+	t_s32	minimap_width;
 	t_minimap	*m;
 
 	m = wolf->player->m;
@@ -235,24 +237,24 @@ void	minimap_obj_color(t_wolf *wolf, sint32 x, sint32 y)
 		minimap_obj_color_horiz(wolf, x, y, &x_key);
 }
 
-void	uniform_translation(sint32 transform[2], sint32 width, sint32 height,
+void	uniform_translation(t_s32 transform[2], t_s32 width, t_s32 height,
 			t_wolf *wolf)
 {
-	sint32	zoom;
+	t_s32	zoom;
 
 	zoom = wolf->player->minimap_zoom;
-	transform[0] = ((W - zoom * width) >> 1) -
-		(sint32)((f32)zoom * (wolf->player->pos.x * 2.0f - (f32)width) / 2.0f);
+transform[0] = ((W - zoom * width) >> 1) -
+		(t_s32)((t_f32)zoom * (wolf->player->pos.x * 2.0f - (t_f32)width) / 2.0f);
 	transform[1] = ((H - zoom * height) >> 1) -
-		(sint32)((f32)zoom * (wolf->player->pos.y * 2.0f - (f32)height) / 2.0f);
+		(t_s32)((t_f32)zoom * (wolf->player->pos.y * 2.0f - (t_f32)height) / 2.0f);
 }
 
-void	minimap_transform(t_minimap *m, t_wolf *wolf, sint32 x, sint32 y)
+void	minimap_transform(t_minimap *m, t_wolf *wolf, t_s32 x, t_s32 y)
 {
-	sint32		width;
-	sint32		height;
-	sint32		zoom;
-	sint32		transform[2];
+	t_s32		width;
+	t_s32		height;
+	t_s32		zoom;
+	t_s32		transform[2];
 
 	width = wolf->obj.w + 1;
 	height = wolf->obj.h + 1;
@@ -270,8 +272,8 @@ void	minimap_transform(t_minimap *m, t_wolf *wolf, sint32 x, sint32 y)
 
 void	minimap(t_wolf *wolf)
 {
-	sint32	x;
-	sint32	y;
+	t_s32	x;
+	t_s32	y;
 
 	y = 0;
 	while (y < wolf->obj.h)

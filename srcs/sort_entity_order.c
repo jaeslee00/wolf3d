@@ -12,29 +12,29 @@
 
 #include "wolf3d.h"
 
-void	swap_integer(sint32 *a, sint32 *b)
+void	swap_integer(t_s32 *a, t_s32 *b)
 {
-	sint32 tmp;
+	t_s32 tmp;
 
 	tmp = *a;
 	*a = *b;
 	*b = tmp;
 }
 
-void	swap_float(f32 *a, f32 *b)
+void	swap_float(t_f32 *a, t_f32 *b)
 {
-	f32 tmp;
+	t_f32 tmp;
 
 	tmp = *a;
 	*a = *b;
 	*b = tmp;
 }
 
-sint32	partition(sint32 *depth_buffer, f32 *depth, sint32 low, sint32 high)
+t_s32	partition(t_s32 *depth_buffer, t_f32 *depth, t_s32 low, t_s32 high)
 {
-	f32		pivot;
-	sint32	i;
-	sint32	j;
+	t_f32		pivot;
+	t_s32	i;
+	t_s32	j;
 
 	pivot = depth[high];
 	i = (low - 1);
@@ -54,9 +54,9 @@ sint32	partition(sint32 *depth_buffer, f32 *depth, sint32 low, sint32 high)
 	return (i + 1);
 }
 
-void	quick_sort(sint32 *depth_buffer, f32 *depth, sint32 low, sint32 high)
+void	quick_sort(t_s32 *depth_buffer, t_f32 *depth, t_s32 low, t_s32 high)
 {
-	sint32 pivot_idx;
+	t_s32 pivot_idx;
 
 	if (low < high)
 	{
@@ -68,9 +68,9 @@ void	quick_sort(sint32 *depth_buffer, f32 *depth, sint32 low, sint32 high)
 
 void	sort_depth_buffer(t_entity *entity, t_items *item, t_player *player)
 {
-	sint32	index;
+	t_s32	index;
 	t_2d	relative_entity_pos;
-	f32		inv_det;
+	t_f32		inv_det;
 
 	index = 0;
 	inv_det = 1.0f / (player->plane.x * player->direction.y -

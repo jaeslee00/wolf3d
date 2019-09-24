@@ -6,116 +6,59 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/01 13:16:29 by viccarau          #+#    #+#             */
-
-/*   Updated: 2019/08/01 13:18:39 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/21 21:01:26 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-sint32	verLine(sint32 x, sint32 y1, sint32 y2, const sint32 color, uint32 *img)
+static t_palette	ceiling(t_wolf *wolf)
 {
-	sint32 y;
+	t_palette	p;
+	t_s32	y;
+	t_f32		per;
 
-	if (y2 < y1)
+	ft_bzero(&p, sizeof(p));
+	is_alloc(p.pal = ft_mem(&wolf->mem, sizeof(t_s32) * H / 2), wolf, -1);
+	per = 0.5f;
+	y = 0;
+	while (y < H / 2)
 	{
-		y1 += y2;
-		y2 = y1 - y2;
-		y1 -= y2;
+		p.pal[y] = rgb_lerp(0x0, per, 0xFFFFFF);
+		y++;
+		per -= 0.0009f;
 	}
-	if (y2 < 0 || y1 >= H  || x < 0 || x >= W)
-		return (0);
-	if (y1 < 0)
-		y1 = 0;
-	if (y2 >= W)
-		y2 = H - 1;
-	y = y1;
-	while (++y < y2)
-		img[x + y * W] = color;
-	return (1);
+	p.size = y;
+	return (p);
 }
 
-void	render(t_wolf *wolf)
+void		background(t_wolf *wolf, t_u32 *img)
 {
-	sint32 x;
-	sint32 line_height;
-	sint32 draw_start;
+	t_2d_p	coord;
+	t_s32		i;
+	t_palette	p;
+	t_s32		y1;
 
-	t_raycaster r;
-	x = 0;
-
-	while (x < W)
+	p = ceiling(wolf);
+	i = ft_abs(wolf->view);
+	coord.y = 0;
+	y1 = H - 1;
+	while (coord.y < H / 2)
+	{
+		coord.x = 0;
+		while (coord.x < W - 1)
 		{
-		r.hit = 0;
-		wolf->player->ray.x = wolf->player->direction.x + wolf->player->plane.x * (2 * x / (f64)(W) - 1);
-		wolf->player->ray.y = wolf->player->direction.y + wolf->player->plane.y * (2 * x / (f64)(W) - 1);
-		r.delta_dist.x = ft_abs(1 / wolf->player->ray.x);
-		 r.delta_dist.y = ft_abs(1 / wolf->player->ray.y);
-		  r.map.x = (sint32)wolf->player->pos.x;
-		  r.map.y = (sint32)wolf->player->pos.y;
-			if (wolf->player->ray.x < 0)
-			{
-				r.step.x = -1;
-				r.side_dist.x = (wolf->player->pos.x - r.map.x) * r.delta_dist.x;
-			}
-			else
-			{
-				r.step.x = 1;
-				r.side_dist.x = (r.map.x + 1.0 - wolf->player->pos.x) * r.delta_dist.x;
-			}
-			if (wolf->player->ray.y < 0)
-			{
-				r.step.y = -1;
-				r.side_dist.y = (wolf->player->pos.y - r.map.y) * r.delta_dist.y;
-			}
-			else
-			{
-				r.step.y = 1;
-				r.side_dist.y = (r.map.y + 1.0 - wolf->player->pos.y) * r.delta_dist.y;
-			}
-
-		//perform DDA
-
-		while (r.hit == 0)
-			{
-				//jump to next map square, OR in x-direction, OR in y-direction
-				if (r.side_dist.x < r.side_dist.y)
-				{
-					r.side_dist.x += r.delta_dist.x;
-					r.map.x += r.step.x;
-					r.side = 0;
-				}
-				else
-				{
-					r.side_dist.y += r.delta_dist.y;
-					r.map.y += r.step.y;
-					r.side = 1;
-				}
-			if (wolf->map[r.map.x][r.map.y] == 1 || wolf->map[r.map.x][r.map.y] > 2)
-				r.hit = 1;
-			}
-
-		if (r.side == 0)
-			r.perp_distance = (r.map.x - wolf->player->pos.x + (1 - r.step.x) / 2) / wolf->player->ray.x;
-		else
-			 r.perp_distance = (r.map.y - wolf->player->pos.y + (1 - r.step.y) / 2) / wolf->player->ray.y;
-
-		 line_height = (sint32)(H / r.perp_distance);
-		draw_start = -line_height / 2 + H / 2;
-			if (draw_start < 0)
-			draw_start = 0;
-			sint32 draw_end = line_height / 2 + H / 2;
-			if (draw_end >= H)
-			draw_end = H - 1;
-sint32 color;
-
-			if (wolf->map[r.map.x][r.map.y])
-			color = 0x440000 * wolf->map[r.map.x][r.map.y];
-else
-color = 0;
-			if (r.side == 1)
-		color = color >> 1;
-verLine(x, draw_start, draw_end, color, wolf->img);
-		x++;
+			img[coord.x + coord.y * W] = p.pal[i];
+					img[coord.x + y1 * W] = p.pal[i];
+				coord.x++;
 		}
-	}
+		if (i < (t_s32)p.size)
+		i++;
+			coord.y++;
+		y1--;
+		}
+	//printf("iter.x= %d, %d %d\n", iter.x, wolf->view, p.size);
+}
+
+// TODO(viccarau): In order to create the pallete, we can calculate the H * 2,
+// then the middle point is where the pallete starts to draw

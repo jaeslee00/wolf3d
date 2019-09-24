@@ -6,17 +6,17 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/22 16:44:56 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/24 12:25:20 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	texel_scale(sint32 *texel, sint32 translatedx,
-			sint32 sprite_width_scale, sint32 tex_y)
+void	texel_scale(t_s32 *texel, t_s32 translatedx,
+			t_s32 sprite_width_scale, t_s32 tex_y)
 {
-	sint32	tex_x[4];
-	sint32	translated_x[4];
+	t_s32	tex_x[4];
+	t_s32	translated_x[4];
 
 	translated_x[0] = translatedx;
 	translated_x[1] = translatedx + 1;
@@ -32,10 +32,10 @@ void	texel_scale(sint32 *texel, sint32 translatedx,
 	texel[3] = tex_x[3] + tex_y;
 }
 
-void	draw_to_pixel(uint32 *img, uint32 *tex_data, sint32 *texel,
-			f32 distance)
+void	draw_to_pixel(t_u32 *img, t_u32 *tex_data, t_s32 *texel,
+			t_f32 distance)
 {
-	sint32	color[4];
+	t_s32	color[4];
 
 	if ((color[0] = tex_data[texel[0]]) != TEXTURE_BLANK)
 		*img = lighting(color[0], distance);
@@ -54,18 +54,18 @@ static void	precalculate_offset(t_entity_render_info *info)
 }
 
 //NOTE (jae) : can be troublesome if the size of the sprite is not multiple of 4
-void	entity_render(uint32 *img, f32 *perp_dist, t_items *item,
+void	entity_render(t_u32 *img, t_f32 *perp_dist, t_items *item,
 			t_entity_render_info *info)
 {
 	t_2d_p		idx;
-	sint32		tex_y;
-	sint32		img_y;
+	t_s32		tex_y;
+	t_s32		img_y;
 	t_2d_p		translated;
-	sint32		texel[4];
+	t_s32		texel[4];
 
 	idx.y = info->draw_start.y + 1;
 	while (idx.y < info->draw_end.y)
-	{
+{
 		translated.y = ((idx.y + info->view) << 1) + info->offset.y;
 		tex_y = (((translated.y * item->tex->height) / info->sprite_size) >> 1)
 			* item->tex->width;
@@ -84,15 +84,15 @@ void	entity_render(uint32 *img, f32 *perp_dist, t_items *item,
 	}
 }
 
-void	entity_render_init(t_entity_render_info *info, sint32 view,
+void	entity_render_init(t_entity_render_info *info, t_s32 view,
 			t_items *item)
 {
-	sint32	sprite_pos_screen;
+	t_s32	sprite_pos_screen;
 
 	info->offset.x = 0;
-	info->sprite_size = abs((sint32)((f32)H / item->transformed_sprite_pos.y));
+	info->sprite_size = abs((t_s32)((t_f32)H / item->transformed_sprite_pos.y));
 	info->sprite_width_scale = (item->tex->width << 16) / info->sprite_size;
-	sprite_pos_screen = (sint32)(((f32)W) *
+	sprite_pos_screen = (t_s32)(((t_f32)W) *
 		(1.0f + item->transformed_sprite_pos.x /
 			item->transformed_sprite_pos.y));
 	info->draw_start.x = (-info->sprite_size + sprite_pos_screen) >> 1;
@@ -100,11 +100,11 @@ void	entity_render_init(t_entity_render_info *info, sint32 view,
 	info->draw_start.y = ((-info->sprite_size + H) >> 1) - view;
 	info->draw_end.y = ((info->sprite_size + H) >> 1) - view;
 	if (info->draw_start.x < 0)
-	{
+{
 		info->offset.x = info->draw_start.x;
 		info->draw_start.x = 0;
 	}
-	if (info->draw_end.x >= W)
+if (info->draw_end.x >= W)
 		info->draw_end.x = W - 1;
 	if (info->draw_start.y < 0)
 		info->draw_start.y = 0;
@@ -112,10 +112,10 @@ void	entity_render_init(t_entity_render_info *info, sint32 view,
 		info->draw_end.y = H - 1;
 }
 
-sint8	entity_render_setup(t_items *item, sint32 view,
+t_s8	entity_render_setup(t_items *item, t_s32 view,
 			t_entity_render_info *info)
 {
-	sint32	sprite_horiz_pos;
+	t_s32	sprite_horiz_pos;
 
 	entity_render_init(info, view, item);
 	if (info->draw_start.x >= W || info->draw_end.x < 0
@@ -131,10 +131,10 @@ sint8	entity_render_setup(t_items *item, sint32 view,
 	return (1);
 }
 
-void	entity_draw_loop(t_wolf *wf, t_items *item, sint32 *order,
-			sint32 nbr_of_entities)
+void	entity_draw_loop(t_wolf *wf, t_items *item, t_s32 *order,
+			t_s32 nbr_of_entities)
 {
-	sint32					index;
+	t_s32					index;
 	t_entity_render_info	info;
 
 	index = 0;
@@ -147,6 +147,6 @@ void	entity_draw_loop(t_wolf *wf, t_items *item, sint32 *order,
 				entity_render(wf->img, wf->perp_dist, &item[order[index]],
 					&info);
 		}
-		index++;
+index++;
 	}
 }
