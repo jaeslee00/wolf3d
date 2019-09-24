@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:02:53 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/09 18:24:19 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/24 13:25:50 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	mouse_movement(t_wolf *wolf, SDL_Event event)
 		old.x = p->direction.x;
 		p->direction.x = p->direction.x * cosine - p->direction.y * sine;
 		p->direction.y = old.x * sine + p->direction.y * cosine;
-		p->m->rotation += sine;
+		p->m->rotation += motion;
 		old.y = p->plane.x;
 		p->plane.x = p->plane.x * cosine - p->plane.y * sine;
 		p->plane.y = old.y * sine + p->plane.y * cosine;
