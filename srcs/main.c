@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/22 21:31:33 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/24 13:43:49 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ t_m3x3	final_projection(t_wolf *wolf)
 
 static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 {
-ft_bzero(time, sizeof(t_2d_p));
+	ft_bzero(time, sizeof(t_2d_p));
 	tkneizer(fd, wolf);
 	ft_wolf_init(wolf, sdl);
 	wolf->proj_matrix = identity();
-	wolf->player->m->rotation = 1.5f;
+	wolf->player->m->rotation = 90.f * PI32 / 180.f;
 	wolf->player->m->scale = 15;
 	wolf->proj_matrix = final_projection(wolf);
 	count_entities(wolf->map, wolf->obj, wolf->entity);
@@ -55,7 +55,7 @@ static void	get_input(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
 
 static void	draw_on_screen(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
 {
-entity_draw_loop(wolf, wolf->entity->item, wolf->entity->order, wolf->entity->nbr_of_entities);
+	entity_draw_loop(wolf, wolf->entity->item, wolf->entity->order, wolf->entity->nbr_of_entities);
 	wolf->proj_matrix = final_projection(wolf);
 	draw_hud(wolf, deltatime);
 	SDL_UpdateTexture(sdl->texture, NULL, wolf->img,
@@ -74,8 +74,8 @@ int		main(int ac, char **av)
 	fd = mem_init(&wolf, ac, av);
 	if (fd > 0)
 	{
-general_inits(&wolf, fd, &time, &sdl);
-while (1)
+		general_inits(&wolf, fd, &time, &sdl);
+		while (1)
 		{
 			time.x = SDL_GetTicks();
 			get_input(&wolf, time.x - time.y, &sdl);
@@ -85,8 +85,8 @@ while (1)
 			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);
 			background(&wolf, wolf.img);
 			raycast(&wolf);
-draw_on_screen(&wolf, SDL_GetTicks() - time.x, &sdl);
-}
+			draw_on_screen(&wolf, SDL_GetTicks() - time.x, &sdl);
+		}
 	}
 	return (0);
 }
