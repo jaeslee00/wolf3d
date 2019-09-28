@@ -79,7 +79,7 @@ int		main(int ac, char **av)
 		{
 			time.x = SDL_GetTicks();
 			get_input(&wolf, time.x - time.y, &sdl);
-			//printf("%d ms\t", time.x - time.y);
+			printf("%d ms\t", time.x - time.y);
 			time.y = SDL_GetTicks();
 			event_handler(&wolf, wolf.map, wolf.doors);
 			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);

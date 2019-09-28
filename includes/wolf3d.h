@@ -16,13 +16,13 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-// # define W	(2560)
+ # define W	(2560)
 //# define H	(1440)
 //#define W	(720)
 //#define H	(520)
  //# define W	(3120)
  //# define H	(2080)
- # define W	(1920)
+ //# define W	(1920)
  # define H	(1080)
 # define TEXTURE_0	0
 # define TEXTURE_1	1

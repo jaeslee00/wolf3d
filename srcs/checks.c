@@ -17,6 +17,8 @@ t_s32		is_invalid(t_s8 *str)
 	t_s32	i;
 
 	i = 0;
+	if (str[0] == '\0')
+		return (0);
 	while (str[i] != '\0')
 	{
 		if (str[i] != ' ' && str[i] != ',' &&
@@ -29,7 +31,7 @@ t_s32		is_invalid(t_s8 *str)
 
 void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 {
-	(void)wolf;
+(void)wolf;
 	if (mem == NULL)
 	{
 		if (error == -2)
@@ -54,8 +56,6 @@ t_s32		mem_init(t_wolf *wolf, t_s32 ac, char **av)
 
 	fd = 0;
 	ft_bzero(&wolf[0], sizeof(*wolf));
-	//printf("size of wolf = %d\n", sizeof(*wolf));
-	//printf("size of ind %d\n", sizeof(t_sdl) + sizeof(t_mem) + sizeof(t_obj) + sizeof(wolf->img) + sizeof(char));
 	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 100)), wolf, -5);
 	wolf->mem.tsize = (1024 * 1024 * 100);
 	wolf->mem.usize = sizeof(t_s32);
