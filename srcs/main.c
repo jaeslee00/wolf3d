@@ -27,13 +27,14 @@ static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 	tkneizer(fd, wolf);
 	ft_wolf_init(wolf, sdl);
 	wolf->proj_matrix = identity();
+	ft_bzero(&wolf->player->pos, sizeof(wolf->player->pos));
 	wolf->player->m->rotation = 90.f * PI32 / 180.f;
 	wolf->player->m->scale = 15;
 	wolf->proj_matrix = final_projection(wolf);
 	count_entities(wolf->map, wolf->obj, wolf->entity);
 	init_entities(wolf->entity, wolf);
-	print_map(wolf->map, wolf->obj, wolf->player, wolf->doors, wolf);
-	sdl->renderer = SDL_CreateRenderer(sdl->win, -1, 0);
+	parse_map(wolf);
+		sdl->renderer = SDL_CreateRenderer(sdl->win, -1, 0);
 	sdl->texture = SDL_CreateTexture(sdl->renderer,
 		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
 	SDL_SetRelativeMouseMode(SDL_TRUE);

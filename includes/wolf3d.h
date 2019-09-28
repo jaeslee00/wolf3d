@@ -288,7 +288,7 @@ t_s32			tkneizer(t_s32 fd, t_wolf *wolf);
 t_s32			lerp(t_f64 a, t_f32 t, t_f64 b);
 t_s32			rgb_lerp(t_s32 color1, t_f32 t, t_s32 color2);
 t_s32			direction_movement(t_wolf *wolf, t_s8 **map, t_s32 framedelta);
-t_s32			print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
+t_s32			parse_map(t_wolf *wolf);
 t_s32			mem_init(t_wolf *wolf, t_s32 ac, char **av);
 void			draw_minimap(t_wolf *wolf);
 void			palette(t_u32 *img, t_palette *p, t_u32 size);

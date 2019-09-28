@@ -29,6 +29,8 @@ t_s8		**int_to_tab(t_wolf *wolf)
 			sizeof(**tab) * (wolf->obj.w)), wolf, -1);
 		while (j < wolf->obj.w)
 		{
+			if (i == 0 || j == 0 || j + 1 == wolf->obj.w || i - 1 == wolf->obj.h)
+				wolf->obj.nb[k] = 1;
 			tab[i][j] = wolf->obj.nb[k];
 			j++;
 			k++;

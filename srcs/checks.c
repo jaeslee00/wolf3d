@@ -42,6 +42,8 @@ void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 			ft_putstr_fd("Malloc didn't want to give you memory. SAD\n", 2);
 		else if (error == -4)
 			ft_putstr_fd("Texture isn't actually bmp file\n", 2);
+		else if (error == -5)
+			ft_putstr_fd("There is no player on the map, try putting a 9 on the map\n", 2);
 		if (error < 0)
 			error = -1;
 		exit(error);

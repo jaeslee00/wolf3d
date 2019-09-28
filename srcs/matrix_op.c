@@ -103,17 +103,24 @@ t_2d	transform(t_m3x3 a, t_2d p)
 	return (r);
 }
 
-t_2d	find_center(t_wolf *wolf)
+t_m3x3	scale(t_f32	scale)
 {
-	t_s32	center;
-	t_2d	offset;
-	
-	if (wolf->obj.size % 2 == 0)
-		center = round(wolf->obj.size / 2) + round((wolf->obj.w) / 2);
-	else
-		center = round(wolf->obj.size / 2);
-	(void)center;
-	offset.x = ((W / 2) - transform(wolf->proj_matrix, wolf->player->pos).x);
-	offset.y = ((H / 2) - transform(wolf->proj_matrix, wolf->player->pos).y);
-	return (offset);
+	t_m3x3	r;
+
+	r = identity();
+	r.e[0][0] = 1 * scale;
+	r.e[1][1] = 1 * scale;
+	r.e[2][2] = 1 * scale;
+	return (r);
+}
+
+t_m3x3	translate(t_m3x3 a, t_2d	offset)
+{
+	t_m3x3	r;
+
+	r = a;
+	r.e[2][0] = offset.x;
+	r.e[2][1] = offset.y;
+	r.e[2][2] = 1;
+	return (r);
 }
