@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/28 02:44:27 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/28 03:59:59 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ t_s32	dda_raycast(t_wolf *wf, t_raycaster *ray)
 
 void	dda_init(t_raycaster *ray, t_player *p)
 {
-	ray->delta_dist.x = fabs(1.0f / p->ray.x);
-	ray->delta_dist.y = fabs(1.0f / p->ray.y);
+	ray->delta_dist.x = fabsf(1.0f / p->ray.x);
+	ray->delta_dist.y = fabsf(1.0f / p->ray.y);
 	ray->map.x = (t_s32)p->pos.x;
 	ray->map.y = (t_s32)p->pos.y;
 	if (p->ray.x < 0)
@@ -94,10 +94,10 @@ void	dda_init(t_raycaster *ray, t_player *p)
 void	raycast(t_wolf *wf)
 {
 	t_raycaster	ray;
-	t_f32			line_height;
+	t_f32		line_height;
 	t_s32		x;
-	t_f32			scale;
-	t_f32			cam_scale;
+	t_f32		scale;
+	t_f32		cam_scale;
 
 	scale = 2.0f / (t_f32)W;
 	x = 0;
@@ -113,7 +113,7 @@ void	raycast(t_wolf *wf)
 		ray.perp_dist = wf->dist[ray.side](&ray, wf->player);
 		wf->perp_dist[x] = ray.perp_dist;
 		line_height = (t_s32)((t_f32)H / ray.perp_dist);
-		if (line_height > 1 && x % 2 == 0)
+		if (line_height > 1 && (x % 2 == 0))
 			draw_wall(wf, line_height, x, &ray);
 		x++;
 	}
