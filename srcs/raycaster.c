@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/24 13:07:55 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/28 02:44:27 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	raycast(t_wolf *wf)
 		ray.perp_dist = wf->dist[ray.side](&ray, wf->player);
 		wf->perp_dist[x] = ray.perp_dist;
 		line_height = (t_s32)((t_f32)H / ray.perp_dist);
-		if (line_height > 1)
+		if (line_height > 1 && x % 2 == 0)
 			draw_wall(wf, line_height, x, &ray);
 		x++;
 	}
