@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/28 02:42:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/28 08:10:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	texture_map(t_wolf *wf, t_texture_map *tex_map, t_s32 x, t_f32 perp_dist,
 	t_s32	tex_y;
 	t_s32	y_offset;
 	t_s32	y;
-	t_s32 precalc;
+	t_s32 	precalc;
 	t_u32	*img = wf->img;
 
 	precalc = (tex->height << 24) / tex_map->column_height;
@@ -55,10 +55,10 @@ void	texture_map(t_wolf *wf, t_texture_map *tex_map, t_s32 x, t_f32 perp_dist,
 	{
 		translated_y = y + y_offset;
 		tex_y = ((translated_y * precalc) >> 24) * tex->width;
-		color = tex->data[tex_y + tex_map->tex_x];
+		color = lighting(tex->data[tex_y + tex_map->tex_x], perp_dist);
 		//NOTE (jae) : cache-miss in jumping over img[] by y * W in every iteration... T-T
-		img[x + y * W] = lighting(color, perp_dist);
-		img[x + 1 + y * W] = lighting(color, perp_dist);
+		img[x + y * W] = color;
+		img[(x + 1) + (y * W)] = color;
 		y++;
 	}
 }
@@ -84,5 +84,5 @@ void	draw_wall(t_wolf *wf, t_s32 line_height, t_s32 x, t_raycaster *ray)
 	tex_width_scale -= floor(tex_width_scale);
 	tex_map.tex_x = (t_s32)(tex_width_scale * (t_f32)wf->tex[(t_s32)texture_pick(ray)].width);
 	//TODO (jae) : reverse texture when looking left
-	texture_map(wf, &tex_map, x, ray->perp_dist, &wf->tex[tex_id]);
+	texture_map(wf, &tex_map, x, ray->perp_dist, (wf->tex + tex_id));
 }
