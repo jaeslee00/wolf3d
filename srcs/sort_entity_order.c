@@ -6,13 +6,13 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/05 01:40:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/17 20:43:13 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/27 22:41:38 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	swap_integer(t_s32 *a, t_s32 *b)
+static void	swap_integer(t_s32 *a, t_s32 *b)
 {
 	t_s32 tmp;
 
@@ -21,7 +21,7 @@ void	swap_integer(t_s32 *a, t_s32 *b)
 	*b = tmp;
 }
 
-void	swap_float(t_f32 *a, t_f32 *b)
+static void	swap_float(t_f32 *a, t_f32 *b)
 {
 	t_f32 tmp;
 
@@ -30,7 +30,7 @@ void	swap_float(t_f32 *a, t_f32 *b)
 	*b = tmp;
 }
 
-t_s32	partition(t_s32 *depth_buffer, t_f32 *depth, t_s32 low, t_s32 high)
+static t_s32	partition(t_s32 *depth_buffer, t_f32 *depth, t_s32 low, t_s32 high)
 {
 	t_f32		pivot;
 	t_s32	i;
@@ -54,7 +54,7 @@ t_s32	partition(t_s32 *depth_buffer, t_f32 *depth, t_s32 low, t_s32 high)
 	return (i + 1);
 }
 
-void	quick_sort(t_s32 *depth_buffer, t_f32 *depth, t_s32 low, t_s32 high)
+static void	quick_sort(t_s32 *depth_buffer, t_f32 *depth, t_s32 low, t_s32 high)
 {
 	t_s32 pivot_idx;
 
@@ -70,7 +70,7 @@ void	sort_depth_buffer(t_entity *entity, t_items *item, t_player *player)
 {
 	t_s32	index;
 	t_2d	relative_entity_pos;
-	t_f32		inv_det;
+	t_f32	inv_det;
 
 	index = 0;
 	inv_det = 1.0f / (player->plane.x * player->direction.y -

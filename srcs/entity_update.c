@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 22:55:41 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/24 12:25:20 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/27 22:44:15 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,6 @@ void	draw_to_pixel(t_u32 *img, t_u32 *tex_data, t_s32 *texel,
 		*(img + 3) = lighting(color[3], distance);
 }
 
-static void	precalculate_offset(t_entity_render_info *info)
-{
-	info->offset.x += info->draw_start.x;
-	info->offset.y = info->sprite_size - H;
-}
-
 //NOTE (jae) : can be troublesome if the size of the sprite is not multiple of 4
 void	entity_render(t_u32 *img, t_f32 *perp_dist, t_items *item,
 			t_entity_render_info *info)
@@ -65,7 +59,7 @@ void	entity_render(t_u32 *img, t_f32 *perp_dist, t_items *item,
 
 	idx.y = info->draw_start.y + 1;
 	while (idx.y < info->draw_end.y)
-{
+	{
 		translated.y = ((idx.y + info->view) << 1) + info->offset.y;
 		tex_y = (((translated.y * item->tex->height) / info->sprite_size) >> 1)
 			* item->tex->width;
@@ -100,11 +94,11 @@ void	entity_render_init(t_entity_render_info *info, t_s32 view,
 	info->draw_start.y = ((-info->sprite_size + H) >> 1) - view;
 	info->draw_end.y = ((info->sprite_size + H) >> 1) - view;
 	if (info->draw_start.x < 0)
-{
+	{
 		info->offset.x = info->draw_start.x;
 		info->draw_start.x = 0;
 	}
-if (info->draw_end.x >= W)
+	if (info->draw_end.x >= W)
 		info->draw_end.x = W - 1;
 	if (info->draw_start.y < 0)
 		info->draw_start.y = 0;
@@ -112,23 +106,20 @@ if (info->draw_end.x >= W)
 		info->draw_end.y = H - 1;
 }
 
-t_s8	entity_render_setup(t_items *item, t_s32 view,
+void	entity_render_setup(t_items *item, t_s32 view,
 			t_entity_render_info *info)
 {
 	t_s32	sprite_horiz_pos;
 
 	entity_render_init(info, view, item);
-	if (info->draw_start.x >= W || info->draw_end.x < 0
-		|| info->draw_start.y >= H || info->draw_end.y < 0)
-		return (-1);
 	sprite_horiz_pos = (info->draw_start.x + info->offset.x + info->draw_end.x) >> 1;
 	if (sprite_horiz_pos < (W >> 1) + (info->sprite_size >> 2)
 		&& sprite_horiz_pos > (W >> 1) - (info->sprite_size >> 2))
 		item->flag |= 1UL;
 	else
 		item->flag &= ~1UL;
-	precalculate_offset(info);
-	return (1);
+	info->offset.x += info->draw_start.x;
+	info->offset.y = info->sprite_size - H;
 }
 
 void	entity_draw_loop(t_wolf *wf, t_items *item, t_s32 *order,
@@ -143,10 +134,9 @@ void	entity_draw_loop(t_wolf *wf, t_items *item, t_s32 *order,
 	{
 		if (item[order[index]].transformed_sprite_pos.y > 0.0f)
 		{
-			if (entity_render_setup(&item[order[index]], wf->view, &info) > 0)
-				entity_render(wf->img, wf->perp_dist, &item[order[index]],
-					&info);
+			entity_render_setup(&item[order[index]], wf->view, &info);
+			entity_render(wf->img, wf->perp_dist, &item[order[index]], &info);
 		}
-index++;
+		index++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/24 12:57:15 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/28 02:47:46 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ typedef struct	s_texture_map
 {
 	t_s32	start;
 	t_s32	end;
-	t_2d_p	coord;
+	t_s32	tex_x;
 	t_s32	column_height;
 }				t_texture_map;
 
@@ -118,7 +118,7 @@ typedef struct	s_minimap
 	t_f32		scale;
 	t_f32		rotation;
 	t_2d		offset;
-	}				t_minimap;
+}				t_minimap;
 
 typedef struct	s_obj
 {
@@ -138,7 +138,7 @@ typedef struct	s_sdl
 
 typedef struct	s_palette
 {
-t_u32		*pal;
+	t_u32		*pal;
 	t_u32		size;
 }				t_palette;
 
@@ -148,8 +148,8 @@ typedef struct	s_player
 	t_2d		pos;
 	t_2d		direction;
 	t_2d		plane;
-t_f32			speed;
-t_minimap	*m;
+	t_f32		speed;
+	t_minimap	*m;
 	}				t_player;
 
 typedef struct	s_file
@@ -171,7 +171,7 @@ typedef struct	s_raycaster
 	t_2d	side_dist;
 	t_2d	delta_dist;
 	t_2d	plane;
-	t_f32		perp_dist;
+	t_f32	perp_dist;
 	t_s32	hit;
 	t_s32	side;
 }				t_raycaster;
@@ -190,7 +190,6 @@ typedef struct	s_entity_render_info
 
 typedef struct	s_items
 {
-	t_s32		id;
 	t_2d		pos;
 	t_2d		transformed_sprite_pos;
 	t_s32		flag;
@@ -201,7 +200,7 @@ typedef struct	s_items
 typedef struct	s_entity
 {
 	t_s32	nbr_of_entities;
-	t_f32		*depth;
+	t_f32	*depth;
 	t_s32	*order;
 	t_items	*item;
 }				t_entity;
@@ -228,10 +227,10 @@ typedef struct	s_wolf
 	t_animation	a;
 	t_s32		view;
 	t_entity	*entity;
-	t_f32			*perp_dist;
+	t_f32		*perp_dist;
 	//t_2d		*minimap;
 	t_2d		*p;
-	t_m3x3	proj_matrix;
+	t_m3x3		proj_matrix;
 }				t_wolf;
 
 typedef struct	s_ln
