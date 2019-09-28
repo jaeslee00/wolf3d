@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/28 08:10:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/28 21:03:21 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_s32	lighting(t_s32 color, t_f32 distance)
 	return (rgb_lerp(0, light + 0.19f, color));
 }
 
-t_s8	texture_pick(t_raycaster *ray)
+t_s32	texture_pick(t_raycaster *ray)
 {
 	if (ray->side == 0)
 		return (ray->step.x < 0 ? TEXTURE_0 : TEXTURE_1);
@@ -55,7 +55,7 @@ void	texture_map(t_wolf *wf, t_texture_map *tex_map, t_s32 x, t_f32 perp_dist,
 	{
 		translated_y = y + y_offset;
 		tex_y = ((translated_y * precalc) >> 24) * tex->width;
-		color = lighting(tex->data[tex_y + tex_map->tex_x], perp_dist);
+		color = lighting(tex->data[tex_map->tex_x + tex_y], perp_dist);
 		//NOTE (jae) : cache-miss in jumping over img[] by y * W in every iteration... T-T
 		img[x + y * W] = color;
 		img[(x + 1) + (y * W)] = color;
@@ -66,7 +66,7 @@ void	texture_map(t_wolf *wf, t_texture_map *tex_map, t_s32 x, t_f32 perp_dist,
 void	draw_wall(t_wolf *wf, t_s32 line_height, t_s32 x, t_raycaster *ray)
 {
 	t_texture_map	tex_map;
-	t_f32				tex_width_scale;
+	t_f32			tex_width_scale;
 	t_s32			tex_id;
 
 	tex_id = texture_pick(ray);
@@ -82,7 +82,7 @@ void	draw_wall(t_wolf *wf, t_s32 line_height, t_s32 x, t_raycaster *ray)
 	else
 		tex_width_scale = wf->player->pos.x + ray->perp_dist * wf->player->ray.x;
 	tex_width_scale -= floor(tex_width_scale);
-	tex_map.tex_x = (t_s32)(tex_width_scale * (t_f32)wf->tex[(t_s32)texture_pick(ray)].width);
+	tex_map.tex_x = (t_s32)(tex_width_scale * (t_f32)wf->tex[texture_pick(ray)].width);
 	//TODO (jae) : reverse texture when looking left
 	texture_map(wf, &tex_map, x, ray->perp_dist, (wf->tex + tex_id));
 }
