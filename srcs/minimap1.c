@@ -90,7 +90,7 @@ static void	drawline(t_wolf *wolf, t_pts pts, t_s32 nb, t_s32 nb1)
 					wolf->img[xy.x + (xy.y * W)] = 0x00BB00;
 				else if (nb == 3 || nb1 == 3 || nb == 5 || nb1 == 5)
 					wolf->img[xy.x + (xy.y * W)] = 0xBB0000;
-				else if (nb != 0 || nb1 != 0)
+				else if ((nb != 0 || nb1 != 0) && (nb != 9 && nb1 != 9))
 					wolf->img[xy.x + (xy.y * W)] = 0x555555;
 				else
 					wolf->img[xy.x + (xy.y * W)] = 0x000000;
@@ -110,8 +110,8 @@ void	init_points(t_wolf *wolf)
 	t_s32	k;
 
 	i = 0;
-	k = 0;
-	j = 0;
+	k = 1;
+	j = 1;
 	while (k < wolf->obj.size)
 	{
 		if (k % wolf->obj.w == 0)

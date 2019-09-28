@@ -67,11 +67,13 @@ t_s32		tkneizer(t_s32 fd, t_wolf *wolf)
 		if (wolf->obj.w == 0)
 			wolf->obj.w = xy.x;
 		xy.y++;
-		if ((xy.x) % wolf->obj.w != 0 || is_invalid(line))
+		if (is_invalid(line) || (xy.x) % wolf->obj.w != 0)
 			is_alloc(NULL, wolf, -2);
 		free(line);
 	}
 	wolf->obj.size = xy.x;
-	wolf->obj.h = wolf->obj.size / wolf->obj.w;
+	if (wolf->obj.size == 0)
+			is_alloc(NULL, wolf, -2);
+		wolf->obj.h = wolf->obj.size / wolf->obj.w;
 	return (1);
 }
