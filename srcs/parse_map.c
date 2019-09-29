@@ -13,7 +13,7 @@
 
 #include "wolf3d.h"
 
-void	count_entities(t_s8 **map, t_obj obj, t_entity *entity)
+void		count_entities(t_s8 **map, t_obj obj, t_entity *entity)
 {
 	t_s32	i;
 	t_s32	j;
@@ -34,7 +34,7 @@ void	count_entities(t_s8 **map, t_obj obj, t_entity *entity)
 
 static t_u8	get_player_pos(t_wolf* wolf, t_s32 i, t_s32 j)
 {
-	t_player *p;
+	t_player	*p;
 
 	p = wolf->player;
 	if (wolf->map[i][j] == 9)
@@ -70,7 +70,7 @@ static t_u8	parse_doors(t_wolf *wolf, t_s32 i, t_s32 j, t_s32 *k)
 	return (1);
 }
 
-static void parse_items(t_wolf *wolf, t_s32 i, t_s32 j, t_s32 *k)
+static void	parse_items(t_wolf *wolf, t_s32 i, t_s32 j, t_s32 *k)
 {
 	if (wolf->map[i][j] == 4)
 	{
@@ -80,7 +80,7 @@ static void parse_items(t_wolf *wolf, t_s32 i, t_s32 j, t_s32 *k)
 	}
 }
 
-t_s32 parse_map(t_wolf *wolf)
+t_s32		parse_map(t_wolf *wolf)
 {
 	t_s32	i;
 	t_s32	j;
