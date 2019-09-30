@@ -51,16 +51,15 @@ void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 	}
 }
 
-// TODO(viccarau): All the allocations of memory will be done here
-//                Music, textures, EVERYTHING
+// TODO(viccarau): Free memory at every exit
 t_s32		mem_init(t_wolf *wolf, t_s32 ac, char **av)
 {
 	t_s32	fd;
 
 	fd = 0;
 	ft_bzero(&wolf[0], sizeof(*wolf));
-	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 20)), wolf, -5);
-	wolf->mem.tsize = (1024 * 1024 * 20);
+	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 200)), wolf, -5);
+	wolf->mem.tsize = (1024 * 1024 * 200);
 	wolf->mem.usize = sizeof(t_s32);
 	if (ac == 2)
 		fd = open(av[1], O_RDONLY);

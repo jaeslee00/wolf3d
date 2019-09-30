@@ -41,11 +41,11 @@ void	draw_crosshair(t_wolf *wolf)
 	}
 }
 
-void	draw_machinegun(t_wolf *wolf, t_u32 deltaframe)
+void	draw_machinegun(t_wolf *wolf)
 {
 	if (wolf->flag & 1UL << 9)
 	{
-		wolf->a.gun += deltaframe;
+		wolf->a.gun += wolf->deltatime;
 		if(wolf->a.gun < (t_s32)wolf->a.frame)
 		{
 			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
@@ -54,7 +54,7 @@ void	draw_machinegun(t_wolf *wolf, t_u32 deltaframe)
 				wolf->entity->item[i].flag |= 1UL << 1;
 				wolf->entity->item[i].tex = &wolf->tex[13];
 			}
-			wolf->view -= 1;
+			wolf->view -= wolf->deltatime / 2;
 			draw_gun(wolf, 11);
 		}
 		else

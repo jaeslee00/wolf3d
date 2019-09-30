@@ -34,8 +34,10 @@ void	ft_wolf_init(t_wolf *wolf, t_sdl *sdl)
 {
 	wolf->map = int_to_tab(wolf);
 	SDL_Init(SDL_INIT_EVERYTHING);
+	//sdl->win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
+	//SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	sdl->win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		SDL_WINDOWPOS_CENTERED, W, H, 0);
 	SDL_SetWindowBordered(sdl->win, SDL_TRUE);
 	printf("wolf->mem.usize = %I64d, %I64d\n", wolf->mem.usize, wolf->mem.tsize);
 	printf("size of img = %I64d\n", W * H * sizeof(t_u32));

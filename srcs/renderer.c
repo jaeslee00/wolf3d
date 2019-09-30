@@ -104,6 +104,3 @@ void			background(t_wolf *wolf, t_u32 *img)
 	else
 		look_up_down(wolf, img);
 }
-
-// TODO(viccarau): In order to create the pallete, we can calculate the H * 2,
-// then the middle point is where the pallete starts to draw
