@@ -12,7 +12,6 @@
 
 #include "wolf3d.h"
 
-
 t_2d	find_center(t_wolf *wolf)
 {
 	t_s32	center;

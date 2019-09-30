@@ -29,7 +29,7 @@ static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 	wolf->proj_matrix = identity();
 	ft_bzero(&wolf->player->pos, sizeof(wolf->player->pos));
 	wolf->player->m->rotation = 90.f * PI32 / 180.f;
-	wolf->player->m->scale = 15;
+	wolf->player->m->scale = (((W * H) / (640 * 480)) + 10);
 	wolf->proj_matrix = final_projection(wolf);
 	count_entities(wolf->map, wolf->obj, wolf->entity);
 	init_entities(wolf->entity, wolf);
@@ -38,6 +38,7 @@ static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 	sdl->texture = SDL_CreateTexture(sdl->renderer,
 		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
+	  wolf->background = ceiling(wolf);
 }
 
 static void	get_input(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
@@ -80,7 +81,7 @@ int		main(int ac, char **av)
 		{
 			time.x = SDL_GetTicks();
 			get_input(&wolf, time.x - time.y, &sdl);
-			printf("%d ms\t", time.x - time.y);
+			//printf("%d ms\t", time.x - time.y);
 			time.y = SDL_GetTicks();
 			event_handler(&wolf, wolf.map, wolf.doors);
 			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);

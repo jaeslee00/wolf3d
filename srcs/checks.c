@@ -34,6 +34,7 @@ void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 (void)wolf;
 	if (mem == NULL)
 	{
+		printf("\ntsize = %I64d\nusize = %I64d \n", wolf->mem.tsize, wolf->mem.usize);
 		if (error == -2)
 			ft_putstr_fd("Invalid map, not enough y values or invalid file\n", 2);
 		else if (error == -3)
@@ -58,8 +59,8 @@ t_s32		mem_init(t_wolf *wolf, t_s32 ac, char **av)
 
 	fd = 0;
 	ft_bzero(&wolf[0], sizeof(*wolf));
-	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 100)), wolf, -5);
-	wolf->mem.tsize = (1024 * 1024 * 100);
+	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 20)), wolf, -5);
+	wolf->mem.tsize = (1024 * 1024 * 20);
 	wolf->mem.usize = sizeof(t_s32);
 	if (ac == 2)
 		fd = open(av[1], O_RDONLY);

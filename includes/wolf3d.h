@@ -16,13 +16,13 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
- # define W	(2560)
+ //# define W	(2560)
 //# define H	(1440)
-//#define W	(720)
-//#define H	(520)
+//#define W	(640)
+//#define H	(480)
  //# define W	(3120)
  //# define H	(2080)
- //# define W	(1920)
+#define W	(1920)
  # define H	(1080)
 # define TEXTURE_0	0
 # define TEXTURE_1	1
@@ -231,6 +231,7 @@ typedef struct	s_wolf
 	//t_2d		*minimap;
 	t_2d		*p;
 	t_m3x3		proj_matrix;
+	t_palette	background;
 }				t_wolf;
 
 typedef struct	s_ln
@@ -240,13 +241,14 @@ typedef struct	s_ln
 	int		p;
 }				t_ln;
 
-
 typedef struct	s_pts
 {
 	t_2d	min;
 	t_2d	max;
 }				t_pts;
 
+void			draw_crosshair(t_wolf *wolf);
+t_palette		ceiling(t_wolf *wolf);
 t_m3x3			translate(t_m3x3 a, t_2d	offset);
 t_m3x3			final_projection(t_wolf *wolf);
 t_m3x3			rot(float angle);
