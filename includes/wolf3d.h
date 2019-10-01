@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/01 17:56:56 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/01 18:01:15 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
-// # define W	(2560)
-// # define H	(1440)
-// # define W	(720)
-// # define H	(520)
-// # define W	(3120)
-// # define H	(2080)
-# define W	(1920)
-# define H	(1080)
+ //# define W	(2560)
+//# define H	(1440)
+//#define W	(640)
+//#define H	(480)
+ //# define W	(3120)
+ //# define H	(2080)
+#define W	(1920)
+ # define H	(1080)
 # define TEXTURE_0	0
 # define TEXTURE_1	1
 # define TEXTURE_2	2
@@ -231,6 +231,8 @@ typedef struct	s_wolf
 	//t_2d		*minimap;
 	t_2d		*p;
 	t_m3x3		proj_matrix;
+	t_palette	background;
+	t_s32		deltatime;
 }				t_wolf;
 
 typedef struct	s_ln
@@ -240,13 +242,14 @@ typedef struct	s_ln
 	int		p;
 }				t_ln;
 
-
 typedef struct	s_pts
 {
 	t_2d	min;
 	t_2d	max;
 }				t_pts;
 
+void			draw_crosshair(t_wolf *wolf);
+t_palette		ceiling(t_wolf *wolf);
 t_m3x3			translate(t_m3x3 a, t_2d	offset);
 t_m3x3			final_projection(t_wolf *wolf);
 t_m3x3			rot(float angle);
@@ -264,7 +267,7 @@ void			ft_wolf_init(t_wolf *wolf, t_sdl *sdl);
 void			init_entities(t_entity *entity, t_wolf *wolf);
 void			tex_to_mem(t_texture tex, t_wolf *wolf);
 void			load_music(char *path, t_audio *audio);
-void			draw_hud(t_wolf *wolf, t_u32 deltaframe);
+void			draw_hud(t_wolf *wolf);
 t_2d_p			init_2d(t_s32 x, t_s32 y);
 void			draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, t_u32 size);
 funct			*perp_dist(t_wolf *wolf);
@@ -287,12 +290,12 @@ t_s32			is_valid(t_f32 x, t_f32 y);
 t_s32			tkneizer(t_s32 fd, t_wolf *wolf);
 t_s32			lerp(t_f64 a, t_f32 t, t_f64 b);
 t_s32			rgb_lerp(t_s32 color1, t_f32 t, t_s32 color2);
-t_s32			direction_movement(t_wolf *wolf, t_s8 **map, t_s32 framedelta);
-t_s32			print_map(char **map, t_obj obj, t_player *player, t_door *doors, t_wolf *wolf);
+t_s32			direction_movement(t_wolf *wolf, t_s8 **map);
+t_s32			parse_map(t_wolf *wolf);
 t_s32			mem_init(t_wolf *wolf, t_s32 ac, char **av);
 void			draw_minimap(t_wolf *wolf);
 void			palette(t_u32 *img, t_palette *p, t_u32 size);
-void			check_flag(t_wolf *wolf, t_s8 **map, t_s32 framedelta);
+void			check_flag(t_wolf *wolf, t_s8 **map);
 void			set_flag(t_wolf *wolf, SDL_Event event);
 void			ft_frametimes(t_s32 *frames, t_s32 *count);
 void			event_handler(t_wolf *wolf, char **map, t_door *doors);
@@ -306,7 +309,7 @@ void			pers_keys(t_s32 keycode, t_wolf *wolf);
 void			minimap(t_wolf *wolf);
 void			mouse_movement(t_wolf *wolf, SDL_Event event);
 void			draw_gun(t_wolf *wolf, t_u32 tex_id);
-void			draw_machinegun(t_wolf *wolf, t_u32 deltaframe);
+void			draw_machinegun(t_wolf *wolf);
 void			draw_wall(t_wolf *wf, t_s32 line_height, t_s32 x, t_raycaster *ray);
 t_s32			lighting(t_s32 color, t_f32 distance);
 t_texture		read_bmp(const t_s8 *filename, t_wolf *wolf, t_palette *pal);

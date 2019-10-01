@@ -62,14 +62,14 @@ t_2d	mul_point(t_2d point, t_s32 mul)
 	return (point);
 }
 
-t_s32		direction_movement(t_wolf *wolf, t_s8 **map, t_s32 framedelta)
+t_s32		direction_movement(t_wolf *wolf, t_s8 **map)
 {
 	t_f32	time;
 	t_player	*p;
 	t_s32	neg;
 
 	p = wolf->player;
-	time = (t_f32)(framedelta / 200.f) * p->speed;
+	time = (t_f32)(wolf->deltatime / 200.f) * p->speed;
 	if (wolf->flag & 1UL || wolf->flag & 1UL << 1)
 	{
 		neg = (wolf->flag & 1UL) ? 1 : -1;

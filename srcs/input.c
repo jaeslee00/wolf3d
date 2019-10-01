@@ -49,14 +49,14 @@ void	set_flag(t_wolf *wolf, SDL_Event event)
 	}
 }
 
-void	check_flag(t_wolf *wolf, t_s8 **map, t_s32 framedelta)
+void	check_flag(t_wolf *wolf, t_s8 **map)
 {
 	t_f32	fov;
 	t_player	*p;
 
 	p = wolf->player;
 	fov = fov_calculator(wolf);
-	direction_movement(wolf, map, framedelta);
+	direction_movement(wolf, map);
 	if (wolf->flag & 1UL << 4 && fov < 120.0f)
 	{
 		p->direction.x *= 0.99f;

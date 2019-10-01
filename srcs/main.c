@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/28 22:57:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/01 18:00:54 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,21 @@ static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 	tkneizer(fd, wolf);
 	ft_wolf_init(wolf, sdl);
 	wolf->proj_matrix = identity();
-	wolf->player->m->rotation = 90.f * PI32 / 180.f;
-	wolf->player->m->scale = 15;
+	ft_bzero(&wolf->player->pos, sizeof(wolf->player->pos));
+	wolf->player->m->rotation = degree_radian(90);
+	wolf->player->m->scale = (((W * H) / (640 * 480)) + 10);
 	wolf->proj_matrix = final_projection(wolf);
 	count_entities(wolf->map, wolf->obj, wolf->entity);
 	init_entities(wolf->entity, wolf);
-	print_map(wolf->map, wolf->obj, wolf->player, wolf->doors, wolf);
-	sdl->renderer = SDL_CreateRenderer(sdl->win, -1, 0);
+	parse_map(wolf);
+		sdl->renderer = SDL_CreateRenderer(sdl->win, -1, 0);
 	sdl->texture = SDL_CreateTexture(sdl->renderer,
 		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
+	  wolf->background = ceiling(wolf);
 }
 
-static void	get_input(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
+static void	get_input(t_wolf *wolf, t_sdl *sdl)
 {
 	while (SDL_PollEvent(&sdl->event))
 	{
@@ -50,14 +52,14 @@ static void	get_input(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
 		set_flag(wolf, sdl->event);
 		mouse_movement(wolf, sdl->event);
 	}
-	check_flag(wolf, wolf->map, deltatime);
+	check_flag(wolf, wolf->map);
 }
 
-static void	draw_on_screen(t_wolf *wolf, t_s32 deltatime, t_sdl *sdl)
+static void	draw_on_screen(t_wolf *wolf, t_sdl *sdl)
 {
 	entity_draw_loop(wolf, wolf->entity->item, wolf->entity->order, wolf->entity->nbr_of_entities);
 	wolf->proj_matrix = final_projection(wolf);
-	draw_hud(wolf, deltatime);
+	draw_hud(wolf);
 	SDL_UpdateTexture(sdl->texture, NULL, wolf->img,
 		W * sizeof(t_u32));
 	SDL_RenderCopy(sdl->renderer, sdl->texture, NULL, NULL);
@@ -80,22 +82,15 @@ int		main(int ac, char **av)
 		while (1)
 		{
 			time.x = SDL_GetTicks();
-			fps += (time.x - time.y);
-			if (i == 99)
-			{
-				fps /= 100.f;
-				printf("%.0f ms\n", fps);
-				fps = 0.0f;
-				i = 0;
-			}
-			get_input(&wolf, time.x - time.y, &sdl);
-			time.y = SDL_GetTicks();
+			get_input(&wolf, &sdl);
+			//printf("%d ms\t", wolf.deltatime);
 			event_handler(&wolf, wolf.map, wolf.doors);
 			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);
 			background(&wolf, wolf.img);
 			raycast(&wolf);
-			draw_on_screen(&wolf, SDL_GetTicks() - time.x, &sdl);
-			i++;
+			draw_on_screen(&wolf, &sdl);
+			time.y = SDL_GetTicks();
+			wolf.deltatime = time.y - time.x;
 		}
 	}
 	return (0);
