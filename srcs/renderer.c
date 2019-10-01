@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   renderer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/01 13:16:29 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/21 21:01:26 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/09/28 23:00:57 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,14 @@ void		background(t_wolf *wolf, t_u32 *img)
 		while (coord.x < W - 1)
 		{
 			img[coord.x + coord.y * W] = p.pal[i];
-					img[coord.x + y1 * W] = p.pal[i];
-				coord.x++;
+			img[coord.x + y1 * W] = p.pal[i];
+			coord.x++;
 		}
 		if (i < (t_s32)p.size)
-		i++;
-			coord.y++;
+			i++;
+		coord.y++;
 		y1--;
-		}
+	}
 	//printf("iter.x= %d, %d %d\n", iter.x, wolf->view, p.size);
 }
 

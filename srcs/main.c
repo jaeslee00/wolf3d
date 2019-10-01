@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/24 13:43:49 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/09/28 22:57:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ int		main(int ac, char **av)
 	t_wolf		wolf;
 	t_s32		fd;
 	t_2d_p		time;
+	t_f32		fps = 0.0f;
+	t_s32		i = 0;
 	
 	fd = mem_init(&wolf, ac, av);
 	if (fd > 0)
@@ -78,14 +80,22 @@ int		main(int ac, char **av)
 		while (1)
 		{
 			time.x = SDL_GetTicks();
+			fps += (time.x - time.y);
+			if (i == 99)
+			{
+				fps /= 100.f;
+				printf("%.0f ms\n", fps);
+				fps = 0.0f;
+				i = 0;
+			}
 			get_input(&wolf, time.x - time.y, &sdl);
-			printf("%d ms\t", time.x - time.y);
 			time.y = SDL_GetTicks();
 			event_handler(&wolf, wolf.map, wolf.doors);
 			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);
 			background(&wolf, wolf.img);
 			raycast(&wolf);
 			draw_on_screen(&wolf, SDL_GetTicks() - time.x, &sdl);
+			i++;
 		}
 	}
 	return (0);

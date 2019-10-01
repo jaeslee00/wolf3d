@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/28 02:47:46 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/01 17:56:56 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
- # define W	(2560)
-//# define H	(1440)
-//#define W	(720)
-//#define H	(520)
- //# define W	(3120)
- //# define H	(2080)
- //# define W	(1920)
- # define H	(1080)
+// # define W	(2560)
+// # define H	(1440)
+// # define W	(720)
+// # define H	(520)
+// # define W	(3120)
+// # define H	(2080)
+# define W	(1920)
+# define H	(1080)
 # define TEXTURE_0	0
 # define TEXTURE_1	1
 # define TEXTURE_2	2
