@@ -26,7 +26,7 @@ t_palette	ceiling(t_wolf *wolf)
 	y = 0;
 	while (y < H / 2)
 	{
-		p.pal[y] = rgb_lerp(0x0, per, 0xFFFFFF);
+		p.pal[y] = rgb_lerp(0x0, per, 0xFF0000);
 		y++;
 		per -= pix;
 	}
@@ -41,7 +41,7 @@ static void		down(t_wolf *wolf, t_u32 *img, t_2d_p coord, t_s32 i)
 		coord.x = 0;
 		while (coord.x < W - 1)
 		{
-			img[coord.x + coord.y * W] = wolf->background.pal[i];
+			img[coord.x + coord.y * W] = wolf->background->pal[i];
 			coord.x++;
 		}
 		if (i > 0)
@@ -63,12 +63,12 @@ static void		look_up_down(t_wolf *wolf, t_u32 *img)
 			while (coord.x < W - 1)
 			{
 				if (i < 0)
-					img[coord.x + coord.y * W] = wolf->background.pal[0];
+					img[coord.x + coord.y * W] = wolf->background->pal[0];
 				else
-					img[coord.x + coord.y * W] = wolf->background.pal[i];
+					img[coord.x + coord.y * W] = wolf->background->pal[i];
 				coord.x++;
 			}
-			if (i < (t_s32)wolf->background.size)
+			if (i < (t_s32)wolf->background->size)
 				i++;
 			coord.y++;
 		}
@@ -91,11 +91,11 @@ void			background(t_wolf *wolf, t_u32 *img)
 			coord.x = 0;
 			while (coord.x < W - 1)
 			{
-				img[coord.x + coord.y * W] = wolf->background.pal[i];
-				img[coord.x + y1 * W] = wolf->background.pal[i];
+				img[coord.x + coord.y * W] = wolf->background->pal[i];
+				img[coord.x + y1 * W] = wolf->background->pal[i];
 				coord.x++;
 			}
-			if (i < (t_s32)wolf->background.size)
+			if (i < (t_s32)wolf->background->size)
 				i++;
 			coord.y++;
 			y1--;

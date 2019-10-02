@@ -53,11 +53,23 @@ static t_u8	get_player_pos(t_wolf* wolf, t_s32 i, t_s32 j)
 	return (1);
 }
 
+t_u8	door_ns(t_wolf *wolf, t_s32 i, t_s32 j)
+{
+	if ((i - 1) > 0 && (i + 1) < wolf->obj.h &&
+		wolf->map[i - 1][j] == 1 && wolf->map[i + 1][j] == 1)
+		return (1);
+	else if(i - 1 > 0 && wolf->map[i - 1][j] == 1)
+		return (1);
+	else if(i + 1 < wolf->obj.h && wolf->map[i + 1][j] == 1)
+		return (1);
+	return (0);
+}
+
 static t_u8	parse_doors(t_wolf *wolf, t_s32 i, t_s32 j, t_s32 *k)
 {
-	if (wolf->map[i][j] == 3 || wolf->map[i][j] == 5)
+	if (wolf->map[i][j] == 3)
 	{
-		if (wolf->map[i][j] == 3)
+		if (door_ns(wolf, i, j))
 			wolf->doors[*k].flag |= 1UL << 1;
 		wolf->doors[*k].flag |= 1UL;
 		wolf->doors[*k].pos.x = j;

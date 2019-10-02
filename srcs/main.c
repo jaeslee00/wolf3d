@@ -23,6 +23,8 @@ t_m3x3	final_projection(t_wolf *wolf)
 
 static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 {
+	t_palette p;
+
 	ft_bzero(time, sizeof(t_2d_p));
 	tkneizer(fd, wolf);
 	ft_wolf_init(wolf, sdl);
@@ -38,7 +40,8 @@ static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 	sdl->texture = SDL_CreateTexture(sdl->renderer,
 		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
-	  wolf->background = ceiling(wolf);
+	p = ceiling(wolf);
+	wolf->background = &p;
 }
 
 static void	get_input(t_wolf *wolf, t_sdl *sdl)
@@ -65,6 +68,8 @@ static void	draw_on_screen(t_wolf *wolf, t_sdl *sdl)
 	SDL_RenderCopy(sdl->renderer, sdl->texture, NULL, NULL);
 	SDL_RenderPresent(sdl->renderer);
 }
+
+// TODO(viccarau): Parse the doors correctly
 
 int		main(int ac, char **av)
 {

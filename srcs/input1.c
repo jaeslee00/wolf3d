@@ -22,11 +22,8 @@ void	interaction_door(t_door *doors, t_s8 **map, t_s32 i)
 	else
 	{
 		doors[i].flag |= 1UL;
-		if (doors[i].flag & 1UL << 1)
-			map[doors[i].pos.y][doors[i].pos.x] = 3;
-		else
-			map[doors[i].pos.y][doors[i].pos.x] = 5;
-	}
+		map[doors[i].pos.y][doors[i].pos.x] = 3;
+		}
 }
 
 void	event_handler(t_wolf *wolf, t_s8 **map, t_door *doors)

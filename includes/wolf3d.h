@@ -231,7 +231,7 @@ typedef struct	s_wolf
 	//t_2d		*minimap;
 	t_2d		*p;
 	t_m3x3		proj_matrix;
-	t_palette	background;
+	t_palette	*background;
 	t_s32		deltatime;
 }				t_wolf;
 

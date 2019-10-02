@@ -34,6 +34,7 @@ void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 (void)wolf;
 	if (mem == NULL)
 	{
+		//SDL_DestroyWindow()
 		printf("\ntsize = %I64d\nusize = %I64d \n", wolf->mem.tsize, wolf->mem.usize);
 		if (error == -2)
 			ft_putstr_fd("Invalid map, not enough y values or invalid file\n", 2);
