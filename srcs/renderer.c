@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/01 13:16:29 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/01 18:00:39 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/01 23:26:07 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_palette	ceiling(t_wolf *wolf)
 {
 	t_palette	p;
-	t_s32	y;
+	t_s32		y;
 	t_f32		per;
 	t_f32		pix;
 

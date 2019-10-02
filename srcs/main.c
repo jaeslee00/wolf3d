@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/01 18:00:54 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/01 23:28:14 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ int		main(int ac, char **av)
 	t_wolf		wolf;
 	t_s32		fd;
 	t_2d_p		time;
-	t_f32		fps = 0.0f;
-	t_s32		i = 0;
 	
 	fd = mem_init(&wolf, ac, av);
 	if (fd > 0)
