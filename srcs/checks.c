@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/27 13:45:37 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/02 21:11:58 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 	if (mem == NULL)
 	{
 		//SDL_DestroyWindow()
-		printf("\ntsize = %I64d\nusize = %I64d \n", wolf->mem.tsize, wolf->mem.usize);
+		//printf("\ntsize = %I64d\nusize = %I64d \n", wolf->mem.tsize, wolf->mem.usize);
 		if (error == -2)
 			ft_putstr_fd("Invalid map, not enough y values or invalid file\n", 2);
 		else if (error == -3)
@@ -59,8 +59,8 @@ t_s32		mem_init(t_wolf *wolf, t_s32 ac, char **av)
 
 	fd = 0;
 	ft_bzero(&wolf[0], sizeof(*wolf));
-	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 200)), wolf, -5);
-	wolf->mem.tsize = (1024 * 1024 * 200);
+	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 10)), wolf, -5);
+	wolf->mem.tsize = (1024 * 1024 * 10);
 	wolf->mem.usize = sizeof(t_s32);
 	if (ac == 2)
 		fd = open(av[1], O_RDONLY);

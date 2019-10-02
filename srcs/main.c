@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/24 13:43:49 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/02 21:21:20 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	p = ceiling(wolf);
-	wolf->background = &p;
+	wolf->background = p;
 }
 
 static void	get_input(t_wolf *wolf, t_sdl *sdl)
@@ -86,7 +86,7 @@ int		main(int ac, char **av)
 		{
 			time.x = SDL_GetTicks();
 			get_input(&wolf, &sdl);
-			//printf("%d ms\t", wolf.deltatime);
+			printf("%d ms\t", wolf.deltatime);
 			event_handler(&wolf, wolf.map, wolf.doors);
 			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);
 			background(&wolf, wolf.img);
