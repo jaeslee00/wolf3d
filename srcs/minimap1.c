@@ -12,18 +12,20 @@
 
 #include "wolf3d.h"
 
-/*
-void	fill_rect(t_2d beg, t_2d end)
+t_2d	find_center(t_wolf *wolf)
 {
-	int	size;
-	int	i;
-	int	j;
+	t_s32	center;
+	t_2d	offset;
 
-	i = 0;
-	j = 0;
-	size = 0;
+	if (wolf->obj.size % 2 == 0)
+		center = round(wolf->obj.size / 2) + round((wolf->obj.w) / 2);
+	else
+		center = round(wolf->obj.size / 2);
+	(void)center;
+	offset.x = ((W / 2) - transform(wolf->proj_matrix, wolf->player->pos).x);
+	offset.y = ((H / 2) - transform(wolf->proj_matrix, wolf->player->pos).y);
+	return (offset);
 }
-*/
 
 static t_s32	is_valids(t_f32 x, t_f32 y)
 {
@@ -88,7 +90,7 @@ static void	drawline(t_wolf *wolf, t_pts pts, t_s32 nb, t_s32 nb1)
 			{
 				if (nb == 4 || nb1 == 4)
 					wolf->img[xy.x + (xy.y * W)] = 0x00BB00;
-				else if (nb == 3 || nb1 == 3 || nb == 5 || nb1 == 5)
+				else if (nb == 3 || nb1 == 3)
 					wolf->img[xy.x + (xy.y * W)] = 0xBB0000;
 				else if ((nb != 0 || nb1 != 0) && (nb != 9 && nb1 != 9))
 					wolf->img[xy.x + (xy.y * W)] = 0x555555;
@@ -126,47 +128,13 @@ void	init_points(t_wolf *wolf)
 	}
 }
 
-t_m3x3	scale(t_f32	scale)
+static void	draw_vertical_lines(t_wolf *wolf)
 {
-	t_m3x3	r;
-
-	r = identity();
-	r.e[0][0] = 1 * scale;
-	r.e[1][1] = 1 * scale;
-	r.e[2][2] = 1 * scale;
-	return (r);
-}
-
-t_m3x3	translate(t_m3x3 a, t_2d	offset)
-{
-	t_m3x3	r;
-
-	r = a;
-	r.e[2][0] = offset.x;
-	r.e[2][1] = offset.y;
-	r.e[2][2] = 1;
-	return (r);
-}
-
-void	draw_minimap(t_wolf *wolf)
-{
-t_s32	i;
+	t_s32	i;
 	t_s32	j;
 	t_s32	k;
 
-	i = 0;
-	k = 0;
-	 wolf->proj_matrix = translate(wolf->proj_matrix, find_center(wolf));
-	while (i < wolf->obj.size - 1)
-	{
-		if (i - wolf->obj.w > 0)
-			k = i - wolf->obj.w;
-		if ((i + 1) % wolf->obj.w != 0)
-			drawline(wolf, init_pts(transform(wolf->proj_matrix, wolf->p[i]),
-									transform(wolf->proj_matrix, wolf->p[i + 1])), wolf->obj.nb[i], wolf->obj.nb[k]);
-		i++;
-	}
-	i = 0;
+	i = wolf->obj.w + 1;
 	j = 0;
 	k = 0;
 	while (i < wolf->obj.size && j < wolf->obj.size)
@@ -176,7 +144,31 @@ t_s32	i;
 			k = i - 1;
 		if (j < wolf->obj.size)
 			drawline(wolf, init_pts(transform(wolf->proj_matrix, wolf->p[i]),
-									transform(wolf->proj_matrix, wolf->p[j])), wolf->obj.nb[i], wolf->obj.nb[k]);
+				transform(wolf->proj_matrix, wolf->p[j])), wolf->obj.nb[i], wolf->obj.nb[k]);
 		i++;
+		if (i % wolf->obj.w == 0)
+			i++;
 	}
+}
+
+void	draw_minimap(t_wolf *wolf)
+{
+	t_s32	i;
+	t_s32	j;
+
+	i = wolf->obj.w + 1;
+	j = 0;
+	 wolf->proj_matrix = translate(wolf->proj_matrix, find_center(wolf));
+	while (i < wolf->obj.size - 1)
+	{
+		if (i - wolf->obj.w > 0)
+			j = i - wolf->obj.w;
+		if ((i + 1) % wolf->obj.w != 0)
+			drawline(wolf, init_pts(transform(wolf->proj_matrix, wolf->p[i]),
+				transform(wolf->proj_matrix, wolf->p[i + 1])), wolf->obj.nb[i], wolf->obj.nb[j]);
+		i++;
+		if (i % wolf->obj.w == 0)
+			i++;
+	}
+	draw_vertical_lines(wolf);
 }

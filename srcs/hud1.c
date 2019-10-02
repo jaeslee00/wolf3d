@@ -12,11 +12,40 @@
 
 #include "wolf3d.h"
 
-void	draw_machinegun(t_wolf *wolf, t_u32 deltaframe)
+void	draw_crosshair(t_wolf *wolf)
+{
+	t_u32	i;
+	t_u32	j;
+	t_u32	k;
+
+	i = (W / 2) - (5 * wolf->a.size);
+	j = (H / 2);
+	k = 0;
+	while (k <= 10 * wolf->a.size)
+	{
+		wolf->img[i + j * W] = rgb_lerp(wolf->img[i + j * W] - 0xFFFF00, 0.2f,
+										0xFFFF00);
+		i++;
+		k++;
+	}
+	i = (W / 2);
+	j = (H / 2) - (5 * wolf->a.size);
+	k = 0;
+	while (k <= 10 * wolf->a.size)
+	{
+		if (j != (H / 2))
+			wolf->img[i + j * W] = rgb_lerp(wolf->img[i + j * W] - 0xFFFF00,
+											0.2f, 0xFFFF00) - 0x0000FF;
+		j++;
+		k++;
+	}
+}
+
+void	draw_machinegun(t_wolf *wolf)
 {
 	if (wolf->flag & 1UL << 9)
 	{
-		wolf->a.gun += deltaframe;
+		wolf->a.gun += wolf->deltatime;
 		if(wolf->a.gun < (t_s32)wolf->a.frame)
 		{
 			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
@@ -25,7 +54,7 @@ void	draw_machinegun(t_wolf *wolf, t_u32 deltaframe)
 				wolf->entity->item[i].flag |= 1UL << 1;
 				wolf->entity->item[i].tex = &wolf->tex[13];
 			}
-			wolf->view -= 1;
+			wolf->view -= wolf->deltatime / 2;
 			draw_gun(wolf, 11);
 		}
 		else
