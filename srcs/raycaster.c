@@ -12,29 +12,51 @@
 
 #include "wolf3d.h"
 
-void	raycast_collision(t_s8 **map, t_raycaster *ray, t_s8 *hit,
+static t_u8	get_door_side(t_wolf *wolf, t_s32 x, t_s32 y)
+{
+	t_s32	i;
+
+	i = 0;
+	while (i < (t_s32)wolf->nbr_of_doors)
+	{
+		if (wolf->doors[i].pos.x == x && wolf->doors[i].pos.y == y)
+		{
+			if (wolf->doors[i].flag & 1UL << 1)
+				return (1);
+			else
+				return (0);
+		}
+		i++;
+	}
+	return (0);
+}
+
+void	raycast_collision(t_wolf *wolf, t_raycaster *ray, t_s8 *hit,
 			t_2d player_pos)
 {
-	if (map[ray->map.y][ray->map.x] == 1)
+	if (wolf->map[ray->map.y][ray->map.x] == 1)
 		*hit = 1;
-	else if (map[ray->map.y][ray->map.x] == 3)
+	else if (wolf->map[ray->map.y][ray->map.x] == 3)
 	{
-		if (ray->side_dist.x - (0.5f * ray->side_dist.x) /
-			fabs((ray->map.x - player_pos.x) + (t_f32)((1 + ray->step.x) >> 1))
+		if(get_door_side(wolf, ray->map.x, ray->map.y))
+		{
+			if (ray->side_dist.x - (0.5f * ray->side_dist.x) /
+				fabs((ray->map.x - player_pos.x) + (t_f32)((1 + ray->step.x) >> 1))
 				< ray->side_dist.y)
-		{
-			*hit = 1;
-			ray->side = e_ew_door;
+			{
+				*hit = 1;
+				ray->side = e_ew_door;
+			}
 		}
-	}
-	else if (map[ray->map.y][ray->map.x] == 5)
-	{
-		if (ray->side_dist.y - (0.5f * ray->side_dist.y) /
-			fabs((ray->map.y - player_pos.y) + (t_f32)((1 + ray->step.y) >> 1))
-				< ray->side_dist.x)
+		else
 		{
-			*hit = 1;
-			ray->side = e_sn_door;
+			if (ray->side_dist.y - (0.5f * ray->side_dist.y) /
+				fabs((ray->map.y - player_pos.y) + (t_f32)((1 + ray->step.y) >> 1))
+				< ray->side_dist.x)
+			{
+				*hit = 1;
+				ray->side = e_sn_door;
+			}
 		}
 	}
 }
@@ -58,7 +80,7 @@ t_s32	dda_raycast(t_wolf *wf, t_raycaster *ray)
 			ray->map.y += ray->step.y;
 			ray->side = e_sn_wall;
 		}
-		raycast_collision(wf->map, ray, &hit, wf->player->pos);
+		raycast_collision(wf, ray, &hit, wf->player->pos);
 	}
 	return (ray->side);
 }
