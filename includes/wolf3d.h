@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/28 02:47:46 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/02 21:28:13 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,7 @@ typedef struct	s_wolf
 	//t_2d		*minimap;
 	t_2d		*p;
 	t_m3x3		proj_matrix;
-	t_palette	*background;
+	t_palette	background;
 	t_s32		deltatime;
 }				t_wolf;
 

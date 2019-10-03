@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 04:38:32 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/24 13:41:11 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/02 20:46:48 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void	ft_wolf_init(t_wolf *wolf, t_sdl *sdl)
 	sdl->win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, W, H, 0);
 	SDL_SetWindowBordered(sdl->win, SDL_TRUE);
-	printf("wolf->mem.usize = %I64d, %I64d\n", wolf->mem.usize, wolf->mem.tsize);
-	printf("size of img = %I64d\n", W * H * sizeof(t_u32));
+	//printf("wolf->mem.usize = %I64d, %I64d\n", wolf->mem.usize, wolf->mem.tsize);
+	//printf("size of img = %I64d\n", W * H * sizeof(t_u32));
 	is_alloc(wolf->img = ft_mem(&wolf->mem, W * H * sizeof(t_u32)), wolf, -1);
 	is_alloc(wolf->tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
 	load_textures(wolf);
