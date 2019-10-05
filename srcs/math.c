@@ -16,9 +16,9 @@
 ** Calculate from radians to degrees - (angle * 180 / PI32) degrees
 */
 
-t_f64		fov_calculator(t_wolf *wolf)
+t_f64	fov_calculator(t_wolf *wolf)
 {
-	t_f64		fov;
+	t_f64	fov;
 	t_2d	*pn;
 	t_2d	*d;
 
@@ -30,12 +30,12 @@ t_f64		fov_calculator(t_wolf *wolf)
 	return (fov);
 }
 
-t_f32		degree_radian(t_s32 degree)
+t_f32	degree_radian(t_s32 degree)
 {
 	return (degree * PI32 / 180);
 }
 
-t_f64		ft_abs(t_f64 x)
+t_f64	ft_abs(t_f64 x)
 {
 	if (x < 0)
 		x = -x;
