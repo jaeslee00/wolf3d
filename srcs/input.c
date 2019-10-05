@@ -70,12 +70,10 @@ void	check_flag(t_wolf *wolf, t_s8 **map)
 		p->direction.y *= 1.01f;
 		ft_putnbr((int)fov);
 		ft_putchar('\n');
-		}
-	if (wolf->flag & 1UL << 6)
-		wolf->player->speed = 1.5f;
-	else
-		wolf->player->speed = 1;
+	}
 }
+
+//NOTE (jae) : if motion becomes bigger than f64_max, it may cause problem i guess lol
 
 void	mouse_movement(t_wolf *wolf, SDL_Event event)
 {
@@ -97,7 +95,6 @@ void	mouse_movement(t_wolf *wolf, SDL_Event event)
 		cosine = cos(motion);
 		sine = sin(motion);
 		p->m->rotation += motion;
-		//NOTE (jae) : if motion becomes bigger than f64_max, it may cause problem i guess lol
 		p->m->rotation = fmod(p->m->rotation, PI32 * 2.0f);
 		old.x = p->direction.x;
 		p->direction.x = p->direction.x * cosine - p->direction.y * sine;

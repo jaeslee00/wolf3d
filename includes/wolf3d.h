@@ -148,7 +148,8 @@ typedef struct	s_player
 	t_2d		pos;
 	t_2d		direction;
 	t_2d		plane;
-	t_f32		speed;
+	t_2d		friction;
+	t_2d		accel;
 	t_minimap	*m;
 	}				t_player;
 

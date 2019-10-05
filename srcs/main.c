@@ -14,7 +14,7 @@
 
 t_m3x3	final_projection(t_wolf *wolf)
 {
-	t_m3x3	r;
+	t_m3x3		r;
 
 	r = identity();
 	r = mx_mul(scale(wolf->player->m->scale), mx_mul(rot(wolf->player->m->rotation), identity()));
@@ -23,7 +23,7 @@ t_m3x3	final_projection(t_wolf *wolf)
 
 static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 {
-	t_palette p;
+	t_palette	p;
 
 	ft_bzero(time, sizeof(t_2d_p));
 	tkneizer(fd, wolf);
@@ -42,6 +42,7 @@ static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	p = ceiling(wolf);
 	wolf->background = p;
+	ft_bzero(&wolf->player->accel, sizeof(t_2d));
 }
 
 static void	get_input(t_wolf *wolf, t_sdl *sdl)
@@ -86,7 +87,7 @@ int		main(int ac, char **av)
 		{
 			time.x = SDL_GetTicks();
 			get_input(&wolf, &sdl);
-			printf("%d ms\t", wolf.deltatime);
+			//printf("%d ms\t", wolf.deltatime);
 			event_handler(&wolf, wolf.map, wolf.doors);
 			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);
 			background(&wolf, wolf.img);
