@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checks.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/02 21:11:58 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/05 23:55:21 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 (void)wolf;
 	if (mem == NULL)
 	{
-		//SDL_DestroyWindow()
-		//printf("\ntsize = %I64d\nusize = %I64d \n", wolf->mem.tsize, wolf->mem.usize);
+		printf("\ntsize = %zu\nusize = %zu \n", wolf->mem.tsize, wolf->mem.usize);
 		if (error == -2)
 			ft_putstr_fd("Invalid map, not enough y values or invalid file\n", 2);
 		else if (error == -3)
