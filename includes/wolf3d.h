@@ -16,14 +16,14 @@
 # include "draw.h"
 # include <math.h>
 # include <SDL2/SDL.h>
- //# define W	(2560)
+//# define W	(2560)
 //# define H	(1440)
 //#define W	(640)
 //#define H	(480)
- //# define W	(3120)
- //# define H	(2080)
-#define W	(1920)
- # define H	(1080)
+//# define W	(3120)
+//# define H	(2080)
+# define W	(1920)
+# define H	(1080)
 # define TEXTURE_0	0
 # define TEXTURE_1	1
 # define TEXTURE_2	2
@@ -73,13 +73,13 @@ typedef struct	s_2d_p
 	t_s32	y;
 }				t_2d_p;
 
-typedef enum e_raycast_obj
+typedef enum	e_raycast_obj
 {
 	e_ew_wall,
 	e_sn_wall,
 	e_sn_door,
 	e_ew_door
-}			t_raycast_obj;
+}				t_raycast_obj;
 
 typedef struct	s_audio
 {
@@ -115,9 +115,9 @@ typedef struct	s_door
 
 typedef struct	s_minimap
 {
-	t_f32		scale;
-	t_f32		rotation;
-	t_2d		offset;
+	t_f32	scale;
+	t_f32	rotation;
+	t_2d	offset;
 }				t_minimap;
 
 typedef struct	s_obj
@@ -138,8 +138,8 @@ typedef struct	s_sdl
 
 typedef struct	s_palette
 {
-	t_u32		*pal;
-	t_u32		size;
+	t_u32	*pal;
+	t_u32	size;
 }				t_palette;
 
 typedef struct	s_player
@@ -151,7 +151,7 @@ typedef struct	s_player
 	t_2d		friction;
 	t_2d		accel;
 	t_minimap	*m;
-	}				t_player;
+}				t_player;
 
 typedef struct	s_file
 {
@@ -229,7 +229,6 @@ typedef struct	s_wolf
 	t_s32		view;
 	t_entity	*entity;
 	t_f32		*perp_dist;
-	//t_2d		*minimap;
 	t_2d		*p;
 	t_m3x3		proj_matrix;
 	t_palette	background;
@@ -272,19 +271,19 @@ void			draw_hud(t_wolf *wolf);
 t_2d_p			init_2d(t_s32 x, t_s32 y);
 void			draw_sprite(t_wolf *wolf, t_2d_p start, t_texture tex, t_u32 size);
 funct			*perp_dist(t_wolf *wolf);
-t_f32				perp_distance_ew(t_raycaster *ray, t_player *player);
-t_f32				perp_distance_sn(t_raycaster *ray, t_player *player);
-t_f32				perp_distance_ew_door(t_raycaster *ray, t_player *player);
-t_f32				perp_distance_sn_door(t_raycaster *ray, t_player *player);
-t_f32				my_sin(t_f32 angle);
-t_f32				my_cos(t_f32 angle);
-t_f32				my_asin(t_f32 angle);
-t_f32				my_acos(t_f32 angle);
-t_f32				my_tan(t_f32 angle);
-t_f32				my_atan(t_f32 angle);
-t_f32				degree_radian(t_s32 degree);
-t_f64				fov_calculator(t_wolf *wolf);
-t_f64				ft_abs(t_f64 x);
+t_f32			perp_distance_ew(t_raycaster *ray, t_player *player);
+t_f32			perp_distance_sn(t_raycaster *ray, t_player *player);
+t_f32			perp_distance_ew_door(t_raycaster *ray, t_player *player);
+t_f32			perp_distance_sn_door(t_raycaster *ray, t_player *player);
+t_f32			my_sin(t_f32 angle);
+t_f32			my_cos(t_f32 angle);
+t_f32			my_asin(t_f32 angle);
+t_f32			my_acos(t_f32 angle);
+t_f32			my_tan(t_f32 angle);
+t_f32			my_atan(t_f32 angle);
+t_f32			degree_radian(t_s32 degree);
+t_f64			fov_calculator(t_wolf *wolf);
+t_f64			ft_abs(t_f64 x);
 t_s8			**int_to_tab(t_wolf *wolf);
 t_s32			is_invalid(char *str);
 t_s32			is_valid(t_f32 x, t_f32 y);

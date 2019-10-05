@@ -53,7 +53,7 @@ static t_u8	get_player_pos(t_wolf* wolf, t_s32 i, t_s32 j)
 	return (1);
 }
 
-t_u8	door_ns(t_wolf *wolf, t_s32 i, t_s32 j)
+static t_u8	door_ns(t_wolf *wolf, t_s32 i, t_s32 j)
 {
 	if ((i - 1) >= 0 && (i + 1) < wolf->obj.h &&
 		wolf->map[i - 1][j] == 1 && wolf->map[i + 1][j] == 1)

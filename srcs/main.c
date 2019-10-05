@@ -12,12 +12,13 @@
 
 #include "wolf3d.h"
 
-t_m3x3	final_projection(t_wolf *wolf)
+t_m3x3		final_projection(t_wolf *wolf)
 {
 	t_m3x3		r;
 
 	r = identity();
-	r = mx_mul(scale(wolf->player->m->scale), mx_mul(rot(wolf->player->m->rotation), identity()));
+	r = mx_mul(scale(wolf->player->m->scale),
+		mx_mul(rot(wolf->player->m->rotation), identity()));
 	return (r);
 }
 
@@ -36,7 +37,7 @@ static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 	count_entities(wolf->map, wolf->obj, wolf->entity);
 	init_entities(wolf->entity, wolf);
 	parse_map(wolf);
-		sdl->renderer = SDL_CreateRenderer(sdl->win, -1, 0);
+	sdl->renderer = SDL_CreateRenderer(sdl->win, -1, 0);
 	sdl->texture = SDL_CreateTexture(sdl->renderer,
 		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -61,7 +62,8 @@ static void	get_input(t_wolf *wolf, t_sdl *sdl)
 
 static void	draw_on_screen(t_wolf *wolf, t_sdl *sdl)
 {
-	entity_draw_loop(wolf, wolf->entity->item, wolf->entity->order, wolf->entity->nbr_of_entities);
+	entity_draw_loop(wolf, wolf->entity->item,
+		wolf->entity->order, wolf->entity->nbr_of_entities);
 	wolf->proj_matrix = final_projection(wolf);
 	draw_hud(wolf);
 	SDL_UpdateTexture(sdl->texture, NULL, wolf->img,
@@ -70,9 +72,7 @@ static void	draw_on_screen(t_wolf *wolf, t_sdl *sdl)
 	SDL_RenderPresent(sdl->renderer);
 }
 
-// TODO(viccarau): Parse the doors correctly
-
-int		main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	t_sdl		sdl;
 	t_wolf		wolf;
