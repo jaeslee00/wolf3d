@@ -101,13 +101,11 @@ t_s32		direction_movement(t_wolf *wolf, t_s8 **map)
 	acceleration_movement(wolf, p);
 	temp.x = p->accel.x * (t_f32)(wolf->deltatime / 200.f);
 	temp.y = p->accel.y * (t_f32)(wolf->deltatime / 200.f);
-	if (map[(t_s32)(p->pos.y)][(t_s32)(p->pos.x + temp.x + 0.1f)] == 0 &&
-		map[(t_s32)(p->pos.y + temp.y + 0.1f)][(t_s32)(p->pos.x)] == 0 &&
-		map[(t_s32)(p->pos.y)][(t_s32)(p->pos.x + temp.x - 0.1f)] == 0 &&
-		map[(t_s32)(p->pos.y + temp.y - 0.1f)][(t_s32)(p->pos.x)] == 0)
-	{
+	if (map[(t_s32)(p->pos.y)][(t_s32)(p->pos.x + temp.x + 0.2f)] == 0 &&
+		map[(t_s32)(p->pos.y)][(t_s32)(p->pos.x + temp.x - 0.2f)] == 0)
 		p->pos.x += temp.x;
+	if (map[(t_s32)(p->pos.y + temp.y - 0.2f)][(t_s32)(p->pos.x)] == 0 &&
+		map[(t_s32)(p->pos.y + temp.y + 0.2f)][(t_s32)(p->pos.x)] == 0)
 		p->pos.y += temp.y;
-	}
 	return (1);
 }
