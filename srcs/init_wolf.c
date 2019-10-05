@@ -58,12 +58,11 @@ void	ft_wolf_init(t_wolf *wolf, t_sdl *sdl)
 	wolf->player->direction.y = 0;
 	wolf->player->plane.x = 0;
 	wolf->player->plane.y = 1;
-	wolf->player->speed = 0;
 	is_alloc(wolf->p = ft_mem(&wolf->mem, sizeof(t_2d) * wolf->obj.size), wolf, -1);
 	init_points(wolf);
 }
 
-t_file	file_str(void)
+static t_file	file_str(void)
 {
 	t_file	file;
 
