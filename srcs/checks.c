@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/05 23:57:01 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/06 18:49:04 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,12 @@ t_s32	mem_init(t_wolf *wolf, t_s32 ac, char **av)
 	{
 		fd = open(av[1], O_RDONLY);
 		if (ft_strstr(av[1], ".map"))
+		{
+			is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 10)), wolf, -5);
+			wolf->mem.tsize = (1024 * 1024 * 10);
+			wolf->mem.usize = sizeof(t_s32);
 			return (fd);
+		}
 		else
 			is_alloc(NULL, wolf, -2);
 	}
