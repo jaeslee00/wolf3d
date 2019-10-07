@@ -64,9 +64,7 @@ t_s32	mem_init(t_wolf *wolf, t_s32 ac, char **av)
 	if (ac == 2)
 	{
 		fd = open(av[1], O_RDONLY);
-		if (ft_strstr(av[1], ".map"))
-			return (fd);
-		else
+		if (!ft_strstr(av[1], ".map"))
 			is_alloc(NULL, wolf, -2);
 	}
 	else
