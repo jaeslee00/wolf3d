@@ -6,17 +6,17 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 04:38:32 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/02 20:46:48 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/07 19:16:37 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	init_entities(t_entity *entity, t_wolf *wolf)
+void			init_entities(t_entity *entity, t_wolf *wolf)
 {
 	t_s32	index;
 
-	is_alloc(entity->item =(t_items*)ft_mem(&wolf->mem,
+	is_alloc(entity->item = (t_items*)ft_mem(&wolf->mem,
 		sizeof(t_items) * entity->nbr_of_entities), wolf, -1);
 	is_alloc(entity->order = (t_s32*)ft_mem(&wolf->mem,
 		sizeof(t_s32) * entity->nbr_of_entities), wolf, -1);
@@ -30,14 +30,13 @@ void	init_entities(t_entity *entity, t_wolf *wolf)
 	}
 }
 
-void	ft_wolf_init(t_wolf *wolf, t_sdl *sdl)
+static void		sdl_inits(t_wolf *wolf, t_sdl *sdl)
 {
 	wolf->map = int_to_tab(wolf);
 	SDL_Init(SDL_INIT_EVERYTHING);
-	//sdl->win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
-	//SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	wolf->sdl = sdl;
 	sdl->win = SDL_CreateWindow("Wolf3d", SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED, W, H, 0);
+								SDL_WINDOWPOS_CENTERED, W, H, 0);
 	SDL_SetWindowBordered(sdl->win, SDL_TRUE);
 	is_alloc(wolf->img = ft_mem(&wolf->mem, W * H * sizeof(t_u32)), wolf, -1);
 	is_alloc(wolf->tex = ft_mem(&wolf->mem, sizeof(t_texture) * 20), wolf, -1);
@@ -47,16 +46,27 @@ void	ft_wolf_init(t_wolf *wolf, t_sdl *sdl)
 	wolf->a.size = round(W / (1920 / 4));
 	wolf->view = 0;
 	wolf->a.frame = 100;
-	is_alloc(wolf->doors = (t_door*)ft_mem(&wolf->mem, sizeof(t_door) * 100), wolf, -1);
-	is_alloc(wolf->player = (t_player*)ft_mem(&wolf->mem, sizeof(t_player)), wolf, -1);
-	is_alloc(wolf->player->m = (t_minimap *)ft_mem(&wolf->mem, wolf->obj.size * sizeof(t_minimap)), wolf, -1);
-	is_alloc(wolf->perp_dist = (t_f32*)ft_mem(&wolf->mem, sizeof(t_f32) * W), wolf, -1);
-	is_alloc(wolf->entity = (t_entity*)ft_mem(&wolf->mem, sizeof(t_entity)), wolf, -1);
+}
+
+void			ft_wolf_init(t_wolf *wolf, t_sdl *sdl)
+{
+	sdl_inits(wolf, sdl);
+	is_alloc(wolf->doors = (t_door*)ft_mem(&wolf->mem,
+		sizeof(t_door) * 100), wolf, -1);
+	is_alloc(wolf->player = (t_player*)ft_mem(&wolf->mem,
+		sizeof(t_player)), wolf, -1);
+	is_alloc(wolf->player->m = (t_minimap *)ft_mem(&wolf->mem,
+		sizeof(t_minimap) * wolf->obj.size), wolf, -1);
+	is_alloc(wolf->perp_dist = (t_f32*)ft_mem(&wolf->mem,
+		sizeof(t_f32) * W), wolf, -1);
+	is_alloc(wolf->entity = (t_entity*)ft_mem(&wolf->mem,
+		sizeof(t_entity)), wolf, -1);
 	wolf->player->direction.x = 1;
 	wolf->player->direction.y = 0;
 	wolf->player->plane.x = 0;
 	wolf->player->plane.y = 1;
-	is_alloc(wolf->p = ft_mem(&wolf->mem, sizeof(t_2d) * wolf->obj.size), wolf, -1);
+	is_alloc(wolf->p = ft_mem(&wolf->mem,
+		sizeof(t_2d) * wolf->obj.size), wolf, -1);
 	init_points(wolf);
 }
 
@@ -82,7 +92,7 @@ static t_file	file_str(void)
 	return (file);
 }
 
-void	load_textures(t_wolf *wolf)
+void			load_textures(t_wolf *wolf)
 {
 	t_s32		i;
 	t_palette	pal;

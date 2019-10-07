@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:02:53 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/24 13:46:39 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/07 20:05:42 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ void	set_flag(t_wolf *wolf, SDL_Event event)
 		check_key(wolf, event, SDL_SCANCODE_E, 1UL << 7);
 		if (event.key.keysym.scancode == SDL_SCANCODE_TAB)
 			if (event.type == SDL_KEYDOWN)
-			wolf->flag ^= 1UL << 8;
+				wolf->flag ^= 1UL << 8;
 	}
 }
 
 void	check_flag(t_wolf *wolf, t_s8 **map)
 {
-	t_f32	fov;
+	t_f32		fov;
 	t_player	*p;
 
 	p = wolf->player;
@@ -73,11 +73,9 @@ void	check_flag(t_wolf *wolf, t_s8 **map)
 	}
 }
 
-//NOTE (jae) : if motion becomes bigger than f64_max, it may cause problem i guess lol
-
 void	mouse_movement(t_wolf *wolf, SDL_Event event)
 {
-	t_2d	old;
+	t_2d		old;
 	t_f64		motion;
 	t_f32		cosine;
 	t_f32		sine;
@@ -88,13 +86,15 @@ void	mouse_movement(t_wolf *wolf, SDL_Event event)
 	{
 		motion = (t_f64)(event.motion.xrel * 0.001f);
 		wolf->view += (t_s32)(event.motion.yrel);
-		if (wolf->view > H/2)
-			wolf->view = H/2;
-		else if (wolf->view < -H/2)
-			wolf->view = -H/2;
+		if (wolf->view > H / 2)
+			wolf->view = H / 2;
+		else if (wolf->view < -H / 2)
+			wolf->view = -H / 2;
 		cosine = cos(motion);
 		sine = sin(motion);
 		p->m->rotation += motion;
+// TODO(viccarau): fmod makes the norminette think this file can't compile
+		// You should probably change that;
 		p->m->rotation = fmod(p->m->rotation, PI32 * 2.0f);
 		old.x = p->direction.x;
 		p->direction.x = p->direction.x * cosine - p->direction.y * sine;

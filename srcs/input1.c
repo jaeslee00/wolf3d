@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:42:47 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/09 18:22:23 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/07 19:30:05 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,18 @@ void		event_handler(t_wolf *wolf, t_s8 **map, t_door *doors)
 static void	acceleration_movement(t_wolf *wolf, t_player *p)
 {
 	t_s32	neg;
-	t_f32	speed;
 
-	speed = 0.05f;
 	if (wolf->flag & 1UL || wolf->flag & 1UL << 1)
 	{
 		neg = (wolf->flag & 1UL) ? 1 : -1;
-		p->accel.x += neg * p->direction.x * speed;
-		p->accel.y += neg * p->direction.y * speed;
+		p->accel.x += neg * p->direction.x * 0.05f;
+		p->accel.y += neg * p->direction.y * 0.05f;
 	}
-	if (wolf->flag & 1UL << 2|| wolf->flag & 1UL << 3)
+	if (wolf->flag & 1UL << 2 || wolf->flag & 1UL << 3)
 	{
 		neg = (wolf->flag & 1UL << 3) ? 1 : -1;
-		p->accel.x += neg * p->plane.x * speed;
-		p->accel.y += neg * p->plane.y * speed;
+		p->accel.x += neg * p->plane.x * 0.05f;
+		p->accel.y += neg * p->plane.y * 0.05f;
 	}
 	if (wolf->flag & 1UL << 6)
 	{

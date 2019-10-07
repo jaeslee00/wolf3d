@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/02 21:11:58 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/07 18:46:19 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,12 @@ void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 {
 	if (mem == NULL)
 	{
-		//SDL_DestroyWindow()
+		SDL_DestroyWindow(wolf->sdl->win);
+		SDL_DestroyRenderer(wolf->sdl->renderer);
+		SDL_DestroyTexture(wolf->sdl->texture);
 		if (error == -2)
-			ft_putstr_fd("Invalid map, not enough y values or invalid file\n", 2);
+			ft_putstr_fd("Invalid map, not enough y"
+				"values or invalid file\n", 2);
 		else if (error == -3)
 			ft_putstr_fd("Texture(s) couldn't load\n", 2);
 		else if (error == -1)
@@ -43,7 +46,8 @@ void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 		else if (error == -4)
 			ft_putstr_fd("Texture isn't actually bmp file\n", 2);
 		else if (error == -5)
-			ft_putstr_fd("There is no player on the map, try putting a 9 on the map\n", 2);
+			ft_putstr_fd("There is no player on the map,"
+				"try putting a 9 on the map\n", 2);
 		if (error < 0)
 			error = -1;
 		if (wolf->mem.m != NULL)
@@ -51,9 +55,6 @@ void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 		exit(error);
 	}
 }
-
-// TODO(viccarau): Free memory at every exit
-// TODO(viccarau): Don't allow the open of a linked file
 
 t_s32	mem_init(t_wolf *wolf, t_s32 ac, char **av)
 {

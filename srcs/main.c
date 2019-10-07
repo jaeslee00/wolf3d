@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/02 21:21:20 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/07 19:29:36 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 
 	ft_bzero(time, sizeof(t_2d_p));
 	tkneizer(fd, wolf);
+	if (wolf->obj.size == 0)
+		is_alloc(NULL, wolf, -2);
+	wolf->obj.h = wolf->obj.size / wolf->obj.w;
 	ft_wolf_init(wolf, sdl);
 	wolf->proj_matrix = identity();
 	ft_bzero(&wolf->player->pos, sizeof(wolf->player->pos));
@@ -78,7 +81,7 @@ int			main(int ac, char **av)
 	t_wolf		wolf;
 	t_s32		fd;
 	t_2d_p		time;
-	
+
 	fd = mem_init(&wolf, ac, av);
 	if (fd > 0)
 	{
@@ -87,7 +90,6 @@ int			main(int ac, char **av)
 		{
 			time.x = SDL_GetTicks();
 			get_input(&wolf, &sdl);
-			//printf("%d ms\t", wolf.deltatime);
 			event_handler(&wolf, wolf.map, wolf.doors);
 			sort_depth_buffer(wolf.entity, wolf.entity->item, wolf.player);
 			background(&wolf, wolf.img);
