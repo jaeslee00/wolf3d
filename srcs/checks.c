@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/07 18:46:19 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/07 20:27:51 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,19 @@ t_s32	is_invalid(t_s8 *str)
 	return (0);
 }
 
+void	free_sdl(t_sdl *sdl)
+{
+	SDL_DestroyWindow(sdl->win);
+	SDL_DestroyRenderer(sdl->renderer);
+	SDL_DestroyTexture(sdl->texture);
+}
+
 void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 {
 	if (mem == NULL)
 	{
-		SDL_DestroyWindow(wolf->sdl->win);
-		SDL_DestroyRenderer(wolf->sdl->renderer);
-		SDL_DestroyTexture(wolf->sdl->texture);
+		if (error != -1)
+			free_sdl(wolf->sdl);
 		if (error == -2)
 			ft_putstr_fd("Invalid map, not enough y"
 				"values or invalid file\n", 2);
@@ -70,8 +76,8 @@ t_s32	mem_init(t_wolf *wolf, t_s32 ac, char **av)
 	}
 	else
 		fd = open("wolf3d.map", O_RDONLY);
-	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 10)), wolf, -5);
-	wolf->mem.tsize = (1024 * 1024 * 10);
+	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 15)), wolf, -5);
+	wolf->mem.tsize = (1024 * 1024 * 15);
 	wolf->mem.usize = sizeof(t_s32);
 	return (fd);
 }

@@ -28,11 +28,11 @@ OBJ = $(SRC:$(SRC_DIR)%.c=$(SRC_DIR)%.o)
 LIB_INC = -Iincludes
 
 FLAGS += -Llibft -lft -lm -framework SDL2
-CFLAGS += -g $(LIB_INC) -F. -Wall -Wextra -Werror
+CFLAGS += -O -O2 -O3 $(LIB_INC) -F. -Wall -Wextra -Werror
 
 all: $(NAME)
 
-$(NAME):	$(OBJ) $(INC)
+$(NAME):	$(SDL2) $(OBJ) $(INC)
 	make -C libft
 	gcc -o $(NAME) $(OBJ) $(CFLAGS) $(FLAGS)
 
@@ -47,10 +47,10 @@ $(OBJ): $(INC)
 
 clean:
 	rm -f $(OBJ)
-#	make -C libft clean
+	make -C libft clean
 
 fclean:	clean
 	rm -f $(NAME)
-#	make -C libft fclean
+	make -C libft fclean
 
 re: fclean all
