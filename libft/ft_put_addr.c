@@ -6,7 +6,7 @@
 /*   By: viccarau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/22 21:29:29 by viccarau          #+#    #+#             */
-/*   Updated: 2018/11/22 21:42:25 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/08 16:53:15 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	ft_put_addr(void *mem)
 {
 	unsigned long long	nb;
-	unsigned char	addr[13];
-	char			*hex;
-	int				i;
+	unsigned char		addr[13];
+	char				*hex;
+	int					i;
 
 	nb = (unsigned long long)mem;
 	hex = "0123456789abcdef";

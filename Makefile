@@ -28,7 +28,7 @@ OBJ = $(SRC:$(SRC_DIR)%.c=$(SRC_DIR)%.o)
 LIB_INC = -Iincludes
 
 FLAGS += -Llibft -lft -lm -framework SDL2
-CFLAGS += -O -O2 -O3 $(LIB_INC) -F. -Wall -Wextra -Werror
+CFLAGS += -O2 -O3 $(LIB_INC) -F. -Wall -Wextra -Werror
 
 all: $(NAME)
 
