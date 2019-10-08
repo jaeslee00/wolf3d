@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/05 01:40:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/09/27 22:41:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/08 16:11:50 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ static t_s32	partition(t_s32 *depth_buffer, t_f32 *depth,
 	return (i + 1);
 }
 
-static void		quick_sort(t_s32 *depth_buffer, t_f32 *depth, t_s32 low, t_s32 high)
+static void		quick_sort(t_s32 *depth_buffer, t_f32 *depth, t_s32 low,
+					t_s32 high)
 {
 	t_s32	pivot_idx;
 
@@ -67,7 +68,8 @@ static void		quick_sort(t_s32 *depth_buffer, t_f32 *depth, t_s32 low, t_s32 high
 	}
 }
 
-void			sort_depth_buffer(t_entity *entity, t_items *item, t_player *player)
+void			sort_depth_buffer(t_entity *entity, t_items *item,
+					t_player *player)
 {
 	t_s32	index;
 	t_2d	relative_entity_pos;
