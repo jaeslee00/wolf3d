@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 04:38:32 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/07 19:16:37 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/08 14:37:12 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,10 @@ static t_file	file_str(void)
 void			load_textures(t_wolf *wolf)
 {
 	t_s32		i;
-	t_palette	pal;
 	t_file		file;
 
 	i = -1;
-	pal.size = 0;
 	file = file_str();
-	is_alloc(pal.pal = ft_mem(&wolf->mem, 2948), wolf, 1);
 	while (i++ < 13)
-		wolf->tex[i] = read_bmp(file.str[i], wolf, &pal);
+		wolf->tex[i] = read_bmp(file.str[i], wolf);
 }

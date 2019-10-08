@@ -6,7 +6,7 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/07 20:27:51 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/08 14:43:18 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,24 @@ t_s32	is_invalid(t_s8 *str)
 
 void	free_sdl(t_sdl *sdl)
 {
-	SDL_DestroyWindow(sdl->win);
-	SDL_DestroyRenderer(sdl->renderer);
-	SDL_DestroyTexture(sdl->texture);
+	if (sdl != NULL)
+	{
+		if (sdl->win != NULL)
+			SDL_DestroyWindow(sdl->win);
+		if (sdl->renderer != NULL)
+			SDL_DestroyRenderer(sdl->renderer);
+		if (sdl->texture != NULL)
+			SDL_DestroyTexture(sdl->texture);
+	}
 }
 
 void	is_alloc(void *mem, t_wolf *wolf, t_s32 error)
 {
 	if (mem == NULL)
 	{
-		if (error != -1)
-			free_sdl(wolf->sdl);
+		free_sdl(wolf->sdl);
 		if (error == -2)
-			ft_putstr_fd("Invalid map, not enough y"
+			ft_putstr_fd("Invalid map, not enough y "
 				"values or invalid file\n", 2);
 		else if (error == -3)
 			ft_putstr_fd("Texture(s) couldn't load\n", 2);
@@ -70,14 +75,20 @@ t_s32	mem_init(t_wolf *wolf, t_s32 ac, char **av)
 	ft_bzero(&wolf[0], sizeof(*wolf));
 	if (ac == 2)
 	{
-		fd = open(av[1], O_RDONLY);
+		fd = open(av[1], O_RDONLY | O_NONBLOCK | O_NOFOLLOW);
 		if (!ft_strstr(av[1], ".map"))
 			is_alloc(NULL, wolf, -2);
 	}
 	else
-		fd = open("wolf3d.map", O_RDONLY);
-	is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 15)), wolf, -5);
-	wolf->mem.tsize = (1024 * 1024 * 15);
-	wolf->mem.usize = sizeof(t_s32);
+		fd = open("wolf3d.map", O_RDONLY | O_NONBLOCK | O_NOFOLLOW);
+	if (fd > 0)
+	{
+		ft_bzero(&wolf->mem, sizeof(t_mem));
+		is_alloc(wolf->mem.m = ft_memalloc((1024 * 1024 * 11)), wolf, -5);
+		wolf->mem.tsize = (1024 * 1024 * 11);
+		wolf->mem.usize = sizeof(t_s32);
+	}
+	else
+		is_alloc(NULL, wolf, -2);
 	return (fd);
 }

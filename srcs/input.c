@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:02:53 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/08 13:56:50 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/08 15:00:12 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ void		set_flag(t_wolf *wolf, SDL_Event event)
 	check_key(wolf, event, SDL_SCANCODE_S, 1UL << 1);
 	check_key(wolf, event, SDL_SCANCODE_A, 1UL << 2);
 	check_key(wolf, event, SDL_SCANCODE_D, 1UL << 3);
+	check_key(wolf, event, SDL_SCANCODE_UP, 1UL);
+	check_key(wolf, event, SDL_SCANCODE_DOWN, 1UL << 1);
+	check_key(wolf, event, SDL_SCANCODE_LEFT, 1UL << 2);
+	check_key(wolf, event, SDL_SCANCODE_RIGHT, 1UL << 3);
 	check_key(wolf, event, SDL_SCANCODE_EQUALS, 1UL << 4);
 	check_key(wolf, event, SDL_SCANCODE_MINUS, 1UL << 5);
 	check_key(wolf, event, SDL_SCANCODE_LSHIFT, 1UL << 6);

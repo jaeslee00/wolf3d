@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:43:55 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/07 18:52:14 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/08 14:38:08 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void			data_to_img(t_bitmap_header b, t_u8 *d, t_texture *tex, t_s32 o)
 	}
 }
 
-t_texture		read_bmp(const t_s8 *filename, t_wolf *wolf, t_palette *pal)
+t_texture		read_bmp(const t_s8 *filename, t_wolf *wolf)
 {
 	t_bitmap_header	bitmap;
 	t_u8			data[3 * 120 * 120];
@@ -109,7 +109,7 @@ t_texture		read_bmp(const t_s8 *filename, t_wolf *wolf, t_palette *pal)
 	t_texture		tex;
 
 	ft_bzero(data, sizeof(data));
-	fd = open(filename, O_RDONLY);
+	fd = open(filename, O_RDONLY | O_NONBLOCK | O_NOFOLLOW);
 	if (fd > 0)
 	{
 		read(fd, header, 54);
@@ -122,9 +122,9 @@ t_texture		read_bmp(const t_s8 *filename, t_wolf *wolf, t_palette *pal)
 		read_all(fd, data, tex.size);
 		data_to_img(bitmap, &data[0],
 			&tex, (bitmap.height - 1) * (bitmap.width % 4));
-		palette(tex.data, pal, (bitmap.height * bitmap.width) - 1);
 	}
 	else
-		ft_bzero(&tex, sizeof(tex));
+		is_alloc(tex.data = (t_u32*)ft_mem(&wolf->mem,
+			64 * 64 * sizeof(t_u32)), wolf, -1);
 	return (tex);
 }

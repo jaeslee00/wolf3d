@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 23:51:37 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/07 19:29:36 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/08 14:03:08 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static void	general_inits(t_wolf *wolf, t_s32 fd, t_2d_p *time, t_sdl *sdl)
 	t_palette	p;
 
 	ft_bzero(time, sizeof(t_2d_p));
+	ft_bzero(sdl, sizeof(t_sdl));
 	tkneizer(fd, wolf);
 	if (wolf->obj.size == 0)
 		is_alloc(NULL, wolf, -2);

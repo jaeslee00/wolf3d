@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/07 20:20:18 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/08 14:23:30 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,7 +303,7 @@ void			draw_machinegun(t_wolf *wolf);
 void			draw_wall(t_wolf *wf, t_s32 line_height, t_s32 x,
 				t_raycaster *ray);
 t_s32			lighting(t_s32 color, t_f32 distance);
-t_texture		read_bmp(const t_s8 *filename, t_wolf *wolf, t_palette *pal);
+t_texture		read_bmp(const t_s8 *filename, t_wolf *wolf);
 void			entity_update(t_wolf *wf);
 void			entity_draw_loop(t_wolf *wf, t_items *item, t_s32 *order,
 					t_s32 nbr_of_entities);
