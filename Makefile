@@ -16,14 +16,13 @@ CC = gcc
 SRC_DIR = ./srcs/
 
 INC = includes/wolf3d.h includes/draw.h includes/minimap.h
-SRC = $(SRC_DIR)main.c $(SRC_DIR)parsing.c \
-	$(SRC_DIR)raycaster.c $(SRC_DIR)checks.c  \
-	$(SRC_DIR)math.c $(SRC_DIR)perp_distance.c $(SRC_DIR)minimap.c $(SRC_DIR)minimap1.c \
-	$(SRC_DIR)draw_wall.c $(SRC_DIR)input.c $(SRC_DIR)input1.c $(SRC_DIR)bmp_reader.c \
-	$(SRC_DIR)draw_sprite.c $(SRC_DIR)hud.c $(SRC_DIR)hud1.c $(SRC_DIR)init_entity_update.c \
-	$(SRC_DIR)entity_update.c $(SRC_DIR)sort_entity_order.c $(SRC_DIR)sound.c $(SRC_DIR)init_wolf.c \
-	$(SRC_DIR)renderer.c $(SRC_DIR)matrix_op.c $(SRC_DIR)matrix_op1.c $(SRC_DIR)parse_map.c
-OBJ = $(SRC:$(SRC_DIR)%.c=$(SRC_DIR)%.o)
+
+SRC = bmp_reader.c checks.c draw_sprite.c draw_wall.c entity_update.c hud.c \
+hud1.c init_entity_update.c init_wolf.c input.c input1.c main.c math.c \
+matrix_op.c matrix_op1.c minimap.c minimap1.c parse_map.c parsing.c \
+perp_distance.c raycaster.c renderer.c sort_entity_order.c sound.c
+
+OBJ = $(SRC:%.c=$(SRC_DIR)%.o)
 
 LIB_INC = -Iincludes
 
