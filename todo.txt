@@ -1,7 +1,0 @@
-/*
- TODO(viccarau): Make doors generalized ( when initializing doors, 
-check how they're facing)
- TODO(viccarau): GUN sprite animation
- TODO(viccarau): Sounds
- TODO(viccarau): Text menus
-/*
