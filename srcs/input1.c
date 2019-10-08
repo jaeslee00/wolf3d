@@ -6,11 +6,22 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:42:47 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/07 19:30:05 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/08 16:17:04 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+void		non_repeat_key(t_wolf *wolf, SDL_Event event)
+{
+	if (event.key.repeat == 0)
+	{
+		check_key(wolf, event, SDL_SCANCODE_E, 1UL << 7);
+		if (event.key.keysym.scancode == SDL_SCANCODE_TAB)
+			if (event.type == SDL_KEYDOWN)
+				wolf->flag ^= 1UL << 8;
+	}
+}
 
 void		interaction_door(t_door *doors, t_s8 **map, t_s32 i)
 {

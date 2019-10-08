@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/08 16:02:36 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/08 16:16:30 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,4 +319,7 @@ void			sort_depth_buffer(t_entity *entity, t_items *item,
 					t_player *player);
 void			count_entities(t_s8 **map, t_obj obj, t_entity *entity);
 void			color_picker(t_wolf *wolf, t_s32 nb, t_s32 nb1, t_2d_p xy);
+void			non_repeat_key(t_wolf *wolf, SDL_Event event);
+void			check_key(t_wolf *wolf, SDL_Event event,
+				SDL_Scancode key, t_s32 bit);
 #endif

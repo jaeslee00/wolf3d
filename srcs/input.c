@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:02:53 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/08 15:00:12 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/08 16:16:12 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,7 @@ void		set_flag(t_wolf *wolf, SDL_Event event)
 	check_key(wolf, event, SDL_SCANCODE_EQUALS, 1UL << 4);
 	check_key(wolf, event, SDL_SCANCODE_MINUS, 1UL << 5);
 	check_key(wolf, event, SDL_SCANCODE_LSHIFT, 1UL << 6);
-	if (event.key.repeat == 0)
-	{
-		check_key(wolf, event, SDL_SCANCODE_E, 1UL << 7);
-		if (event.key.keysym.scancode == SDL_SCANCODE_TAB)
-			if (event.type == SDL_KEYDOWN)
-				wolf->flag ^= 1UL << 8;
-	}
+	non_repeat_key(wolf, event);
 }
 
 void		check_flag(t_wolf *wolf, t_s8 **map)
