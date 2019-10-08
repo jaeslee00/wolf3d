@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/01 17:56:49 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/08 16:01:59 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ static t_u8	get_door_side(t_wolf *wolf, t_s32 x, t_s32 y)
 	return (0);
 }
 
-void	raycast_collision(t_wolf *wolf, t_raycaster *ray, t_s8 *hit,
-			t_2d player_pos)
+void		raycast_collision(t_wolf *wolf, t_raycaster *ray, t_s8 *hit,
+								t_2d player_pos)
 {
 	if (wolf->map[ray->map.y][ray->map.x] == 1)
 		*hit = 1;
 	else if (wolf->map[ray->map.y][ray->map.x] == 3)
 	{
-		if(get_door_side(wolf, ray->map.x, ray->map.y))
+		if (get_door_side(wolf, ray->map.x, ray->map.y))
 		{
 			if (ray->side_dist.x - (0.5f * ray->side_dist.x) /
 				fabs((ray->map.x - player_pos.x) + (t_f32)((1 + ray->step.x) >> 1))
@@ -61,7 +61,7 @@ void	raycast_collision(t_wolf *wolf, t_raycaster *ray, t_s8 *hit,
 	}
 }
 
-t_s32	dda_raycast(t_wolf *wf, t_raycaster *ray)
+t_s32		dda_raycast(t_wolf *wf, t_raycaster *ray)
 {
 	t_s8	hit;
 
@@ -85,7 +85,7 @@ t_s32	dda_raycast(t_wolf *wf, t_raycaster *ray)
 	return (ray->side);
 }
 
-void	dda_init(t_raycaster *ray, t_player *p)
+void		dda_init(t_raycaster *ray, t_player *p)
 {
 	ray->delta_dist.x = fabsf(1.0f / p->ray.x);
 	ray->delta_dist.y = fabsf(1.0f / p->ray.y);
@@ -113,7 +113,7 @@ void	dda_init(t_raycaster *ray, t_player *p)
 	}
 }
 
-void	raycast(t_wolf *wf)
+void		raycast(t_wolf *wf)
 {
 	t_raycaster	ray;
 	t_f32		line_height;

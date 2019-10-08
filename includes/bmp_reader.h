@@ -6,11 +6,13 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 18:05:15 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/30 13:05:32 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/07 19:56:28 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#ifndef BMP_READER_H
+# define BMP_READER_H
+# include "wolf3d.h"
 
 typedef struct	s_bitmap_header
 {
@@ -31,6 +33,8 @@ typedef struct	s_bitmap_header
 	t_u32	colors_used;
 	t_u32	colors_important;
 	t_u32	red_mask;
-	t_u32	green_Mask;
+	t_u32	green_mask;
 	t_u32	blue_mask;
 }				t_bitmap_header;
+
+#endif

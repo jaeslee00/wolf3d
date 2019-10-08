@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 17:19:22 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/22 21:45:09 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/07 18:58:14 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void		draw_gun(t_wolf *wolf, t_u32 tex_id)
 			wolf->tex[tex_id], wolf->a.size);
 }
 
-static void	change_sprite(t_wolf *wolf, t_s32 idx, t_s32 gun, t_s32 update)
+void		change_sprite(t_wolf *wolf, t_s32 idx, t_s32 gun, t_s32 update)
 {
 	t_s32	check;
 	t_s32	i;
@@ -54,7 +54,7 @@ void		draw_shotgun(t_wolf *wolf)
 		wolf->a.gun += wolf->deltatime;
 		if (wolf->a.gun < 100)
 			change_sprite(wolf, 13, 6, 1);
-		else if(wolf->a.gun < 150)
+		else if (wolf->a.gun < 150)
 			change_sprite(wolf, 0, 7, 0);
 		else if (wolf->a.gun < 200)
 			change_sprite(wolf, 0, 9, 0);
@@ -70,7 +70,7 @@ void		draw_shotgun(t_wolf *wolf)
 	}
 	else
 		draw_gun(wolf, 5);
-	if(wolf->view < -H / 2)
+	if (wolf->view < -H / 2)
 		wolf->view = -H / 2;
 }
 
@@ -91,7 +91,7 @@ void		draw_bar(t_wolf *wolf, int percent)
 	{
 		i = W / 2 - size / 2;
 		color = 0x00FF00;
-		while(i < (size + (W / 2 - size / 2)))
+		while (i < (size + (W / 2 - size / 2)))
 		{
 			if (i == percent)
 				color = 0xFF0000;
@@ -106,7 +106,6 @@ void		draw_hud(t_wolf *wolf)
 {
 	if (wolf->flag & 1UL << 8)
 		draw_minimap(wolf);
-	//draw_bar(wolf, wolf->player->health);
 	if (wolf->flag & 1UL << 10)
 		draw_shotgun(wolf);
 	else

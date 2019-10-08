@@ -6,13 +6,25 @@
 /*   By: viccarau <viccarau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/01 20:18:48 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/01 20:18:48 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/07 20:06:25 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	draw_crosshair(t_wolf *wolf)
+void		color_picker(t_wolf *wolf, t_s32 nb, t_s32 nb1, t_2d_p xy)
+{
+	if (nb == 4 || nb1 == 4)
+		wolf->img[xy.x + (xy.y * W)] = 0x00BB00;
+	else if (nb == 3 || nb1 == 3)
+		wolf->img[xy.x + (xy.y * W)] = 0xBB0000;
+	else if ((nb != 0 || nb1 != 0) && (nb != 9 && nb1 != 9))
+		wolf->img[xy.x + (xy.y * W)] = 0x555555;
+	else
+		wolf->img[xy.x + (xy.y * W)] = 0x000000;
+}
+
+void		draw_crosshair(t_wolf *wolf)
 {
 	t_u32	i;
 	t_u32	j;
@@ -24,7 +36,7 @@ void	draw_crosshair(t_wolf *wolf)
 	while (k <= 10 * wolf->a.size)
 	{
 		wolf->img[i + j * W] = rgb_lerp(wolf->img[i + j * W] - 0xFFFF00, 0.2f,
-										0xFFFF00);
+			0xFFFF00);
 		i++;
 		k++;
 	}
@@ -35,51 +47,50 @@ void	draw_crosshair(t_wolf *wolf)
 	{
 		if (j != (H / 2))
 			wolf->img[i + j * W] = rgb_lerp(wolf->img[i + j * W] - 0xFFFF00,
-											0.2f, 0xFFFF00) - 0x0000FF;
+				0.2f, 0xFFFF00) - 0x0000FF;
 		j++;
 		k++;
 	}
 }
 
-void	draw_machinegun(t_wolf *wolf)
+static t_s8	draw_machine_anim(t_wolf *wolf)
+{
+	t_s8	i;
+
+	i = 0;
+	if ((i = (wolf->a.gun >= 500)))
+	{
+		change_sprite(wolf, 0, 11, 0);
+		wolf->flag &= ~(1UL << 9);
+		wolf->a.gun = 0;
+	}
+	else if ((i = (wolf->a.gun < (t_s32)wolf->a.frame)))
+	{
+		change_sprite(wolf, 13, 11, 1);
+		wolf->view -= wolf->deltatime / 2;
+	}
+	return (i);
+}
+
+void		draw_machinegun(t_wolf *wolf)
 {
 	if (wolf->flag & 1UL << 9)
 	{
 		wolf->a.gun += wolf->deltatime;
-		if(wolf->a.gun < (t_s32)wolf->a.frame)
-		{
-			for (int i=0; i < wolf->entity->nbr_of_entities; i++)
-				if (wolf->entity->item[i].flag & 1UL)
-			{
-				wolf->entity->item[i].flag |= 1UL << 1;
-				wolf->entity->item[i].tex = &wolf->tex[13];
-			}
-			wolf->view -= wolf->deltatime / 2;
-			draw_gun(wolf, 11);
-		}
+		if (draw_machine_anim(wolf))
+			;
 		else
 		{
 			wolf->view -= 1;
-			draw_gun(wolf, 10);
+			change_sprite(wolf, 0, 10, 0);
 			wolf->a.frame += 50;
-		}
-		if (wolf->a.gun >= 500)
-		{
-			draw_gun(wolf, 11);
-			wolf->flag &= ~(1UL << 9);
-			wolf->a.gun = 0;
 		}
 	}
 	else
 	{
-		for (int i=0; i < wolf->entity->nbr_of_entities; i++)
-		{
-			wolf->entity->item[i].flag |= 1UL << 1;
-			wolf->entity->item[i].tex = &wolf->tex[12];
-		}
+		change_sprite(wolf, 12, 10, 1);
 		wolf->a.frame = 0;
-		draw_gun(wolf, 10);
 	}
-	if(wolf->view < -H / 2)
+	if (wolf->view < -H / 2)
 		wolf->view = -H / 2;
 }

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:43:55 by viccarau          #+#    #+#             */
-/*   Updated: 2019/09/21 21:00:00 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/08 14:38:08 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ t_s32			read_all(t_s32 fd, t_u8 *data, t_s32 size)
 	return (read_bytes + ret);
 }
 
-t_bitmap_header get_header(t_u8 *mem)
+t_bitmap_header	get_header(t_u8 *mem)
 {
 	t_bitmap_header	header;
-	
+
 	ft_memcpy(&header.file_type, &mem[0], sizeof(t_u16));
 	if (header.file_type != 19778)
 		is_alloc(NULL, NULL, -4);
@@ -46,8 +46,8 @@ t_bitmap_header get_header(t_u8 *mem)
 
 void			palette(t_u32 *img, t_palette *p, t_u32 size)
 {
-	t_u32 i;
-	t_u32 j;
+	t_u32	i;
+	t_u32	j;
 
 	j = 0;
 	while (j < size)
@@ -58,7 +58,7 @@ void			palette(t_u32 *img, t_palette *p, t_u32 size)
 			if (img[j] == p->pal[i])
 			{
 				j++;
-				break;
+				break ;
 			}
 			i++;
 		}
@@ -77,7 +77,7 @@ void			data_to_img(t_bitmap_header b, t_u8 *d, t_texture *tex, t_s32 o)
 	t_s32	j;
 	t_s32	k;
 	t_s32	l;
-	
+
 	l = b.height - 1;
 	j = 0;
 	while (j < b.height)
@@ -100,7 +100,7 @@ void			data_to_img(t_bitmap_header b, t_u8 *d, t_texture *tex, t_s32 o)
 	}
 }
 
-t_texture	read_bmp(const t_s8 *filename, t_wolf *wolf, t_palette *pal)
+t_texture		read_bmp(const t_s8 *filename, t_wolf *wolf)
 {
 	t_bitmap_header	bitmap;
 	t_u8			data[3 * 120 * 120];
@@ -109,7 +109,7 @@ t_texture	read_bmp(const t_s8 *filename, t_wolf *wolf, t_palette *pal)
 	t_texture		tex;
 
 	ft_bzero(data, sizeof(data));
-	fd = open(filename, O_RDONLY);
+	fd = open(filename, O_RDONLY | O_NONBLOCK | O_NOFOLLOW);
 	if (fd > 0)
 	{
 		read(fd, header, 54);
@@ -117,12 +117,14 @@ t_texture	read_bmp(const t_s8 *filename, t_wolf *wolf, t_palette *pal)
 		tex.width = bitmap.width;
 		tex.height = bitmap.height;
 		tex.size = 3 * tex.width * tex.height;
-		is_alloc(tex.data = (t_u32*)ft_mem(&wolf->mem, tex.width * tex.height * sizeof(t_u32)), wolf, -1);
+		is_alloc(tex.data = (t_u32*)ft_mem(&wolf->mem,
+			tex.width * tex.height * sizeof(t_u32)), wolf, -1);
 		read_all(fd, data, tex.size);
-		data_to_img(bitmap, &data[0], &tex, (bitmap.height - 1) * (bitmap.width % 4));
-		palette(tex.data, pal, (bitmap.height * bitmap.width) - 1);
+		data_to_img(bitmap, &data[0],
+			&tex, (bitmap.height - 1) * (bitmap.width % 4));
 	}
 	else
-		ft_bzero(&tex, sizeof(tex));
+		is_alloc(tex.data = (t_u32*)ft_mem(&wolf->mem,
+			64 * 64 * sizeof(t_u32)), wolf, -1);
 	return (tex);
 }

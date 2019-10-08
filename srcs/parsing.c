@@ -6,11 +6,30 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 16:26:36 by viccarau          #+#    #+#             */
-/*   Updated: 2019/08/28 14:45:08 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/07 19:29:08 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+void		count_entities(t_s8 **map, t_obj obj, t_entity *entity)
+{
+	t_s32	i;
+	t_s32	j;
+
+	i = 0;
+	while (i < obj.h)
+	{
+		j = 0;
+		while (j < obj.w)
+		{
+			if (map[i][j] == 4)
+				entity->nbr_of_entities++;
+			j++;
+		}
+		i++;
+	}
+}
 
 t_s8		**int_to_tab(t_wolf *wolf)
 {
@@ -75,8 +94,5 @@ t_s32		tkneizer(t_s32 fd, t_wolf *wolf)
 		free(line);
 	}
 	wolf->obj.size = xy.x;
-	if (wolf->obj.size == 0)
-			is_alloc(NULL, wolf, -2);
-		wolf->obj.h = wolf->obj.size / wolf->obj.w;
 	return (1);
 }
