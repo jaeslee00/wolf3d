@@ -6,13 +6,14 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:02:53 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/07 20:05:42 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/08 13:56:50 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	check_key(t_wolf *wolf, SDL_Event event, SDL_Scancode key, t_s32 bit)
+void		check_key(t_wolf *wolf, SDL_Event event,
+				SDL_Scancode key, t_s32 bit)
 {
 	if (event.key.keysym.scancode == key)
 	{
@@ -23,7 +24,7 @@ void	check_key(t_wolf *wolf, SDL_Event event, SDL_Scancode key, t_s32 bit)
 	}
 }
 
-void	set_flag(t_wolf *wolf, SDL_Event event)
+void		set_flag(t_wolf *wolf, SDL_Event event)
 {
 	if (event.key.keysym.scancode == SDL_SCANCODE_1
 		&& !(wolf->flag & 1UL << 9))
@@ -49,7 +50,7 @@ void	set_flag(t_wolf *wolf, SDL_Event event)
 	}
 }
 
-void	check_flag(t_wolf *wolf, t_s8 **map)
+void		check_flag(t_wolf *wolf, t_s8 **map)
 {
 	t_f32		fov;
 	t_player	*p;
@@ -73,7 +74,16 @@ void	check_flag(t_wolf *wolf, t_s8 **map)
 	}
 }
 
-void	mouse_movement(t_wolf *wolf, SDL_Event event)
+static void	view_limit(t_s32 *view, t_s32 yrelative)
+{
+	*view += yrelative;
+	if (*view > H / 2)
+		*view = H / 2;
+	else if (*view < -H / 2)
+		*view = -H / 2;
+}
+
+void		mouse_movement(t_wolf *wolf, SDL_Event event)
 {
 	t_2d		old;
 	t_f64		motion;
@@ -85,17 +95,11 @@ void	mouse_movement(t_wolf *wolf, SDL_Event event)
 	if (event.type == SDL_MOUSEMOTION)
 	{
 		motion = (t_f64)(event.motion.xrel * 0.001f);
-		wolf->view += (t_s32)(event.motion.yrel);
-		if (wolf->view > H / 2)
-			wolf->view = H / 2;
-		else if (wolf->view < -H / 2)
-			wolf->view = -H / 2;
+		view_limit(&wolf->view, (t_s32)event.motion.yrel);
 		cosine = cos(motion);
 		sine = sin(motion);
 		p->m->rotation += motion;
-// TODO(viccarau): fmod makes the norminette think this file can't compile
-		// You should probably change that;
-		p->m->rotation = fmod(p->m->rotation, PI32 * 2.0f);
+		p->m->rotation = fmod(p->m->rotation, 2.0f * PI32);
 		old.x = p->direction.x;
 		p->direction.x = p->direction.x * cosine - p->direction.y * sine;
 		p->direction.y = old.x * sine + p->direction.y * cosine;
