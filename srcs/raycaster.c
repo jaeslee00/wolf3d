@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 15:57:38 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/08 16:01:59 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/08 16:06:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static t_u8	get_door_side(t_wolf *wolf, t_s32 x, t_s32 y)
 }
 
 void		raycast_collision(t_wolf *wolf, t_raycaster *ray, t_s8 *hit,
-								t_2d player_pos)
+								t_2d p_pos)
 {
 	if (wolf->map[ray->map.y][ray->map.x] == 1)
 		*hit = 1;
@@ -41,7 +41,7 @@ void		raycast_collision(t_wolf *wolf, t_raycaster *ray, t_s8 *hit,
 		if (get_door_side(wolf, ray->map.x, ray->map.y))
 		{
 			if (ray->side_dist.x - (0.5f * ray->side_dist.x) /
-				fabs((ray->map.x - player_pos.x) + (t_f32)((1 + ray->step.x) >> 1))
+				fabs((ray->map.x - p_pos.x) + (t_f32)((1 + ray->step.x) >> 1))
 				< ray->side_dist.y)
 			{
 				*hit = 1;
@@ -51,7 +51,7 @@ void		raycast_collision(t_wolf *wolf, t_raycaster *ray, t_s8 *hit,
 		else
 		{
 			if (ray->side_dist.y - (0.5f * ray->side_dist.y) /
-				fabs((ray->map.y - player_pos.y) + (t_f32)((1 + ray->step.y) >> 1))
+				fabs((ray->map.y - p_pos.y) + (t_f32)((1 + ray->step.y) >> 1))
 				< ray->side_dist.x)
 			{
 				*hit = 1;

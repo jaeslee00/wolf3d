@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/08 16:02:36 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/08 16:16:00 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,6 +313,10 @@ void			draw_wall(t_wolf *wf, t_s32 line_height, t_s32 x,
 t_s32			lighting(t_s32 color, t_f32 distance);
 t_texture		read_bmp(const t_s8 *filename, t_wolf *wolf);
 void			entity_update(t_wolf *wf);
+void			entity_render_setup(t_items *item, t_s32 view,
+					t_entity_render_info *info);
+void			entity_render_init(t_entity_render_info *info, t_s32 view,
+					t_items *item);
 void			entity_draw_loop(t_wolf *wf, t_items *item, t_s32 *order,
 					t_s32 nbr_of_entities);
 void			sort_depth_buffer(t_entity *entity, t_items *item,

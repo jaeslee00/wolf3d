@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 22:57:14 by jaelee            #+#    #+#             */
-/*   Updated: 2019/10/07 23:40:06 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/08 16:07:49 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ t_s32	texture_pick(t_raycaster *ray)
 void	texture_map(t_u32 *img, t_texture_map *tex_map, t_texture *tex,
 			t_f32 perp_dist)
 {
-	t_wall_render_info info;
-	t_s32	color;
-	t_s32	tex_y;
-	t_s32	y;
+	t_wall_render_info	info;
+	t_s32				color;
+	t_s32				tex_y;
+	t_s32				y;
 
 	info.precalc = (tex->height << 24) / tex_map->column_height;
 	info.y_offset = ((tex_map->column_height - H) >> 1) + tex_map->view;
@@ -64,7 +64,9 @@ void	draw_wall(t_wolf *wf, t_s32 line_height, t_s32 x, t_raycaster *ray)
 	t_texture_map	tex_map;
 	t_f32			tex_width_scale;
 	t_s32			tex_id;
+	t_player		*p;
 
+	p = wf->player;
 	tex_id = texture_pick(ray);
 	tex_map.start = ((-line_height + H) >> 1) - wf->view;
 	tex_map.end = ((line_height + H) >> 1) - wf->view;
@@ -75,9 +77,9 @@ void	draw_wall(t_wolf *wf, t_s32 line_height, t_s32 x, t_raycaster *ray)
 	if (tex_map.end >= H)
 		tex_map.end = H - 1;
 	if (ray->side == e_ew_wall || ray->side == e_ew_door)
-		tex_width_scale = wf->player->pos.y + ray->perp_dist * wf->player->ray.y;
+		tex_width_scale = p->pos.y + ray->perp_dist * p->ray.y;
 	else
-		tex_width_scale = wf->player->pos.x + ray->perp_dist * wf->player->ray.x;
+		tex_width_scale = p->pos.x + ray->perp_dist * p->ray.x;
 	tex_width_scale -= floor(tex_width_scale);
 	tex_map.tex_x = (t_s32)(tex_width_scale * (t_f32)wf->tex[tex_id].width);
 	texture_map(&wf->img[x], &tex_map, &wf->tex[tex_id], ray->perp_dist);
