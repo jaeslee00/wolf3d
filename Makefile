@@ -13,7 +13,7 @@
 NAME = wolf3d
 SDL2 = ./SDL2.framework
 CC = gcc
-SRC_DIR = ~/Work/wolf3d/srcs/
+SRC_DIR = ./srcs/
 
 INC = includes/wolf3d.h includes/draw.h includes/minimap.h
 SRC = $(SRC_DIR)main.c $(SRC_DIR)parsing.c \
