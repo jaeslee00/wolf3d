@@ -13,16 +13,16 @@
 NAME = wolf3d
 SDL2 = ./SDL2.framework
 CC = gcc
-SRC_DIR = ./srcs/
+SD = ./srcs/
 
 INC = includes/wolf3d.h includes/draw.h includes/minimap.h
-
-SRC = bmp_reader.c checks.c draw_sprite.c draw_wall.c entity_update.c hud.c \
-hud1.c init_entity_update.c init_wolf.c input.c input1.c main.c math.c \
-matrix_op.c matrix_op1.c minimap.c minimap1.c parse_map.c parsing.c \
-perp_distance.c raycaster.c renderer.c sort_entity_order.c sound.c
-
-OBJ = $(SRC:%.c=$(SRC_DIR)%.o)
+SRC = $(SD)main.c $(SD)parsing.c $(SD)raycaster.c $(SD)checks.c $(SD)math.c \
+	$(SD)perp_distance.c $(SD)minimap.c $(SD)minimap1.c $(SD)draw_wall.c \
+	$(SD)input.c $(SD)input1.c $(SD)bmp_reader.c $(SD)draw_sprite.c $(SD)hud.c \
+	$(SD)hud1.c $(SD)init_entity_update.c $(SD)entity_update.c \
+	$(SD)sort_entity_order.c $(SD)sound.c $(SD)init_wolf.c $(SD)renderer.c \
+	$(SD)matrix_op.c $(SD)matrix_op1.c $(SD)parse_map.c
+OBJ = $(SRC:$(SD)%.c=$(SD)%.o)
 
 LIB_INC = -Iincludes
 
