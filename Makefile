@@ -27,7 +27,7 @@ OBJ = $(SRC:$(SD)%.c=$(SD)%.o)
 LIB_INC = -Iincludes
 
 FLAGS += -Llibft -lft -lm -framework SDL2
-CFLAGS += -O2 -O3 $(LIB_INC) -F. -Wall -Wextra -Werror
+CFLAGS += -g -O2 -O3 $(LIB_INC) -F. -Wall -Wextra -Werror
 
 all: $(NAME)
 
@@ -50,6 +50,7 @@ clean:
 
 fclean:	clean
 	rm -f $(NAME)
+	rm -rf $(SDL2)
 	make -C libft fclean
 
 re: fclean all

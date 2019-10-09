@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 18:46:58 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/08 16:44:48 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/09 18:00:00 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,4 +326,5 @@ void			color_picker(t_wolf *wolf, t_s32 nb, t_s32 nb1, t_2d_p xy);
 void			non_repeat_key(t_wolf *wolf, SDL_Event event);
 void			check_key(t_wolf *wolf, SDL_Event event,
 				SDL_Scancode key, t_s32 bit);
+void			init_empty_texture(t_wolf *wolf, t_texture *tex);
 #endif

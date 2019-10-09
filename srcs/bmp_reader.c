@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:43:55 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/08 14:38:08 by viccarau         ###   ########.fr       */
+/*   Updated: 2019/10/09 17:59:47 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ t_texture		read_bmp(const t_s8 *filename, t_wolf *wolf)
 			&tex, (bitmap.height - 1) * (bitmap.width % 4));
 	}
 	else
-		is_alloc(tex.data = (t_u32*)ft_mem(&wolf->mem,
-			64 * 64 * sizeof(t_u32)), wolf, -1);
+		init_empty_texture(wolf, &tex);
 	return (tex);
 }

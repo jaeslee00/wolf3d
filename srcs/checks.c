@@ -6,11 +6,19 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 08:40:07 by viccarau          #+#    #+#             */
-/*   Updated: 2019/10/08 16:02:28 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/10/09 18:00:51 by viccarau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+void	init_empty_texture(t_wolf *wolf, t_texture *tex)
+{
+	tex->width = 64;
+	tex->height = 64;
+	is_alloc(tex->data = (t_u32*)ft_mem(&wolf->mem,
+		64 * 64 * sizeof(t_u32)), wolf, -1);
+}
 
 t_s32	is_invalid(t_s8 *str)
 {
