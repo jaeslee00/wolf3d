@@ -11,7 +11,8 @@
 # **************************************************************************** #
 
 NAME = wolf3d
-SDL2 = ./SDL2.framework
+SDL2_DIR = /Users/jai/Library/Frameworks
+SDL2 = $(SDL2_DIR)/SDL2.framework
 CC = gcc
 SD = ./srcs/
 
@@ -27,7 +28,7 @@ OBJ = $(SRC:$(SD)%.c=$(SD)%.o)
 LIB_INC = -Iincludes
 
 FLAGS += -Llibft -lft -lm -framework SDL2
-CFLAGS += -g -O2 -O3 $(LIB_INC) -F. -Wall -Wextra -Werror
+CFLAGS := -O2 -O3 $(LIB_INC) -F $(SDL2_DIR) -Wall -Wextra -Werror
 
 all: $(NAME)
 
@@ -36,10 +37,10 @@ $(NAME):	$(SDL2) $(OBJ) $(INC)
 	gcc -o $(NAME) $(OBJ) $(CFLAGS) $(FLAGS)
 
 $(SDL2):
-	@if [ ! -d ./SDL2.framework ]; \
+	@if [ ! -d ~/Library/Frameworks/SDL2.framework ]; \
 	then curl https://www.libsdl.org/release/SDL2-2.0.10.dmg \
 	-o SDL2-2.0.10.dmg ; hdiutil attach SDL2-2.0.10.dmg ; \
-	cp -r /Volumes/SDL2/SDL2.framework . ; \
+	cp -r /Volumes/SDL2/SDL2.framework ~/Library/Frameworks ; \
 	hdiutil detach /Volumes/SDL2 ; fi; \
 
 $(OBJ): $(INC)
